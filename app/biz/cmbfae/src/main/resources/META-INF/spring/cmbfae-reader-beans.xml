@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!--交易读取start-->
+    <!--使用mybatis的分页Reader-->
+    <bean id="cmfaeTransApplyDBReader"
+          class="org.mybatis.spring.batch.MyBatisPagingItemReader"
+          p:sqlSessionFactory-ref="sqlSessionFactory"
+          p:parameterValues-ref="transApplyDatesParameters"
+          p:queryId="com.jinhui.scheduler.data.core.mapper.cmbfae.TransDao.queryTransDetail"
+          p:pageSize="100"
+          scope="step"/>
+
+    <util:map id="transApplyDatesParameters"  scope="step">
+        <entry key="exchangeNo" value="#{jobParameters['exchangeNo']}"/>
+        <entry key="batchCode" value="#{jobParameters['batchCode']}"/>
+    </util:map>
+
+    <bean id="cmfaeTransApplyDBProcessor" class="com.jinhui.scheduler.biz.cmbfae.process.CmfaeTransApplyDBProcessor"/>
+    <!--交易读取end-->
+
+
+    
+    <!--持仓读取start-->
+    <bean id="cmfaePositionDBReader"
+          class="org.mybatis.spring.batch.MyBatisPagingItemReader"
+          p:sqlSessionFactory-ref="sqlSessionFactory"
+          p:parameterValues-ref="positionDatesParameters"
+          p:queryId="com.jinhui.scheduler.data.core.mapper.cmbfae.InvestorPositionDao.queryPositionDetailInfo"
+          p:pageSize="100"
+          scope="step"/>
+
+    <util:map id="positionDatesParameters"  scope="step">
+        <entry key="exchangeNo" value="#{jobParameters['exchangeNo']}"/>
+    </util:map>
+
+    <bean id="cmfaePositionProcessor" class="com.jinhui.scheduler.biz.cmbfae.process.CmfaePositionProcessor"/>
+    <!--持仓读取end-->
+
+
+
+
+</beans>

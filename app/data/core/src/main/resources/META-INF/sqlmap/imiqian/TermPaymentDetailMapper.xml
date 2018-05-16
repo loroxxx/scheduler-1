@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.imiqian.TermPaymentDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.jinhui.scheduler.domain.imiqian.domain.TermPaymentDetail" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="chn_code" property="chnCode" jdbcType="CHAR" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="product_no" property="productNo" jdbcType="CHAR" />
+    <result column="investor_id" property="investorId" jdbcType="CHAR" />
+    <result column="investor_name" property="investorName" jdbcType="VARCHAR" />
+    <result column="subs_total_amount" property="subsTotalAmount" jdbcType="DECIMAL" />
+    <result column="interest_period" property="interestPeriod" jdbcType="INTEGER" />
+    <result column="interest_date" property="interestDate" jdbcType="DATE" />
+    <result column="interest_amount" property="interestAmount" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, chn_code, product_name, product_no, investor_id, investor_name, subs_total_amount, 
+    interest_period, interest_date, interest_amount
+  </sql>
+
+  <select id="selectToPayInterest" resultMap="BaseResultMap">
+      select * from term_payment_detail where interest_date = DATE_FORMAT(now(),'%Y-%m-%d') and interest_state = '0'
+  </select>
+
+    <select id="selectToPayInterestWithChoice" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select * from term_payment_detail where  interest_date &gt; #{preWorkDay} and interest_date &lt;= DATE_FORMAT(now(),'%Y-%m-%d') and interest_state = '0'
+    </select>
+
+  <insert id="insertDetail" parameterType="com.jinhui.scheduler.domain.imiqian.domain.TermPaymentDetail" >
+    insert into term_payment_detail(chn_code,
+                                    product_name,
+                                    product_no,
+                                    investor_id,
+                                    investor_name,
+                                    subs_total_amount,
+                                    interest_period,
+                                    interest_date,
+                                    interest_amount,
+                                    interest_state,
+                                    create_time,
+                                    gmt_modified)
+              values(#{chnCode},
+                     #{productName},
+                     #{productNo},
+                     #{investorId},
+                     #{investorName},
+                     #{subsTotalAmount},
+                     #{interestPeriod},
+                     #{interestDate},
+                     #{interestAmount},
+                     '0',
+                     now(),
+                     now())
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.jinhui.scheduler.domain.imiqian.domain.TermPaymentDetail" >
+    update term_payment_detail
+    <set >
+      <if test="chnCode != null" >
+        chn_code = #{chnCode,jdbcType=CHAR},
+      </if>
+      <if test="productName != null" >
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null" >
+        product_no = #{productNo,jdbcType=CHAR},
+      </if>
+      <if test="investorId != null" >
+        investor_id = #{investorId,jdbcType=CHAR},
+      </if>
+      <if test="investorName != null" >
+        investor_name = #{investorName,jdbcType=VARCHAR},
+      </if>
+      <if test="subsTotalAmount != null" >
+        subs_total_amount = #{subsTotalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="interestPeriod != null" >
+        interest_period = #{interestPeriod,jdbcType=INTEGER},
+      </if>
+      <if test="interestDate != null" >
+        interest_date = #{interestDate,jdbcType=DATE},
+      </if>
+      <if test="interestAmount != null" >
+        interest_amount = #{interestAmount,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <!-- 更新客户回款计划状态为"已付息"-->
+    <update id="updateToPayInterest" parameterType="java.lang.Integer">
+        update term_payment_detail set interest_state = '1' where id = #{id}
+    </update>
+
+</mapper>

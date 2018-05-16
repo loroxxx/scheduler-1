@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.imiqian.InvestorPositionRegularProductMapper" >
+  <resultMap id="positionMap" type="com.jinhui.scheduler.domain.imiqian.domain.InvestorPositionRegularProduct" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="gather_date" property="gatherDate" jdbcType="DATE" />
+    <result column="batch_code" property="batchCode" jdbcType="INTEGER" />
+    <result column="investor_id" property="investorId" jdbcType="CHAR" />
+    <result column="chn_id" property="chnId" jdbcType="CHAR" />
+    <result column="chn_code" property="chnCode" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="product_no" property="productNo" jdbcType="CHAR" />
+    <result column="child_product_no" property="childProductNo" jdbcType="CHAR" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="total_postion_vol" property="totalPostionVol" jdbcType="DECIMAL" />
+    <result column="product_vol" property="productVol" jdbcType="DECIMAL" />
+    <result column="total_postion_amount" property="totalPostionAmount" jdbcType="DECIMAL" />
+    <result column="total_income" property="totalIncome" jdbcType="DECIMAL" />
+    <result column="total_redemed_amount" property="totalRedemedAmount" jdbcType="DECIMAL" />
+    <result column="total_subs_amount" property="totalSubsAmount" jdbcType="DECIMAL" />
+    <result column="rolling_flag" property="rollingFlag" jdbcType="CHAR" />
+    <result column="rolling_vol" property="rollingVol" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, gather_date, batch_code,investor_id, chn_id, chn_code, name, child_product_no, product_no, product_name, total_postion_vol,
+    product_vol, total_postion_amount, total_income, total_redemed_amount, total_subs_amount, 
+    rolling_flag, rolling_vol
+  </sql>
+  <!-- 根据渠道代码，用户ID，产品代码查询是否已存在持仓记录 -->
+  <select id="selectIsExistPosition" parameterType="com.jinhui.scheduler.domain.imiqian.domain.InvestorPosition" resultMap="positionMap">
+    select
+    <include refid="Base_Column_List" />
+    from investor_position_regular_product
+    where chn_id = #{chnId} and investor_id = #{investorId} and product_no = #{productNo}
+  </select>
+
+  <!-- 定期产品成立时，添加定期产品的持仓记录-->
+  <insert id="addRegularProductPosition" parameterType="com.jinhui.scheduler.domain.imiqian.domain.InvestorPosition">
+    insert into investor_position_regular_product(gather_date,
+                                  batch_code,
+                                  investor_id,
+                                  chn_id,
+                                  chn_code,
+                                  name,
+                                  product_no,
+                                  child_product_no,
+                                  product_name,
+                                  total_postion_vol,
+                                  product_vol,
+                                  total_postion_amount,
+                                  total_income,
+                                  total_redemed_amount,
+                                  total_subs_amount)
+    select #{gatherDate},#{batchCode},
+           investor_id,
+           chn_id,
+           chn_code,
+           name,
+           product_no,
+           child_product_no,
+           product_name,
+           trans_vol,
+           product_vol,
+           trans_amount,
+           0,
+           0,
+           trans_amount from investor_trans where id = #{id}
+  </insert>
+
+  <!-- 更新定期产品的持仓记录-->
+  <update id="updateRegularProductPosition" parameterType="com.jinhui.scheduler.domain.imiqian.domain.InvestorTrans" >
+    update investor_position_regular_product set total_postion_vol = total_postion_vol + #{transVol},
+                                 total_postion_amount = total_postion_amount + #{transAmount},
+                                 total_subs_amount = total_subs_amount + #{transAmount}
+    where chn_id = #{chnId} and investor_id = #{investorId} and product_no = #{productNo}
+  </update>
+
+  <!-- 更新定期产品的总收益-->
+  <update id="upgrateTotalIncome" parameterType="com.jinhui.scheduler.domain.imiqian.domain.TermPaymentDetail">
+    update investor_position_regular_product set total_income = total_income + #{interestAmount} where chn_code = #{chnCode} and investor_id = #{investorId} and product_no = #{productNo}
+  </update>
+
+  <!-- 更新定期产品的总收益-->
+  <update id="upgrateTotalIncomeAndClearPosition" parameterType="com.jinhui.scheduler.domain.imiqian.domain.TermPaymentDetail">
+    update investor_position_regular_product set total_income = total_income + #{interestAmount}, total_redemed_amount = total_redemed_amount + #{subsTotalAmount} + #{interestAmount},total_postion_vol = 0,total_postion_amount = 0 where chn_code = #{chnCode} and investor_id = #{investorId} and product_no = #{productNo}
+  </update>
+
+</mapper>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.core.GeneratedFileMapper">
+
+    <resultMap id="generatedFileMap" type="com.jinhui.scheduler.domain.core.GeneratedFile">
+        <id property="fileId" column="file_id"/>
+        <result property="fileName" column="file_name"/>
+        <result property="institution" column="institution"/>
+        <result property="batchDate" column="batch_date" />
+        <result property="backupLocation" column="backup_location"/>
+    </resultMap>
+
+    <select id="findByGeFileId" parameterType="int" resultMap="generatedFileMap">
+        SELECT file_id,
+        file_name,
+        institution,
+        batch_date,
+        backup_location
+        FROM schedule_generated_file
+        WHERE file_id = #{fileId}
+    </select>
+    <insert id="save" parameterType="com.jinhui.scheduler.domain.core.GeneratedFile">
+        INSERT INTO schedule_generated_file
+        (
+        file_name,
+        institution,
+        batch_date,
+        backup_location
+        )
+        VALUES
+        (
+        #{fileName},
+        #{institution},
+        #{batchDate},
+        #{backupLocation}
+        )
+    </insert>
+
+    <select id="findFile" parameterType="com.jinhui.scheduler.domain.core.AbstractBatchFile$Criteria"
+            resultMap="generatedFileMap">
+        SELECT file_id,
+        file_name,
+        institution,
+        batch_date,
+        backup_location
+        FROM schedule_generated_file
+        WHERE 1=1
+        <if test="batchDate != null">
+            AND DATE_FORMAT(batch_date,'%Y%m%d') = DATE_FORMAT(#{batchDate}, '%Y%m%d')
+        </if>
+        <if test="fileName != null">
+            AND file_name LIKE CONCAT('%', #{fileName}, '%')
+        </if>
+        <if test="institution != null">
+            AND institution = #{institution}
+        </if>
+        ORDER BY batch_date DESC
+    </select>
+
+</mapper>

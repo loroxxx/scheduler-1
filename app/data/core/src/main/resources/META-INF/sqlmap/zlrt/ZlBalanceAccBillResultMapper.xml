@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.zlrt.ZlBalanceAccBillResultMapper" >
+  <resultMap id="BaseResultMap" type="com.jinhui.scheduler.domain.zlrt.ZlBalanceAccBillResult" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="batch_code" property="batchCode" jdbcType="INTEGER" />
+    <result column="fund_date" property="fundDate" jdbcType="VARCHAR" />
+    <result column="fund_time" property="fundTime" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="investor_id" property="investorId" jdbcType="CHAR" />
+    <result column="fund_code" property="fundCode" jdbcType="VARCHAR" />
+    <result column="trans_bank_act" property="transBankAct" jdbcType="CHAR" />
+    <result column="trans_bank_code" property="transBankCode" jdbcType="CHAR" />
+    <result column="busi_type" property="busiType" jdbcType="CHAR" />
+    <result column="zl_busi_type" property="zlBusiType" jdbcType="CHAR" />
+    <result column="trans_amt" property="transAmt" jdbcType="DECIMAL" />
+    <result column="zl_trans_amt" property="zlTransAmt" jdbcType="DECIMAL" />
+    <result column="trans_state" property="transState" jdbcType="CHAR" />
+    <result column="zl_trans_state" property="zlTransState" jdbcType="CHAR" />
+    <result column="fund_seq_id" property="fundSeqId" jdbcType="VARCHAR" />
+    <result column="zl_fund_seq_id" property="zlFundSeqId" jdbcType="VARCHAR" />
+    <result column="not_equal_flag" property="notEqualFlag" jdbcType="CHAR" />
+    <result column="result_type" property="resultType" jdbcType="CHAR" />
+    <result column="is_check" property="isCheck" jdbcType="CHAR" />
+    <result column="result_desc" property="resultDesc" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, batch_code, fund_date, fund_time, user_name, user_id, investor_id, fund_code, 
+    trans_bank_act, trans_bank_code, busi_type, zl_busi_type, trans_amt, zl_trans_amt, 
+    trans_state, zl_trans_state, fund_seq_id, zl_fund_seq_id, not_equal_flag, result_type, 
+    is_check, result_desc, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from zl_balance_acc_bill_result
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <insert id="insertSelective" parameterType="com.jinhui.scheduler.domain.zlrt.ZlBalanceAccBillResult" >
+    insert into zl_balance_acc_bill_result
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="batchCode != null" >
+        batch_code,
+      </if>
+      <if test="fundDate != null" >
+        fund_date,
+      </if>
+      <if test="fundTime != null" >
+        fund_time,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="investorId != null" >
+        investor_id,
+      </if>
+      <if test="fundCode != null" >
+        fund_code,
+      </if>
+      <if test="transBankAct != null" >
+        trans_bank_act,
+      </if>
+      <if test="transBankCode != null" >
+        trans_bank_code,
+      </if>
+      <if test="busiType != null" >
+        busi_type,
+      </if>
+      <if test="zlBusiType != null" >
+        zl_busi_type,
+      </if>
+      <if test="transAmt != null" >
+        trans_amt,
+      </if>
+      <if test="zlTransAmt != null" >
+        zl_trans_amt,
+      </if>
+      <if test="transState != null" >
+        trans_state,
+      </if>
+      <if test="zlTransState != null" >
+        zl_trans_state,
+      </if>
+      <if test="fundSeqId != null" >
+        fund_seq_id,
+      </if>
+      <if test="zlFundSeqId != null" >
+        zl_fund_seq_id,
+      </if>
+      <if test="notEqualFlag != null" >
+        not_equal_flag,
+      </if>
+      <if test="resultType != null" >
+        result_type,
+      </if>
+      <if test="isCheck != null" >
+        is_check,
+      </if>
+      <if test="resultDesc != null" >
+        result_desc,
+      </if>
+      <if test="1 == 1" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="batchCode != null" >
+        #{batchCode,jdbcType=INTEGER},
+      </if>
+      <if test="fundDate != null" >
+        #{fundDate,jdbcType=VARCHAR},
+      </if>
+      <if test="fundTime != null" >
+        #{fundTime,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="investorId != null" >
+        #{investorId,jdbcType=CHAR},
+      </if>
+      <if test="fundCode != null" >
+        #{fundCode,jdbcType=VARCHAR},
+      </if>
+      <if test="transBankAct != null" >
+        #{transBankAct,jdbcType=CHAR},
+      </if>
+      <if test="transBankCode != null" >
+        #{transBankCode,jdbcType=CHAR},
+      </if>
+      <if test="busiType != null" >
+        #{busiType,jdbcType=CHAR},
+      </if>
+      <if test="zlBusiType != null" >
+        #{zlBusiType,jdbcType=CHAR},
+      </if>
+      <if test="transAmt != null" >
+        #{transAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="zlTransAmt != null" >
+        #{zlTransAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="transState != null" >
+        #{transState,jdbcType=CHAR},
+      </if>
+      <if test="zlTransState != null" >
+        #{zlTransState,jdbcType=CHAR},
+      </if>
+      <if test="fundSeqId != null" >
+        #{fundSeqId,jdbcType=VARCHAR},
+      </if>
+      <if test="zlFundSeqId != null" >
+        #{zlFundSeqId,jdbcType=VARCHAR},
+      </if>
+      <if test="notEqualFlag != null" >
+        #{notEqualFlag,jdbcType=CHAR},
+      </if>
+      <if test="resultType != null" >
+        #{resultType,jdbcType=CHAR},
+      </if>
+      <if test="isCheck != null" >
+        #{isCheck,jdbcType=CHAR},
+      </if>
+      <if test="resultDesc != null" >
+        #{resultDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="1 == 1" >
+        now(),
+      </if>
+    </trim>
+  </insert>
+
+  <select id="queryListAfterBalance" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from zl_balance_acc_bill_result
+    where batch_code = #{batchCode}
+  </select>
+
+</mapper>

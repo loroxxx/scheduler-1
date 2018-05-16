@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!--开户确认文件的写信息配置  start -->
+    <bean id="gzefeAccountApplyDBWriter" scope="step"
+          class="org.springframework.batch.item.file.FlatFileItemWriter">
+        <property name="resource" value="file:#{jobParameters['generatePath']}/OFD_JH_GJS_#{jobParameters['applyDate']}_01.TXT" />
+        <property name="encoding" value="GBK"/>
+        <property name="headerCallback" ref="gzefeAccountApplyFileHeaderCallback" />
+        <property name="footerCallback" ref="gzefeAccountApplyFileFooterCallback" />
+        <property name="lineAggregator">
+            <bean class="com.jinhui.scheduler.biz.gzefe.writer.FormatterLineAggregator">
+                <property name="fieldExtractor">
+                    <bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+                        <property name="names" value="Address,InstReprIDCode,InstReprIDType,InstReprName,
+                        AppSheetSerialNo,CertificateType,CertificateNo,InvestorName,TransactionDate,
+                        TransactionTime,IndividualOrInstitution,PostCode,TransactionAccountID,
+                        DistributorCode,BusinessCode,DepositAcct,FaxNo,MobileTelNo, AcctNameOfInvestorInClearingAgency,
+                        AcctNoOfInvestorInClearingAgency,ClearingAgency,ClientRiskRate" />
+                    </bean>
+                </property>
+                <property name="format" value="%-120s%-30s%-1s%-20s%-24s%-1s%-30s%-120s%-8s%-6s%-1s%-6s%-17s%-9s%-3s%-19s%-24s%-24s%-60s%-28s%-9s%-1s" />
+            </bean>
+        </property>
+    </bean>
+   <bean id="gzefeAccountApplyFileHeaderCallback" class="com.jinhui.scheduler.biz.gzefe.header.GzefeAccountApplyFileHeaderCallback" />
+   <bean id="gzefeAccountApplyFileFooterCallback" class="com.jinhui.scheduler.biz.gzefe.footer.GzefeCommonFooterCallback" />
+    <!-- 开户确认的写信息配置  end -->
+
+
+
+    <!--交易申请文件的写信息配置  start -->
+    <bean id="gzefeTradeConfirmFileWriter" scope="step"
+          class="org.springframework.batch.item.file.FlatFileItemWriter">
+        <property name="resource" value="file:#{jobParameters['generatePath']}/OFD_JH_GJS_#{jobParameters['applyDate']}_03.TXT" />
+        <property name="encoding" value="GBK"/>
+        <property name="headerCallback" ref="gzefeTradeApplyFileHeaderCallback" />
+        <property name="footerCallback" ref="gzefeTradeApplyFileFooterCallback" />
+        <property name="lineAggregator">
+            <bean class="com.jinhui.scheduler.biz.gzefe.writer.FormatterLineAggregator">
+                <property name="fieldExtractor">
+                    <bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+                        <property name="names" value="AppSheetSerialNo,FundCode,Address,InvestorName,CorpName,FundName,CertificateNo,CertificateType,ChargeType,MobileTelNo,TelNo,HomeTelNo,PostCode,RegistrarName,InstReprName,DistributorName,TransactionDate,TransactionTime,TransactionAccountID,DistributorCode,ApplicationVol,ApplicationAmount,SpecifyFee,BusinessCode,TAAccountID,DiscountRateOfCommission,DepositAcct,RegionCode,CurrencyType,BranchCode,OriginalAppSheetNo,OriginalSubsDate,IndividualOrInstitution,OriginalSerialNo,TASerialNO,TargetBranchCode,TargetRegionCode,TargetTransactionAccountID,Specification,CodeOfTargetFund,FrozenCause,NetNo,OtherFee2" />
+                    </bean>
+                </property>
+                <property name="format" value="%-24s%-6s%-120s%-120s%-40s%-40s%-30s%-1s%-1s%-24s%-22s%-22s%-6s%-40s%-20s%-80s%-8s%-6s%-17s%-9s%-16s%-16s%-16s%-3s%-12s%-5s%-19s%-4s%-3s%-9s%-24s%-8s%-1s%-20s%-20s%-9s%-4s%-17s%-60s%-6s%-1s%-9s%-16s" />
+            </bean>
+        </property>
+    </bean>
+    <bean id="gzefeTradeApplyFileHeaderCallback" class="com.jinhui.scheduler.biz.gzefe.header.GzefeTradeApplyFileHeaderCallback" />
+    <bean id="gzefeTradeApplyFileFooterCallback" class="com.jinhui.scheduler.biz.gzefe.footer.GzefeCommonFooterCallback" />
+    <!-- 交易申请的写信息配置  end -->
+
+
+    <!--分红文件的写信息配置  start -->
+    <bean id="gzefeIncomeFileWriter" scope="step"
+          class="org.springframework.batch.item.file.FlatFileItemWriter">
+        <property name="resource" value="file:#{jobParameters['generatePath']}/OFD_JH_GJS_#{jobParameters['applyDate']}_06.TXT" />
+        <property name="encoding" value="GBK"/>
+        <!--<property name="lineSeparator" value="&#13;&#10;"/>-->
+        <property name="headerCallback" ref="gzefeIncomeFileHeaderCallback" />
+        <property name="footerCallback" ref="gzefeIncomeFileFooterCallback" />
+        <property name="lineAggregator">
+            <bean class="com.jinhui.scheduler.biz.gzefe.writer.FormatterLineAggregator">
+                <property name="fieldExtractor">
+                    <bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+                        <property name="names" value="AppSheetSerialNo,BasisforCalculatingDividend,TransactionCfmDate,CertificateType,CertificateNo,MobileTelNo,CurrencyType,VolOfDividendforReinvestment,DividentDate,DividendAmount,XRDate,ConfirmedAmount,FundCode,CodeOfTargetFund,RegistrationDate,ReturnCode,TransactionAccountID,DistributorCode,BusinessCode,TAAccountID,DepositAcct,DividendPerUnit,DefDividendMethod,DividendType,OtherFee2" />
+                    </bean>
+                </property>
+                <property name="format" value="%-24s%-16s%-8s%-1s%-30s%-24s%-3s%-16s%-8s%-16s%-8s%-16s%-6s%-6s%-8s%-4s%-17s%-9s%-3s%-12s%-19s%-16s%-1s%-1s%-16s" />
+            </bean>
+        </property>
+    </bean>
+    <bean id="gzefeIncomeFileHeaderCallback" class="com.jinhui.scheduler.biz.gzefe.header.GzefeIncomeFileHeaderCallback" />
+    <bean id="gzefeIncomeFileFooterCallback" class="com.jinhui.scheduler.biz.gzefe.footer.GzefeCommonFooterCallback" />
+    <!-- 分红文件的写信息配置  end -->
+
+
+    <!--汇总文件的写信息配置  start -->
+    <bean id="gzefeGatherFileWriter" scope="step"
+          class="org.springframework.batch.item.file.FlatFileItemWriter">
+        <property name="resource" value="file:#{jobParameters['generatePath']}/OFD_JH_GJS_#{jobParameters['applyDate']}_12.TXT" />
+        <property name="encoding" value="GBK"/>
+        <property name="headerCallback" ref="gzefeGatherFileHeaderCallback" />
+        <property name="footerCallback" ref="gzefeGatherFileFooterCallback" />
+        <property name="lineAggregator">
+            <bean class="com.jinhui.scheduler.biz.gzefe.writer.FormatterLineAggregator">
+                <property name="fieldExtractor">
+                    <bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+                        <property name="names" value="FundCode,DistributorCode,BusinessCode,AggregationOfTransactionByBusinessType,AggregationDate,TotalFailingVol,TotalSuccessfulVol,TotalFailingAmount,TotalSuccessfulAmount,TotalFailingDealingNum,TotalSuccessfulDealingNum" />
+                    </bean>
+                </property>
+                <property name="format" value="%-6s%-9s%-3s%-8s%-8s%-16s%-16s%-16s%-16s%-6s%-6s" />
+            </bean>
+        </property>
+    </bean>
+    <bean id="gzefeGatherFileHeaderCallback" class="com.jinhui.scheduler.biz.gzefe.header.GzefeGatherFileHeaderCallback" />
+    <bean id="gzefeGatherFileFooterCallback" class="com.jinhui.scheduler.biz.gzefe.footer.GzefeCommonFooterCallback" />
+    <!-- 分红文件的写信息配置  end -->
+
+</beans>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:annotation-config/>
+
+    <!-- todo 配置 writer bean -->
+
+    <bean id="testFileItemWriter" class="org.springframework.batch.item.file.FlatFileItemWriter" scope="step">
+        <property name="resource" value="file://#{jobExecutionContext['file.dir']}/test_20170615.txt"/>
+        <property name="lineAggregator">
+            <bean class="com.jinhui.scheduler.biz.core.test.aggregator.TestLineAggregator"/>
+        </property>
+        <!--<property name="headerCallback" ref="ExampleFileHeaderCallback"/>-->
+    </bean>
+</beans>

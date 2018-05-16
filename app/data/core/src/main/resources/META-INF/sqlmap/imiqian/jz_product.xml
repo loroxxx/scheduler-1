@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.imiqian.JzProductMapper">
+    <resultMap id="jzProductMap" type="com.jinhui.scheduler.domain.imiqian.pojo.JzProductInfo">
+        <result property="product_code" column="product_code"/>
+        <result property="project_code" column="project_code"/>
+        <result property="product_name" column="product_name"/>
+        <result property="product_institution" column="product_institution"/>
+        <result property="risk_level" column="risk_level"/>
+        <result property="income_cal_type" column="income_cal_type"/>
+        <result property="pre_income_ratio" column="pre_income_ratio"/>
+        <result property="income_cal_alg" column="income_cal_alg"/>
+        <result property="subscribe_cancel_flag" column="subscribe_cancel_flag"/>
+        <result property="subscribe_start_date" column="subscribe_start_date"/>
+        <result property="subscribe_start_time" column="subscribe_start_time"/>
+        <result property="subscribe_end_date" column="subscribe_end_date"/>
+        <result property="subscribe_end_time" column="subscribe_end_time"/>
+        <result property="established_date" column="established_date"/>
+        <result property="interest_date" column="interest_date"/>
+        <result property="expire_date" column="expire_date"/>
+        <result property="max_person" column="max_person"/>
+        <result property="min_raised_amount" column="min_raised_amount"/>
+        <result property="person_min_amount" column="person_min_amount"/>
+        <result property="person_increasing_amount" column="person_increasing_amount"/>
+        <result property="person_max_amount" column="person_max_amount"/>
+        <result property="person_total_amount" column="person_total_amount"/>
+        <result property="product_total_amount" column="product_total_amount"/>
+        <result property="product_assigned_amount" column="product_assigned_amount"/>
+        <result property="product_total_share" column="product_total_share"/>
+        <result property="product_assigned_share" column="product_assigned_share"/>
+        <result property="each_amount" column="each_amount"/>
+        <result property="pay_date" column="pay_date"/>
+        <result property="fixed_income_ratio" column="fixed_income_ratio"/>
+        <result property="cal_day" column="cal_day"/>
+        <result property="currency" column="currency"/>
+        <result property="product_status" column="product_status"/>
+        <result property="headtail_cal_alg" column="headtail_cal_alg"/>
+        <result property="product_institution_code" column="product_institution_code"/>
+        <result property="product_type" column="product_type"/>
+        <result property="payment_type" column="payment_type"/>
+        <result property="risk_test" column="risk_test"/>
+    </resultMap>
+
+    <insert id="save" parameterType="com.jinhui.scheduler.domain.imiqian.pojo.JzProductInfo">
+        insert into ta_product
+        (product_code,project_code,product_name,product_institution,risk_level,income_cal_type,pre_income_ratio,income_cal_alg,subscribe_cancel_flag,subscribe_start_date,subscribe_start_time,
+        subscribe_end_date,subscribe_end_time,established_date,interest_date,expire_date,max_person,min_raised_amount,person_min_amount,person_increasing_amount,person_max_amount,person_total_amount,
+        product_total_amount,product_assigned_amount,product_total_share,product_assigned_share,each_amount,pay_date,fixed_income_ratio,cal_day,product_status,headtail_cal_alg,
+        currency,product_institution_code,product_type,payment_type,risk_test,gmt_create,gmt_modified)
+        VALUES
+        (#{product_code},#{project_code},#{product_name},#{product_institution},#{risk_level},#{income_cal_type},#{pre_income_ratio},#{income_cal_alg},#{subscribe_cancel_flag},#{subscribe_start_date},#{subscribe_start_time},
+        #{subscribe_end_date},#{subscribe_end_time},#{established_date},#{interest_date},#{expire_date},#{max_person},#{min_raised_amount},#{person_min_amount},#{person_increasing_amount},#{person_max_amount},#{person_total_amount},
+        #{product_total_amount},#{product_assigned_amount},#{product_total_share},#{product_assigned_share},#{each_amount},#{pay_date},#{fixed_income_ratio},#{cal_day},#{product_status},#{headtail_cal_alg},
+        #{currency},#{product_institution_code},#{product_type},#{payment_type},#{risk_test},sysdate(),sysdate())
+    </insert>
+
+    <update id="updateByProductCode" parameterType="com.jinhui.scheduler.domain.imiqian.pojo.JzProductInfo">
+        update ta_product set gmt_modified=sysdate()
+            <if test="project_code!=null">,project_code=#{project_code}</if>
+            <if test="product_name!=null">,product_name=#{product_name}</if>
+            <if test="product_institution!=null">,product_institution=#{product_institution}</if>
+            <if test="risk_level!=null">,risk_level=#{risk_level}</if>
+            <if test="income_cal_type!=null">,income_cal_type=#{income_cal_type}</if>
+            <if test="pre_income_ratio!=null">,pre_income_ratio=#{pre_income_ratio}</if>
+            <if test="income_cal_alg!=null">,income_cal_alg=#{income_cal_alg}</if>
+            <if test="subscribe_cancel_flag!=null">,subscribe_cancel_flag=#{subscribe_cancel_flag}</if>
+            <if test="subscribe_start_date!=null">,subscribe_start_date=#{subscribe_start_date}</if>
+            <if test="subscribe_start_time!=null">,subscribe_start_time=#{subscribe_start_time}</if>
+            <if test="subscribe_end_date!=null">,subscribe_end_date=#{subscribe_end_date}</if>
+            <if test="subscribe_end_time!=null">,subscribe_end_time=#{subscribe_end_time}</if>
+            <if test="established_date!=null">,established_date=#{established_date}</if>
+            <if test="interest_date!=null">,interest_date=#{interest_date}</if>
+            <if test="expire_date!=null">,expire_date=#{expire_date}</if>
+            <if test="max_person!=null">,max_person=#{max_person}</if>
+            <if test="min_raised_amount!=null">,min_raised_amount=#{min_raised_amount}</if>
+            <if test="person_min_amount!=null">,person_min_amount=#{person_min_amount}</if>
+            <if test="person_increasing_amount!=null">,person_increasing_amount=#{person_increasing_amount}</if>
+            <if test="person_max_amount!=null">,person_max_amount=#{person_max_amount}</if>
+            <if test="person_total_amount!=null">,person_total_amount=#{person_total_amount}</if>
+            <if test="product_total_amount!=null">,product_total_amount=#{product_total_amount}</if>
+            <if test="product_assigned_amount!=null">,product_assigned_amount=#{product_assigned_amount}</if>
+            <if test="product_total_share!=null">,product_total_share=#{product_total_share}</if>
+            <if test="product_assigned_share!=null">,product_assigned_share=#{product_assigned_share}</if>
+            <if test="each_amount!=null">,each_amount=#{each_amount}</if>
+            <if test="pay_date!=null">,pay_date=#{pay_date}</if>
+            <if test="fixed_income_ratio!=null">,fixed_income_ratio=#{fixed_income_ratio}</if>
+            <if test="cal_day!=null">,cal_day=#{cal_day}</if>
+            <if test="currency!=null">,currency=#{currency}</if>
+            <if test="product_status!=null">,product_status=#{product_status}</if>
+            <if test="headtail_cal_alg!=null">,headtail_cal_alg=#{headtail_cal_alg}</if>
+            <if test="product_institution_code!=null">,product_institution_code=#{product_institution_code}</if>
+            <if test="product_type!=null">,product_type=#{product_type}</if>
+            <if test="payment_type!=null">,payment_type=#{payment_type}</if>
+            <if test="risk_test!=null">,risk_test=#{risk_test}</if>
+        where product_code=#{product_code}
+    </update>
+
+    <delete id="deleteByProductCode" parameterType="com.jinhui.scheduler.domain.imiqian.pojo.JzProductInfo">
+        delete from ta_product where product_code=#{product_code}
+    </delete>
+
+    <select id="findByProductCode" parameterType="java.lang.String" resultType="java.lang.String">
+        select product_name from ta_product where product_code=#{product_code}
+    </select>
+
+    <select id="findListCount" parameterType="com.jinhui.scheduler.domain.imiqian.pojo.JzProductInfo" resultType="java.lang.Integer">
+        select count(*) from ta_product where 1=1
+        <if test="product_code != null">
+            AND product_code=#{product_code}
+        </if>
+        <if test="product_name != null">
+            AND product_name like "%"#{product_name}"%"
+        </if>
+        <if test="product_institution != null">
+            AND product_institution like "%"#{product_institution}"%"
+        </if>
+        <if test="risk_level != null">
+            AND risk_level=#{risk_level}
+        </if>
+        <if test="subscribe_start_date != null">
+            AND subscribe_start_date=#{subscribe_start_date}
+        </if>
+        <if test="subscribe_end_date != null">
+            AND subscribe_end_date=#{subscribe_end_date}
+        </if>
+        <if test="interest_date != null">
+            AND interest_date=#{interest_date}
+        </if>
+        <if test="product_status != 0">
+            AND product_status=#{product_status}
+        </if>
+    </select>
+
+    <select id="findList" parameterType="com.jinhui.scheduler.domain.imiqian.pojo.JzProductInfo" resultMap="jzProductMap">
+        select * from ta_product where 1=1
+        <if test="product_code != null">
+            AND product_code=#{product_code}
+        </if>
+        <if test="product_name != null">
+            AND product_name like "%"#{product_name}"%"
+        </if>
+        <if test="product_institution != null">
+            AND product_institution like "%"#{product_institution}"%"
+        </if>
+        <if test="risk_level != null">
+            AND risk_level=#{risk_level}
+        </if>
+        <if test="subscribe_start_date != null">
+            AND subscribe_start_date=#{subscribe_start_date}
+        </if>
+        <if test="subscribe_end_date != null">
+            AND subscribe_end_date=#{subscribe_end_date}
+        </if>
+        <if test="interest_date != null">
+            AND interest_date=#{interest_date}
+        </if>
+        <if test="product_status != 0">
+            AND product_status=#{product_status}
+        </if>
+        <if test="offset &gt;= 0 and page_size &gt; 0">
+            ORDER BY product_status,subscribe_start_date limit #{offset},#{page_size}
+        </if>
+    </select>
+
+</mapper>

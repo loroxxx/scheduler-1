@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.core.ChnProductHistoryDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.jinhui.scheduler.domain.cmbfae.model.ChnProduct" id="chnProductHistoryMap">
+        <result property="productName" column="product_name"/>
+        <result property="productNo" column="product_no"/>
+        <result property="incomeRate" column="income_rate"/>
+        <result property="percentIncomeRate" column="percent_income_rate"/>
+        <result property="subsToplimit" column="subs_toplimit"/>
+        <result property="redeemToplimit" column="redeem_toplimit"/>
+        <result property="positionLimit" column="position_limit"/>
+        <result property="productSubsToplimit" column="product_subs_toplimit"/>
+        <result property="productRedeemToplimit" column="product_redeem_toplimit"/>
+        <result property="totalLimit" column="total_limit"/>
+        <result property="assignLimit" column="assign_limit"/>
+        <result property="preferDate" column="prefer_date"/>
+        <result property="chnCode" column="chn_code"/>
+    </resultMap>
+
+
+  <sql id="Base_Column_List"> product_name, product_no, income_rate, percent_income_rate, subs_toplimit, redeem_toplimit, position_limit, product_subs_toplimit, product_redeem_toplimit, total_limit, assign_limit, prefer_date, chn_code   </sql>
+
+
+	<select id="queryChnProductHistory" resultMap="chnProductHistoryMap">
+		select product_name, product_no, income_rate, percent_income_rate, subs_toplimit, redeem_toplimit, position_limit, product_subs_toplimit, product_redeem_toplimit, total_limit, assign_limit, prefer_date, chn_code from chn_product_history where  product_no = #{productNo} and chn_code =#{chnCode} and prefer_date =#{preferDate}
+	</select>
+
+	 
+	<insert id="insertChnProductHistory" parameterType="com.jinhui.scheduler.domain.cmbfae.model.ChnProduct" useGeneratedKeys="true" keyProperty="id">
+		insert into chn_product_history
+		(
+			`product_name`, 
+			`product_no`, 
+			`income_rate`, 
+			`percent_income_rate`, 
+			`subs_toplimit`, 
+			`redeem_toplimit`, 
+			`position_limit`, 
+			`product_subs_toplimit`, 
+			`product_redeem_toplimit`, 
+			`total_limit`, 
+			`assign_limit`, 
+			`prefer_date`, 
+			`chn_code`
+		)
+		values
+		(
+			#{productName}, 
+			#{productNo}, 
+			#{incomeRate}, 
+			#{percentIncomeRate}, 
+			#{subsToplimit}, 
+			#{redeemToplimit}, 
+			#{positionLimit}, 
+			#{productSubsToplimit}, 
+			#{productRedeemToplimit}, 
+			#{totalLimit}, 
+			#{assignLimit}, 
+			#{preferDate}, 
+			#{chnCode}
+		)
+	</insert>
+	 
+	<update id="updateChnProductHistory" parameterType="com.jinhui.scheduler.domain.cmbfae.model.ChnProduct">
+		update chn_product_history 
+		<set>
+			<if test="incomeRate != null">`income_rate` = #{incomeRate}, </if>
+			<if test="percentIncomeRate != null">`percent_income_rate` = #{percentIncomeRate}, </if>
+			<if test="subsToplimit != null">`subs_toplimit` = #{subsToplimit}, </if>
+			<if test="redeemToplimit != null">`redeem_toplimit` = #{redeemToplimit}, </if>
+			<if test="positionLimit != null">`position_limit` = #{positionLimit}, </if>
+			<if test="productSubsToplimit != null">`product_subs_toplimit` = #{productSubsToplimit}, </if>
+			<if test="productRedeemToplimit != null">`product_redeem_toplimit` = #{productRedeemToplimit}, </if>
+			<if test="totalLimit != null">`total_limit` = #{totalLimit}, </if>
+			<if test="assignLimit != null">`assign_limit` = #{assignLimit}, </if>
+			<if test="preferDate != null">`prefer_date` = #{preferDate}, </if>
+		</set>
+		where product_no = #{productNo} and chn_code =#{chnCode} and prefer_date =#{preferDate}
+	</update>
+	
+
+	<insert id="insertList" parameterType="java.util.List">
+		insert into chn_product_history
+		( `product_name`, `product_no`, `income_rate`, `percent_income_rate`, `subs_toplimit`, `redeem_toplimit`, `position_limit`, `product_subs_toplimit`, `product_redeem_toplimit`, `total_limit`, `assign_limit`, `prefer_date`, `chn_code`		)values
+		 <foreach collection="list" item="item" index="index" separator=",">
+		( #{item.id} ,  #{item.productName} ,  #{item.productNo} ,  #{item.incomeRate} ,  #{item.percentIncomeRate} ,  #{item.subsToplimit} ,  #{item.redeemToplimit} ,  #{item.positionLimit} ,  #{item.productSubsToplimit} ,  #{item.productRedeemToplimit} ,  #{item.totalLimit} ,  #{item.assignLimit} ,  #{item.preferDate} ,  #{item.chnCode} 		)
+		</foreach> 
+	</insert>
+	
+	
+	
+
+</mapper>

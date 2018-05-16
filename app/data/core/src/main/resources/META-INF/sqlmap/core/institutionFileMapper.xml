@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.core.InstitutionFileMapper">
+
+    <resultMap id="fileMap" type="com.jinhui.scheduler.domain.common.InstitutionFile">
+        <id column="file_type" property="fileType"/>
+        <result column="file_pattern" property="filePattern"/>
+        <result column="institution" property="institution"/>
+    </resultMap>
+
+    <select id="find"  resultMap="fileMap" parameterType="com.jinhui.scheduler.domain.common.InstitutionFile$Criteria">
+        SELECT file_type, file_pattern, institution
+        FROM schedule_institution_file
+        WHERE 1=1
+        <if test="institution != null">
+            AND institution = #{institution}
+        </if>
+        <if test="isDownloadFile != null">
+            AND download_file = #{isDownloadFile}
+        </if>
+    </select>
+
+    <select id="findByIdentity"  parameterType="java.util.Map"
+            resultMap="fileMap">
+        SELECT file_type, file_pattern, institution
+        FROM schedule_institution_file
+        WHERE file_pattern = #{filePattern} AND institution = #{institution}
+    </select>
+
+</mapper>

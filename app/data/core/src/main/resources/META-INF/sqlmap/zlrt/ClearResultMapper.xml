@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.zlrt.ClearResultMapperZlrt" >
+  <resultMap id="clearResultMap" type="com.jinhui.scheduler.domain.zlrt.ClearResult" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="batch_code" property="batchCode" jdbcType="INTEGER" />
+    <result column="batch_date" property="batchDate" jdbcType="DATE" />
+    <result column="chn_code" property="chnCode" jdbcType="VARCHAR" />
+    <result column="step_no" property="stepNo" jdbcType="VARCHAR" />
+    <result column="step_code" property="stepCode" jdbcType="VARCHAR" />
+    <result column="step_desc" property="stepDesc" jdbcType="VARCHAR" />
+    <result column="total_count" property="totalCount" jdbcType="INTEGER" />
+    <result column="succ_count" property="succCount" jdbcType="INTEGER" />
+    <result column="fail_count" property="failCount" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, batch_code, batch_date, chn_code, step_no,step_code, step_desc,total_count,succ_count,fail_count,status, type, create_time
+  </sql>
+
+  <delete id="delete">
+    delete from clear_result where 1=1
+    <if test="batchCode != null">
+      AND batch_code &gt;= #{batchCode}
+    </if>
+    <if test="chnCode != null">
+      AND chn_code = #{chnCode}
+    </if>
+  </delete>
+
+  <insert id="save" parameterType="com.jinhui.scheduler.domain.zlrt.ClearResult" >
+    insert into clear_result
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="batchCode != null" >
+        batch_code,
+      </if>
+      <if test="batchDate != null" >
+        batch_date,
+      </if>
+      <if test="chnCode != null" >
+        chn_code,
+      </if>
+      <if test="stepNo != null" >
+        step_no,
+      </if>
+      <if test="stepCode != null" >
+        step_code,
+      </if>
+      <if test="stepDesc != null" >
+        step_desc,
+      </if>
+      <if test="totalCount != null" >
+        total_count,
+      </if>
+      <if test="succCount != null" >
+        succ_count,
+      </if>
+      <if test="failCount != null" >
+        fail_count,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="batchCode != null" >
+        #{batchCode},
+      </if>
+      <if test="batchDate != null" >
+        #{batchDate,jdbcType=DATE},
+      </if>
+      <if test="chnCode != null" >
+        #{chnCode,jdbcType=VARCHAR},
+      </if>
+      <if test="stepNo != null" >
+        #{stepNo,jdbcType=VARCHAR},
+      </if>
+      <if test="stepCode != null" >
+        #{stepCode,jdbcType=VARCHAR},
+      </if>
+      <if test="stepDesc != null" >
+        #{stepDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="totalCount != null" >
+        #{totalCount,jdbcType=INTEGER},
+      </if>
+      <if test="succCount != null" >
+        #{succCount,jdbcType=INTEGER},
+      </if>
+      <if test="failCount != null" >
+        #{failCount,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <!-- 查询证联对账单导入成功的任务个数(用于导入之后判断是否导入成功) -->
+  <select id="findBillImportCount" parameterType="com.jinhui.scheduler.domain.zlrt.ClearResult" resultType="java.lang.Integer">
+    select count(*) from clear_result where 1=1 and step_no = 'STEP_15' and status = '0'
+    <if test="chnCode != null">
+      AND chn_code = #{chnCode}
+    </if>
+    <if test="batchCode != null and batchCode != 0">
+      AND batch_Code = #{batchCode}
+    </if>
+  </select>
+
+  <!-- 查询证联赎回文件报送的任务个数(用于判断证联赎回文件是否报送成功) -->
+  <select id="findRedeemCount" parameterType="com.jinhui.scheduler.domain.zlrt.ClearResult" resultType="java.lang.Integer">
+    select count(*) from clear_result where 1=1 and step_no = 'STEP_17' and status = '0'
+    <if test="chnCode != null">
+      AND chn_code = #{chnCode}
+    </if>
+    <if test="batchCode != null and batchCode != 0">
+      AND batch_Code = #{batchCode}
+    </if>
+  </select>
+
+  <!-- 查询清算成功的任务个数(用于清算之后判断是否清算成功) -->
+  <select id="findClearCount" parameterType="com.jinhui.scheduler.domain.imiqian.domain.ClearResult" resultType="java.lang.Integer">
+    select count(*) from clear_result where 1=1 and step_no in ('STEP_3','STEP_4','STEP_5','STEP_6','STEP_7','STEP_8') and status = '0'
+    <if test="batchCode != null and batchCode != 0">
+      AND batch_Code = #{batchCode}
+    </if>
+  </select>
+
+  <select id="findRedeemRecord" parameterType="com.jinhui.scheduler.domain.zlrt.ClearResult" resultType="com.jinhui.scheduler.domain.zlrt.ClearResult">
+    select
+     <include refid="Base_Column_List"/>
+    from clear_result where 1=1 and step_no = 'STEP_17' and status = '0'
+    <if test="chnCode != null">
+      AND chn_code = #{chnCode}
+    </if>
+    <if test="batchCode != null and batchCode != 0">
+      AND batch_Code = #{batchCode}
+    </if>
+  </select>
+
+  <!-- 查询监管申购文件的报送记录 -->
+  <select id="findBankPurchaseRecord" parameterType="com.jinhui.scheduler.domain.zlrt.ClearResult" resultType="com.jinhui.scheduler.domain.zlrt.ClearResult">
+    select
+    <include refid="Base_Column_List"/>
+    from clear_result where 1=1 and step_no = 'STEP_18' and status = '0'
+    <if test="chnCode != null">
+      AND chn_code = #{chnCode}
+    </if>
+    <if test="batchCode != null and batchCode != 0">
+      AND batch_Code = #{batchCode}
+    </if>
+  </select>
+
+  <!-- 查询监管申购文件的报送记录 -->
+  <select id="findBankRedeemRecord" parameterType="com.jinhui.scheduler.domain.zlrt.ClearResult" resultType="com.jinhui.scheduler.domain.zlrt.ClearResult">
+    select
+    <include refid="Base_Column_List"/>
+    from clear_result where 1=1 and step_no = 'STEP_19' and status = '0'
+    <if test="chnCode != null">
+      AND chn_code = #{chnCode}
+    </if>
+    <if test="batchCode != null and batchCode != 0">
+      AND batch_Code = #{batchCode}
+    </if>
+  </select>
+
+
+
+  <!-- 查询证联对账单导入成功的任务个数(用于导入之后判断是否导入成功) -->
+  <select id="findBankCount" parameterType="com.jinhui.scheduler.domain.zlrt.ClearResult" resultType="java.lang.Integer">
+    select count(*) from clear_result where 1=1 and step_no in ('STEP_18','STEP_19') and status = '0'
+    <if test="chnCode != null">
+      AND chn_code = #{chnCode}
+    </if>
+    <if test="batchCode != null and batchCode != 0">
+      AND batch_Code = #{batchCode}
+    </if>
+  </select>
+
+  <!-- 查询某个交易所一起报送的文件数 -->
+  <select id="findSendCount" parameterType="com.jinhui.scheduler.domain.zlrt.ClearResult" resultType="java.lang.Integer">
+    select count(*) from clear_result where 1=1 and step_no in ('STEP_17','STEP_18','STEP_19') and status = '0'
+    <if test="chnCode != null">
+      AND chn_code = #{chnCode}
+    </if>
+    <if test="batchCode != null and batchCode != 0">
+      AND batch_Code = #{batchCode}
+    </if>
+  </select>
+
+  <!-- 查询证联对账的个数(用于判断是否已对账) -->
+  <select id="findBalanceResultCount" parameterType="com.jinhui.scheduler.domain.zlrt.ClearResult" resultType="java.lang.Integer">
+    select count(*) from clear_result where 1=1 and step_no = 'STEP_16' and status = '0'
+    <if test="chnCode != null">
+      AND chn_code = #{chnCode}
+    </if>
+    <if test="batchCode != null and batchCode != 0">
+      AND batch_Code = #{batchCode}
+    </if>
+  </select>
+
+  <select id="findAnnounceCount" parameterType="com.jinhui.scheduler.domain.zlrt.ClearResult" resultType="java.lang.Integer">
+    select count(*) from clear_result where 1=1 and step_no = 'STEP_20' and status = '0'
+    <if test="chnCode != null">
+      AND chn_code = #{chnCode}
+    </if>
+    <if test="batchCode != null and batchCode != 0">
+      AND batch_Code = #{batchCode}
+    </if>
+  </select>
+
+  <select id="findList" parameterType="com.jinhui.scheduler.domain.imiqian.domain.ClearResult" resultMap="clearResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from clear_result where 1=1
+    <if test="chnCode != null">
+      AND chn_code = #{chnCode}
+    </if>
+    <if test="batchCode != null and batchCode != 0">
+      AND batch_Code = #{batchCode}
+    </if>
+  </select>
+
+
+
+</mapper>

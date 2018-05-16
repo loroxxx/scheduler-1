@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.imiqian.UserMapper" >
+  <resultMap id="userMap" type="com.jinhui.scheduler.domain.imiqian.domain.User" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="investor_id" property="investorId" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="user_flag" property="userFlag" jdbcType="CHAR" />
+    <result column="id_type" property="idType" jdbcType="CHAR" />
+    <result column="id_no" property="idNo" jdbcType="CHAR" />
+    <result column="sex" property="sex" jdbcType="CHAR" />
+    <result column="phone" property="phone" jdbcType="CHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="open_bank" property="openBank" jdbcType="VARCHAR" />
+    <result column="bank_account" property="bankAccount" jdbcType="CHAR" />
+    <result column="exchange_code" property="exchangeCode" jdbcType="CHAR" />
+    <result column="create_time" property="createTime" jdbcType="DATE" />
+    <result column="update_time" property="updateTime" jdbcType="DATE" />
+    <result column="confirm_date" property="confirmDate" jdbcType="DATE" />
+    <result column="record_date" property="recordDate" jdbcType="DATE" />
+    <result column="batch_code" property="batchCode" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, investor_id, name, user_flag, id_type, id_no, sex, phone, address, open_bank,
+    bank_account, exchange_code, confirm_date, record_date,batch_code,create_time, update_time
+  </sql>
+
+  <insert id="save" parameterType="com.jinhui.scheduler.domain.imiqian.domain.User" >
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="investorId != null" >
+        investor_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="userFlag != null" >
+        user_flag,
+      </if>
+      <if test="idType != null" >
+        id_type,
+      </if>
+      <if test="idNo != null" >
+        id_no,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="openBank != null" >
+        open_bank,
+      </if>
+      <if test="bankAccount != null" >
+        bank_account,
+      </if>
+      <if test="exchangeCode != null" >
+        exchange_code,
+      </if>
+      <if test="createTime != null" >
+      create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="confirmDate != null" >
+        confirm_date,
+      </if>
+      <if test="recordDate != null" >
+        record_date,
+      </if>
+      <if test="batchCode != null" >
+        batch_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="investorId != null" >
+        #{investorId,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="userFlag != null" >
+        #{userFlag,jdbcType=CHAR},
+      </if>
+      <if test="idType != null" >
+        #{idType,jdbcType=CHAR},
+      </if>
+      <if test="idNo != null" >
+        #{idNo,jdbcType=CHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=CHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=CHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="openBank != null" >
+        #{openBank,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null" >
+        #{bankAccount,jdbcType=CHAR},
+      </if>
+      <if test="exchangeCode != null" >
+        #{exchangeCode,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=DATE},
+      </if>
+      <if test="confirmDate != null" >
+        #{confirmDate,jdbcType=DATE},
+      </if>
+      <if test="recordDate != null" >
+        #{recordDate,jdbcType=DATE},
+      </if>
+      <if test="batchCode != null" >
+        #{batchCode},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="findList" parameterType="com.jinhui.scheduler.domain.imiqian.domain.User" resultMap="userMap">
+    select
+    <include refid="Base_Column_List" />
+    from user where 1=1
+    <if test="investorId != null">
+      AND investor_id = #{investorId}
+    </if>
+    <if test="idType != null">
+      AND id_type = #{idType}
+    </if>
+    <if test="idNo != null">
+      AND id_no = #{idNo}
+    </if>
+  </select>
+
+  <delete id="delete">
+    delete from user where 1=1
+    <if test="batchCode != null">
+      AND batch_code &gt;= #{batchCode}
+    </if>
+  </delete>
+
+</mapper>

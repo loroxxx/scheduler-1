@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.core.BatchPageStepMapper">
+
+
+  <sql id="Base_Column_List"> step, update_time   </sql>
+
+
+	<select id="queryPageStep" resultType="java.lang.String">
+		select step  from batch_page_step 
+	</select>
+
+	<insert id="savePageStep" >
+		insert into batch_page_step
+		(
+			`step`, 
+			`update_time`
+		)
+		values
+		(
+			#{step}, 
+			#{updateTime}
+		)
+	</insert>
+	 
+	<update id="updatePageStep" parameterType="map">
+		update batch_page_step 
+		<set>
+			<if test="step != null">`step` = #{step}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}</if>
+		</set>
+	</update>
+	
+
+</mapper>

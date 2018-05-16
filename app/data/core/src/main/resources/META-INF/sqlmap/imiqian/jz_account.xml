@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.imiqian.JzAccountMapper">
+    <resultMap id="jzAccountMap" type="com.jinhui.scheduler.domain.imiqian.pojo.JzAccountInfo">
+        <id property="Id" column="Id"/>
+        <result property="AppSheetSerialNo" column="AppSheetSerialNo"/>
+        <result property="CertificateType" column="CertificateType"/>
+        <result property="CertificateNo" column="CertificateNo"/>
+        <result property="InvestorName" column="InvestorName"/>
+        <result property="TransactionDate" column="TransactionDate"/>
+        <result property="TransactionTime" column="TransactionTime"/>
+        <result property="IndividualOrInstitution" column="IndividualOrInstitution"/>
+        <result property="TransactionAccountID" column="TransactionAccountID"/>
+        <result property="DistributorCode" column="DistributorCode"/>
+        <result property="BusinessCode" column="BusinessCode"/>
+        <result property="EmailAddress" column="EmailAddress"/>
+        <result property="MobileTelNo" column="MobileTelNo"/>
+        <result property="BranchCode" column="BranchCode"/>
+        <result property="ClientRiskRate" column="ClientRiskRate"/>
+        <result property="ConfirmFlag" column="ConfirmFlag"/>
+        <result property="TransactionCfmDate" column="TransactionCfmDate"/>
+        <result property="ReturnCode" column="ReturnCode"/>
+        <result property="Status" column="Status"/>
+        <result property="TAAccountID" column="TAAccountID"/>
+        <result property="TASerialNO" column="TASerialNO"/>
+        <result property="ErrorDetail" column="ErrorDetail"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+       Id,AppSheetSerialNo,CertificateType,CertificateNo,InvestorName,TransactionDate,TransactionTime,IndividualOrInstitution,TransactionAccountID,DistributorCode,
+        BusinessCode,EmailAddress,MobileTelNo,BranchCode,ClientRiskRate,ConfirmFlag,Status,TAAccountID,TASerialNO,ErrorDetail,TransactionCfmDate,ReturnCode
+    </sql>
+
+    <insert id="save" parameterType="com.jinhui.scheduler.domain.imiqian.pojo.JzAccountInfo">
+        insert into ta_account
+        (<include refid="Base_Column_List" />)
+        VALUES
+        (#{Id},#{AppSheetSerialNo},#{CertificateType},#{CertificateNo},#{InvestorName},#{TransactionDate},#{TransactionTime},#{IndividualOrInstitution},#{TransactionAccountID},#{DistributorCode},
+        #{BusinessCode},#{EmailAddress},#{MobileTelNo},#{BranchCode},#{ClientRiskRate},#{ConfirmFlag},#{Status},#{TAAccountID},#{TASerialNO},#{ErrorDetail},#{TransactionCfmDate},#{ReturnCode})
+    </insert>
+
+    <select id="findList" parameterType="com.jinhui.scheduler.domain.imiqian.pojo.JzAccountInfo" resultMap="jzAccountMap">
+      select <include refid="Base_Column_List" /> from ta_account where 1=1
+        <if test="Id != null">
+            AND Id=#{Id}
+        </if>
+        <if test="AppSheetSerialNo != null">
+            AND AppSheetSerialNo=#{AppSheetSerialNo}
+        </if>
+        <if test="CertificateType != null">
+            AND CertificateType=#{CertificateType}
+        </if>
+        <if test="CertificateNo != null">
+            AND CertificateNo=#{CertificateNo}
+        </if>
+        <if test="InvestorName != null">
+            AND InvestorName=#{InvestorName}
+        </if>
+        <if test="TransactionDate != null">
+            AND TransactionDate=#{TransactionDate}
+        </if>
+        <if test="TransactionTime != null">
+            AND TransactionTime=#{TransactionTime}
+        </if>
+        <if test="IndividualOrInstitution != null">
+            AND IndividualOrInstitution=#{IndividualOrInstitution}
+        </if>
+        <if test="TransactionAccountID != null">
+            AND TransactionAccountID=#{TransactionAccountID}
+        </if>
+        <if test="DistributorCode != null">
+            AND DistributorCode=#{DistributorCode}
+        </if>
+        <if test="BusinessCode != null">
+            AND BusinessCode=#{BusinessCode}
+        </if>
+        <if test="EmailAddress != null">
+            AND EmailAddress=#{EmailAddress}
+        </if>
+        <if test="MobileTelNo != null">
+            AND MobileTelNo=#{MobileTelNo}
+        </if>
+        <if test="BranchCode != null">
+            AND BranchCode=#{BranchCode}
+        </if>
+        <if test="ClientRiskRate != null">
+            AND ClientRiskRate=#{ClientRiskRate}
+        </if>
+        <if test="ConfirmFlag != null">
+            AND ConfirmFlag=#{ConfirmFlag}
+        </if>
+        <if test="TransactionCfmDate != null">
+            AND TransactionCfmDate=#{TransactionCfmDate}
+        </if>
+        <if test="ReturnCode != null">
+            AND ReturnCode=#{ReturnCode}
+        </if>
+        <if test="Status != null">
+            AND Status=#{Status}
+        </if>
+        <if test="TAAccountID != null">
+            AND TAAccountID=#{TAAccountID}
+        </if>
+        <if test="TASerialNO != null">
+            AND TASerialNO=#{TASerialNO}
+        </if>
+        <if test="ErrorDetail != null">
+            AND ErrorDetail=#{ErrorDetail}
+        </if>
+        order by  ConfirmFlag asc,TransactionCfmDate asc
+        <if test="Offset &gt;= 0 and PageSize &gt; 0">
+            limit #{Offset},#{PageSize}
+        </if>
+    </select>
+
+    <select id="findListCount" parameterType="com.jinhui.scheduler.domain.imiqian.pojo.JzAccountInfo" resultType="java.lang.Integer">
+        select count(*) from ta_account where 1=1
+        <if test="Id != null">
+            AND Id=#{Id}
+        </if>
+        <if test="AppSheetSerialNo != null">
+            AND AppSheetSerialNo=#{AppSheetSerialNo}
+        </if>
+        <if test="CertificateType != null">
+            AND CertificateType=#{CertificateType}
+        </if>
+        <if test="CertificateNo != null">
+            AND CertificateNo=#{CertificateNo}
+        </if>
+        <if test="InvestorName != null">
+            AND InvestorName=#{InvestorName}
+        </if>
+        <if test="TransactionDate != null">
+            AND TransactionDate=#{TransactionDate}
+        </if>
+        <if test="TransactionTime != null">
+            AND TransactionTime=#{TransactionTime}
+        </if>
+        <if test="IndividualOrInstitution != null">
+            AND IndividualOrInstitution=#{IndividualOrInstitution}
+        </if>
+        <if test="TransactionAccountID != null">
+            AND TransactionAccountID=#{TransactionAccountID}
+        </if>
+        <if test="DistributorCode != null">
+            AND DistributorCode=#{DistributorCode}
+        </if>
+        <if test="BusinessCode != null">
+            AND BusinessCode=#{BusinessCode}
+        </if>
+        <if test="EmailAddress != null">
+            AND EmailAddress=#{EmailAddress}
+        </if>
+        <if test="MobileTelNo != null">
+            AND MobileTelNo=#{MobileTelNo}
+        </if>
+        <if test="BranchCode != null">
+            AND BranchCode=#{BranchCode}
+        </if>
+        <if test="ClientRiskRate != null">
+            AND ClientRiskRate=#{ClientRiskRate}
+        </if>
+        <if test="ConfirmFlag != null">
+            AND ConfirmFlag=#{ConfirmFlag}
+        </if>
+        <if test="TransactionCfmDate != null">
+            AND TransactionCfmDate=#{TransactionCfmDate}
+        </if>
+        <if test="ReturnCode != null">
+            AND ReturnCode=#{ReturnCode}
+        </if>
+        <if test="Status != null">
+            AND Status=#{Status}
+        </if>
+        <if test="TAAccountID != null">
+            AND TAAccountID=#{TAAccountID}
+        </if>
+        <if test="TASerialNO != null">
+            AND TASerialNO=#{TASerialNO}
+        </if>
+        <if test="ErrorDetail != null">
+            AND ErrorDetail=#{ErrorDetail}
+        </if>
+    </select>
+
+    <delete id="delete" parameterType="com.jinhui.scheduler.domain.imiqian.pojo.JzAccountInfo">
+        delete from ta_account where 1=1
+        <if test="Id != null">
+            AND Id=#{Id}
+        </if>
+        <if test="CertificateType != null">
+            AND CertificateType=#{CertificateType}
+        </if>
+        <if test="CertificateNo != null">
+            AND CertificateNo=#{CertificateNo}
+        </if>
+        <if test="InvestorName != null">
+            AND InvestorName=#{InvestorName}
+        </if>
+        <if test="TransactionDate != null">
+            AND TransactionDate=#{TransactionDate}
+        </if>
+        <if test="TransactionTime != null">
+            AND TransactionTime=#{TransactionTime}
+        </if>
+        <if test="IndividualOrInstitution != null">
+            AND IndividualOrInstitution=#{IndividualOrInstitution}
+        </if>
+        <if test="TransactionAccountID != null">
+            AND TransactionAccountID=#{TransactionAccountID}
+        </if>
+        <if test="DistributorCode != null">
+            AND DistributorCode=#{DistributorCode}
+        </if>
+        <if test="BusinessCode != null">
+            AND BusinessCode=#{BusinessCode}
+        </if>
+        <if test="EmailAddress != null">
+            AND EmailAddress=#{EmailAddress}
+        </if>
+        <if test="MobileTelNo != null">
+            AND MobileTelNo=#{MobileTelNo}
+        </if>
+        <if test="BranchCode != null">
+            AND BranchCode=#{BranchCode}
+        </if>
+        <if test="ClientRiskRate != null">
+            AND ClientRiskRate=#{ClientRiskRate}
+        </if>
+        <if test="ConfirmFlag != null">
+            AND ConfirmFlag=#{ConfirmFlag}
+        </if>
+        <if test="TransactionCfmDate != null">
+            AND TransactionCfmDate=#{TransactionCfmDate}
+        </if>
+        <if test="ReturnCode != null">
+            AND ReturnCode=#{ReturnCode}
+        </if>
+        <if test="Status != null">
+            AND Status=#{Status}
+        </if>
+        <if test="TAAccountID != null">
+            AND TAAccountID=#{TAAccountID}
+        </if>
+        <if test="Status != null">
+            AND TASerialNO=#{TASerialNO}
+        </if>
+    </delete>
+
+    <update id="update" parameterType="com.jinhui.scheduler.domain.imiqian.pojo.JzAccountInfo">
+        update ta_account
+        <set>
+            <if test="Id != null">
+                Id=#{Id},
+            </if>
+            <if test="AppSheetSerialNo != null">
+                AppSheetSerialNo=#{AppSheetSerialNo},
+            </if>
+            <if test="CertificateType != null">
+                CertificateType=#{CertificateType},
+            </if>
+            <if test="CertificateNo != null">
+                CertificateNo=#{CertificateNo},
+            </if>
+            <if test="InvestorName != null">
+                InvestorName=#{InvestorName},
+            </if>
+            <if test="TransactionDate != null">
+                TransactionDate=#{TransactionDate},
+            </if>
+            <if test="TransactionTime != null">
+                TransactionTime=#{TransactionTime},
+            </if>
+            <if test="IndividualOrInstitution != null">
+                IndividualOrInstitution=#{IndividualOrInstitution},
+            </if>
+            <if test="TransactionAccountID != null">
+                TransactionAccountID=#{TransactionAccountID},
+            </if>
+            <if test="DistributorCode != null">
+                DistributorCode=#{DistributorCode},
+            </if>
+            <if test="BusinessCode != null">
+                BusinessCode=#{BusinessCode},
+            </if>
+            <if test="EmailAddress != null">
+                EmailAddress=#{EmailAddress},
+            </if>
+            <if test="MobileTelNo != null">
+                MobileTelNo=#{MobileTelNo},
+            </if>
+            <if test="BranchCode != null">
+                BranchCode=#{BranchCode},
+            </if>
+            <if test="ClientRiskRate != null">
+                ClientRiskRate=#{ClientRiskRate},
+            </if>
+            <if test="ConfirmFlag != null">
+                ConfirmFlag=#{ConfirmFlag},
+            </if>
+            <if test="TransactionCfmDate != null">
+                TransactionCfmDate=#{TransactionCfmDate},
+            </if>
+            <if test="ReturnCode != null">
+                ReturnCode=#{ReturnCode},
+            </if>
+            <if test="Status != null">
+                Status=#{Status},
+            </if>
+            <if test="TAAccountID != null">
+                TAAccountID=#{TAAccountID},
+            </if>
+            <if test="TASerialNO != null">
+                TASerialNO=#{TASerialNO},
+            </if>
+            <if test="ErrorDetail != null">
+                ErrorDetail=#{ErrorDetail}
+            </if>
+        </set>
+        where Id = #{Id}
+    </update>
+</mapper>

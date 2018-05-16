@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!--交易申请文件的写信息配置 start -->
+    <bean id="cmfaeTransApplyDBWriter" scope="step"
+          class="com.jinhui.scheduler.biz.cmbfae.writer.JsonFileItemWriter">
+        <property name="resource" value="file:#{jobParameters['generatePath']}" />
+        <property name="encoding" value="UTF-8"/>
+        <!--在文件开头生成统计信息-->
+        <property name="headerCallback" ref="cmfaeTransApplyFileHeaderCallback" />
+    </bean>
+
+    <bean id="cmfaeTransApplyFileHeaderCallback" class="com.jinhui.scheduler.biz.cmbfae.header.CmfaeTransApplyFileHeaderCallback" />
+    <!--交易申请文件的写信息配置 end -->
+
+
+
+
+    <!--持仓文件的写信息配置 start -->
+    <bean id="cmfaePositionWriter" scope="step"
+          class="com.jinhui.scheduler.biz.cmbfae.writer.JsonFileItemWriter">
+        <property name="resource" value="file:#{jobParameters['generatePath']}" />
+        <property name="encoding" value="UTF-8"/>
+        <!--在文件开头生成统计信息-->
+        <property name="headerCallback" ref="cmfaePostionFileHeaderCallback" />
+    </bean>
+
+    <bean id="cmfaePostionFileHeaderCallback" class="com.jinhui.scheduler.biz.cmbfae.header.CmfaePostionFileHeaderCallback" />
+    <!--持仓文件的写信息配置 end -->
+
+</beans>

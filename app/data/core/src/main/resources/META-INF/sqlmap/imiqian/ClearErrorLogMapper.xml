@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.imiqian.ClearErrorLogMapper" >
+  <resultMap id="BaseResultMap" type="com.jinhui.scheduler.domain.imiqian.domain.ClearErrorLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="batch_code" property="batchCode" jdbcType="INTEGER" />
+    <result column="batch_date" property="batchDate" jdbcType="DATE" />
+    <result column="chn_code" property="chnCode" jdbcType="VARCHAR" />
+    <result column="chn_name" property="chnName" jdbcType="VARCHAR" />
+    <result column="step_code" property="stepCode" jdbcType="VARCHAR" />
+    <result column="target_code" property="targetCode" jdbcType="VARCHAR" />
+    <result column="step_desc" property="stepDesc" jdbcType="VARCHAR" />
+    <result column="error_info" property="errorInfo" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="DATE" />
+    <result column="error_info" property="errorInfo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, batch_code, batch_date, chn_code, step_code,target_code, step_desc, error_info, create_time
+  </sql>
+
+  <insert id="save" parameterType="com.jinhui.scheduler.domain.imiqian.domain.ClearErrorLog" >
+    insert into clear_error_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="batchCode != null" >
+        batch_code,
+      </if>
+      <if test="batchDate != null" >
+        batch_date,
+      </if>
+      <if test="chnCode != null" >
+        chn_code,
+      </if>
+      <if test="stepCode != null" >
+        step_code,
+      </if>
+      <if test="targetCode != null" >
+        target_code,
+      </if>
+      <if test="stepDesc != null" >
+        step_desc,
+      </if>
+      <if test="errorInfo != null" >
+        error_info,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="batchCode != null" >
+        #{batchCode},
+      </if>
+      <if test="batchDate != null" >
+        #{batchDate,jdbcType=DATE},
+      </if>
+      <if test="chnCode != null" >
+        #{chnCode,jdbcType=VARCHAR},
+      </if>
+      <if test="stepCode != null" >
+        #{stepCode,jdbcType=VARCHAR},
+      </if>
+      <if test="targetCode != null" >
+        #{targetCode,jdbcType=VARCHAR},
+      </if>
+      <if test="stepDesc != null" >
+        #{stepDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="errorInfo != null" >
+        #{errorInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="findErrorLogList" resultMap="BaseResultMap">
+    select i.chn_code,i.chn_name,e.error_info from clear_error_log e,chn_info i
+    where e.chn_code = i.chn_code and e.batch_code = #{batchCode}
+  </select>
+
+  <delete id="deleteErrorLog">
+    delete from clear_error_log where batch_code = #{batchCode}
+  </delete>
+
+</mapper>

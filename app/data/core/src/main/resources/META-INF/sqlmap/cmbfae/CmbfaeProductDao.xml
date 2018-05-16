@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.cmbfae.CmbfaeProductDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.jinhui.scheduler.domain.cmbfae.model.Product" id="productMap">
+        <result property="productName" column="product_name"/>
+        <result property="productNo" column="product_no"/>
+        <result property="platProductNo" column="plat_product_no"/>
+        <result property="productIssuer" column="product_issuer"/>
+        <result property="exchangeNo" column="exchange_no"/>
+        <result property="productType" column="product_type"/>
+        <result property="productExpdate" column="product_expdate"/>
+        <result property="expdateUnit" column="expdate_unit"/>
+        <result property="calIncomeWay" column="cal_income_way"/>
+        <result property="calRateWay" column="cal_rate_way"/>
+        <result property="setupDate" column="setup_date"/>
+        <result property="rateDate" column="rate_date"/>
+        <result property="termDate" column="term_date"/>
+        <result property="casheDate" column="cashe_date"/>
+        <result property="incomeRate" column="income_rate"/>
+        <result property="ipoStartDate" column="ipo_start_date"/>
+        <result property="ipoEndDate" column="ipo_end_date"/>
+        <result property="startPeriods" column="start_periods"/>
+        <result property="endPeriods" column="end_periods"/>
+        <result property="totalLimit" column="total_limit"/>
+        <result property="totalVol" column="total_vol"/>
+        <result property="productVol" column="product_vol"/>
+        <result property="subsStartAmount" column="subs_start_amount"/>
+        <result property="subsRange" column="subs_range"/>
+        <result property="riskAssess" column="risk_assess"/>
+        <result property="riskLevel" column="risk_level"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+
+  <sql id="Base_Column_List">product_name, product_no, plat_product_no, parent_product_no, product_issuer, exchange_no, product_type, product_expdate, expdate_unit, cal_income_way, cal_rate_way, setup_date, rate_date, term_date, cashe_date, income_rate, ipo_start_date, ipo_end_date, start_periods, end_periods, total_limit, total_vol, product_vol, subs_start_amount, subs_range, risk_assess, risk_level , create_time </sql>
+
+
+
+	<select id="queryList" resultMap="productMap">
+		select <include refid="Base_Column_List" /> from product where DATE_FORMAT(create_time,'%Y-%m-%d')=#{date}
+        
+	</select>
+
+	 
+	<insert id="save" parameterType="com.jinhui.scheduler.domain.cmbfae.model.Product" >
+		insert into product
+		(
+			`product_name`,
+			`product_no`,
+			`plat_product_no`,
+			`product_issuer`,
+			`exchange_no`,
+			`product_type`,
+			`product_expdate`,
+			`expdate_unit`,
+			`cal_income_way`,
+			`cal_rate_way`,
+			`setup_date`,
+			`rate_date`,
+			`term_date`,
+			`cashe_date`,
+			`nominal_income_rate`,
+			`nominal_percent_income_rate`,
+			`ipo_start_date`,
+			`ipo_end_date`,
+			`start_periods`,
+			`end_periods`,
+			`total_limit`,
+			`total_vol`,
+			`product_vol`,
+			`subs_start_amount`,
+			`subs_range`,
+			`risk_assess`,
+			`risk_level`,
+			`create_time`
+		)
+		values
+		(
+			#{productName},
+			#{productNo},
+			#{platProductNo},
+			#{productIssuer},
+			#{exchangeNo},
+			#{productType},
+			#{productExpdate},
+			#{expdateUnit},
+			#{calIncomeWay},
+			#{calRateWay},
+			#{setupDate},
+			#{rateDate},
+			#{termDate},
+			#{casheDate},
+			#{nominalIncomeRate},
+			#{nominalPercentIncomeRate},
+			#{ipoStartDate},
+			#{ipoEndDate},
+			#{startPeriods},
+			#{endPeriods},
+			#{totalLimit},
+			#{totalVol},
+			#{productVol},
+			#{subsStartAmount},
+			#{subsRange},
+			#{riskAssess},
+			#{riskLevel},
+			#{createTime}
+		)
+	</insert>
+	 
+
+
+	<!--<insert id="insertList" parameterType="java.util.List">-->
+		<!--insert into product-->
+		<!--( `product_name`, `product_no`, `plat_product_no`, `parent_product_no`, `product_issuer`, `exchange_no`, `product_type`, `product_expdate`, `expdate_unit`, `cal_income_way`, `cal_rate_way`, `setup_date`, `rate_date`, `term_date`, `cashe_date`, `income_rate`, `ipo_start_date`, `ipo_end_date`, `start_periods`, `end_periods`, `total_limit`, `total_vol`, `product_vol`, `subs_start_amount`, `subs_range`, `risk_assess`, `risk_level`,`create_time`		)values-->
+		 <!--<foreach collection="list" item="item" index="index" separator=",">-->
+		<!--( #{item.productName} ,  #{item.productNo} ,  #{item.platProductNo} ,  #{item.parentProductNo} ,  #{item.productIssuer} ,  #{item.exchangeNo} ,  #{item.productType} ,  #{item.productExpdate} ,  #{item.expdateUnit} ,  #{item.calIncomeWay} ,  #{item.calRateWay} ,  #{item.setupDate} ,  #{item.rateDate} ,  #{item.termDate} ,  #{item.casheDate} ,  #{item.incomeRate} ,  #{item.ipoStartDate} ,  #{item.ipoEndDate} ,  #{item.startPeriods} ,  #{item.endPeriods} ,  #{item.totalLimit} ,  #{item.totalVol} ,  #{item.productVol} ,  #{item.subsStartAmount} ,  #{item.subsRange} ,  #{item.riskAssess} ,  #{item.riskLevel}, #{item.createTime} )-->
+		<!--</foreach> -->
+	<!--</insert>-->
+
+  <resultMap type="com.jinhui.scheduler.domain.cmbfae.template.ProductContentVo" id="productTemplateMap">
+   		 <result property="productCode" column="product_no"/>
+   		 <result property="coProductCode" column="plat_product_no"/>
+	 	 <result property="parentProductCode" column="parent_product_no"/>
+	 	 <result property="productName" column="product_name"/>
+	 	 <result property="productSumLimit" column="total_limit"/>
+	 	 <result property="distributeSumLimit" column="total_limit"/>
+	 	 <result property="productSumVolume" column="total_vol"/>
+	 	 <result property="distributeSumVol" column="total_vol"/>
+	 	 <result property="expectedYield" column="income_rate"/>  
+	 	 <result property="establishDate" column="setup_date"/>
+	 	 <result property="ipoBeginTime" column="ipo_start_date"/>
+	 	 <result property="purchaseBeginAmount" column="subs_start_amount"/>
+	 	 <result property="purchaseScopeAmount" column="subs_range"/>
+	 	 <result property="profitCalcType" column="cal_income_way"/>
+	 	 <result property="calcInterestMethod" column="cal_rate_way"/>
+	 	 <result property="isNeedRisk" column="risk_assess"/>
+	 	 <result property="riskLevel" column="risk_level"/>
+    </resultMap>
+ 
+
+	<select id="select2JsonTemplate" resultMap="productTemplateMap">
+		select p.product_name, s.child_product_no as product_no, s.product_no as parent_product_no, p.product_issuer, p.exchange_no, p.product_type, p.product_expdate, p.expdate_unit, p.cal_income_way, p.cal_rate_way, p.setup_date, p.rate_date, p.term_date, p.cashe_date, p.income_rate, p.ipo_start_date, p.ipo_end_date, p.start_periods, p.end_periods, p.total_limit, p.total_vol, p.product_vol, p.subs_start_amount, p.subs_range, p.risk_assess, p.risk_level
+		 from schedule_product_divided s LEFT JOIN product p ON s.product_no = p.product_no  where s.state='0' and p.product_no =#{productNo}
+
+	</select>
+
+	
+	
+	 <resultMap type="com.jinhui.scheduler.domain.cmbfae.template.ProfitContent" id="profitContontMap">
+        <result property="productName" column="product_name"/>
+        <result property="coProductCode" column="product_no"/>
+        <result property="productCode" column="plat_product_no"/>
+        <result property="profitType" column="cal_income_way"/>
+        <result property="profitValue" column="income_rate"/>
+    </resultMap>
+	
+	 
+	<select id="queryProfitContentList" resultMap="profitContontMap">
+		select  plat_product_no,product_name,product_no,cal_income_way,income_rate from product where exchange_no =#{exchangeNo}
+	</select>
+	
+	
+	<select id="queryProduct" resultMap="productMap">
+		select  plat_product_no,product_name,product_no,cal_income_way,income_rate from product where product_no=#{productNo}
+	</select>
+	
+</mapper>

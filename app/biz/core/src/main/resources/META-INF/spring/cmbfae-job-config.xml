@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 招银前海文件生成mapper -->
+    <!--<bean id="cmbfaeFileJobMapper"
+          class="com.jinhui.scheduler.biz.core.config.support.InstitutionFileBatchJobMapperFactoryBean"
+          parent="instFileJobMapper">
+        <property name="institution" value="Cmbfae"/>
+        <property name="simpleFileBatchJobMapper" ref="fileJobMapper" />
+        <property name="fileMappings">
+            <map>
+                &lt;!&ndash; fixme
+                    === 定义filePattern和job之间的映射关系
+                    例如:  一个发往招银前海的认申购文件,
+                            文件模式为 purchase_102_fix_product_(\d{8})_(\d{3}).req.txt,
+                            对应的job的spring实例ID为 cmbfaePurchaseFixProduct;
+                            这样step的reader就是从db中读取记录，然后通过processor转换，再writer对象就会往
+                            purchase_102_fix_product_(\d{8})_(\d{3}).req.txt自动写内容。
+                 &ndash;&gt;
+                &lt;!&ndash;<entry key="product_102_fix_publish_(\d{8})_(\d{3}).req.txt"
+                       value="cmbfaePurchaseFixProduct"/>&ndash;&gt;
+                <entry key="test_(\d{8})_(\d{3}).req.txt"
+                       value="testUploadJob"/>
+            </map>
+        </property>
+    </bean>-->
+
+</beans>

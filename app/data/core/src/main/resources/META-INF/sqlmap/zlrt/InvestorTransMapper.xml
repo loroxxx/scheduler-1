@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.zlrt.InvestorTransMapperZlrt" >
+  <resultMap id="investorTransMap" type="com.jinhui.scheduler.domain.zlrt.InvestorTrans" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+    <result column="batch_code" property="batchCode" jdbcType="INTEGER" />
+    <result column="investor_id" property="investorId" jdbcType="CHAR" />
+    <result column="chn_id" property="chnId" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="trans_time" property="transTime" jdbcType="TIMESTAMP" />
+    <result column="confirm_date" property="confirmDate" jdbcType="TIMESTAMP" />
+    <result column="app_sheet_serial_no" property="appSheetSerialNo" jdbcType="CHAR" />
+    <result column="product_no" property="productNo" jdbcType="CHAR" />
+    <result column="child_product_no" property="childProductNo" jdbcType="CHAR" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="trans_type" property="transType" jdbcType="CHAR" />
+    <result column="trans_vol" property="transVol" jdbcType="DECIMAL" />
+    <result column="trans_amount" property="transAmount" jdbcType="DECIMAL" />
+    <result column="product_vol" property="productVol" jdbcType="DECIMAL" />
+    <result column="trans_fix" property="transFix" jdbcType="DECIMAL" />
+    <result column="take_income_flag" property="takeIncomeFlag" jdbcType="VARCHAR" />
+    <result column="huge_subs_flag" property="hugeSubsFlag" jdbcType="CHAR" />
+    <result column="huge_redem_flag" property="hugeRedemFlag" jdbcType="CHAR" />
+    <result column="chn_code" property="chnCode" jdbcType="VARCHAR" />
+    <result column="risk_disclosure" property="riskDisclosure" jdbcType="CHAR" />
+    <result column="trans_bank_code" property="transBankCode" jdbcType="VARCHAR" />
+    <result column="trans_bank_act" property="transBankAct" jdbcType="CHAR" />
+    <result column="charge_type" property="chargeType" jdbcType="CHAR" />
+    <result column="charge_way" property="chargeWay" jdbcType="CHAR" />
+    <result column="charge_rate" property="chargeRate" jdbcType="DECIMAL" />
+    <result column="specify_fee" property="specifyFee" jdbcType="DECIMAL" />
+    <result column="rolling_flag" property="rollingFlag" jdbcType="CHAR" />
+    <result column="force_redem_reason" property="forceRedemReason" jdbcType="CHAR" />
+    <result column="force_redem_type" property="forceRedemType" jdbcType="CHAR" />
+    <result column="trans_state" property="transState" jdbcType="CHAR" />
+    <result column="is_excess" property="isExcess" jdbcType="CHAR" />
+    <result column="create_time" property="createTime" jdbcType="DATE" />
+    <result column="update_time" property="updateTime" jdbcType="DATE" />
+    <result column="total_postion_amount" property="totalPostionAmount" jdbcType="DECIMAL" />
+    <result column="total_redemed_amount" property="totalRedemedAmount" jdbcType="DECIMAL" />
+    <result column="total_subs_amount" property="totalSubsAmount" jdbcType="DECIMAL" />
+    <result column="num" property="num" jdbcType="VARCHAR" />
+    <result column="zl_fund_seqId" property="zlFundSeqId" jdbcType="VARCHAR" />
+    <result column="id_no" property="idNo" jdbcType="VARCHAR" />
+    <result column="purchase_count" property="purchaseCount" jdbcType="VARCHAR" />
+    <result column="purchase_sum" property="purchaseSum" jdbcType="VARCHAR" />
+    <result column="redeem_count" property="redeemCount" jdbcType="VARCHAR" />
+    <result column="redeem_sum" property="redeemSum" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, batch_code,serial_number, investor_id, chn_id, name, DATE_FORMAT(trans_time,'%Y%m%d%H%i%s') as trans_time, confirm_date, app_sheet_serial_no,
+    child_product_no,product_no, product_name, trans_type, trans_vol, trans_amount, product_vol,
+    trans_fix, take_income_flag, huge_subs_flag, huge_redem_flag, chn_code, risk_disclosure, 
+    trans_bank_code, trans_bank_act, charge_type, charge_way, charge_rate, specify_fee,
+    rolling_flag, force_redem_reason, force_redem_type, trans_state, is_excess
+  </sql>
+
+  <sql id="search_List" >
+    t.id, t.batch_code,t.serial_number, t.investor_id, t.chn_id, t.name, DATE_FORMAT(t.trans_time,'%Y%m%d%H%i%s') as trans_time, t.confirm_date, t.app_sheet_serial_no,
+    t.child_product_no,t.product_no, t.product_name, t.trans_type, t.trans_vol, t.trans_amount, t.product_vol,
+    t.trans_fix, t.take_income_flag, t.huge_subs_flag, t.huge_redem_flag, t.chn_code, t.risk_disclosure,
+    t.trans_bank_code, t.trans_bank_act, t.charge_type, t.charge_way, t.charge_rate, t.specify_fee,
+    t.rolling_flag, t.force_redem_reason, t.force_redem_type, t.trans_state, t.is_excess,o.id_no
+  </sql>
+
+  <!-- 将不存在证联对账单中的流水改为失败-->
+  <update id="updateStateToFail" parameterType="java.lang.Integer">
+    update investor_trans set trans_state = '0010' where id = #{id}
+  </update>
+
+  <select id="findListCount" parameterType="com.jinhui.scheduler.domain.zlrt.InvestorTrans" resultType="java.lang.Integer">
+    select count(*) from investor_trans where 1=1
+    <if test="batchCode != null and batchCode != 0">
+      AND batch_code=#{batchCode}
+    </if>
+    <if test="chnCode != null">
+      AND chn_code=#{chnCode}
+    </if>
+  </select>
+
+  <select id="findTransTempList" parameterType="com.jinhui.scheduler.domain.zlrt.InvestorTrans" resultMap="investorTransMap">
+    select
+    <include refid="search_List" />
+    from investor_trans_temp t
+    left join chn_open o on t.investor_id = o.investor_id
+    where t.zl_fund_seqId = #{zlFundSeqId}
+  </select>
+
+  <select id="findTransList" parameterType="com.jinhui.scheduler.domain.zlrt.InvestorTrans" resultMap="investorTransMap">
+    select
+    <include refid="search_List" />
+    from investor_trans t
+    left join chn_open o on t.investor_id = o.investor_id
+    where t.zl_fund_seqId = #{zlFundSeqId}
+  </select>
+
+  <!-- 删除交易临时表数据-->
+  <delete id="deleteTransTemp">
+    delete from investor_trans_temp
+  </delete>
+
+  <!-- 将T日交易数据移到临时表 -->
+  <insert id="transferDataToTemp" parameterType="com.jinhui.scheduler.domain.zlrt.InvestorTrans">
+    insert into investor_trans_temp
+    select * from investor_trans where  batch_code = #{batchCode}
+  </insert>
+
+  <select id="findPurchaseCountSum" resultMap="investorTransMap">
+    select count(t.id) as purchase_count, ifnull(sum(t.trans_amount),0) as purchase_sum
+        from investor_trans t
+        left join chn_open o on o.investor_id = t.investor_id
+        left join product p on t.product_no = p.product_no
+        left join exchange_info e on p.exchange_no = e.exchange_code
+    where t.trans_type = '022' and t.trans_state = '0000' and t.batch_code = #{batchCode} and e.zl_instu_id = #{zlInstuId}
+  </select>
+
+  <select id="findRedeemCountSum" resultMap="investorTransMap">
+    select count(t.id) as redeem_count, ifnull(sum(t.trans_amount),0) as redeem_sum
+          from investor_trans t
+          left join chn_open o on o.investor_id = t.investor_id
+          left join product p on p.product_no = t.product_no
+          left join exchange_info e on p.exchange_no = e.exchange_code
+          where (t.trans_type = '024' or t.trans_type = '088') and t.trans_state = '0000' and t.batch_code = #{batchCode} and e.zl_instu_id = #{zlInstuId}
+  </select>
+
+  <!-- 查询T日交易数据中不存在证联对账单中的数据-->
+  <select id="findNotExistBalanceData" resultMap="investorTransMap">
+    select
+    <include refid="Base_Column_List" />
+    from investor_trans_temp where NOT EXISTS (select * from zl_balance_acc_bill where fund_seq_id = zl_fund_seqId) and trans_type = '022'
+  </select>
+
+
+
+</mapper>

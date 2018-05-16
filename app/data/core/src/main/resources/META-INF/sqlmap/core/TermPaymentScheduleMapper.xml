@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.core.TermPaymentScheduleMapper" >
+  <resultMap id="BaseResultMap" type="com.jinhui.scheduler.domain.core.TermPaymentSchedule" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="product_no" property="productNo" jdbcType="CHAR" />
+    <result column="plat_product_no" property="platProductNo" jdbcType="VARCHAR" />
+    <result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
+    <result column="product_total_periods" property="productTotalPeriods" jdbcType="INTEGER" />
+    <result column="interest_amount" property="interestAmount" jdbcType="DECIMAL" />
+    <result column="interest_period" property="interestPeriod" jdbcType="INTEGER" />
+    <result column="interest_days" property="interestDays" jdbcType="INTEGER" />
+    <result column="per_interest_amount" property="perInterestAmount" jdbcType="DECIMAL" />
+    <result column="interest_state" property="interestState" jdbcType="CHAR" />
+    <result column="interest_date" property="interestDate" jdbcType="DATE" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+
+  <resultMap id="BaseResultMap2" type="com.jinhui.scheduler.domain.core.TermPaymentScheduleVo" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="product_no" property="productNo" jdbcType="CHAR" />
+    <result column="per_interest_amount" property="perInterestAmount" jdbcType="DECIMAL" />
+    <result column="interest_date" property="interestDate" jdbcType="DATE" />
+    <result column="exchange_no" property="exchangeNo" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    id, product_name, product_no, plat_product_no, total_amount, product_total_periods, 
+    interest_amount, interest_period, interest_days, per_interest_amount, interest_state, 
+    interest_date, create_time, gmt_modified
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    from term_payment_schedule
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+
+    <select id="selectByParam" resultMap="BaseResultMap2">
+
+      select
+      t.product_name, t.product_no,
+       t.per_interest_amount,
+      t.interest_date, p.exchange_no
+      from term_payment_schedule t,product p
+      where t.product_no=#{productNo}
+      and t.product_no=p.product_no
+      <if test="startDate != null" >
+        and interest_date &gt;= #{startDate}
+      </if>
+      <if test="endDate != null" >
+        and interest_date &lt; #{endDate}
+      </if>
+
+
+    </select>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    delete from term_payment_schedule
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+    <delete id="deleteByProductNo">
+       delete from term_payment_schedule
+    where product_no = #{productNo}
+    </delete>
+
+    <insert id="insert" parameterType="com.jinhui.scheduler.domain.core.TermPaymentSchedule" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    insert into term_payment_schedule (id, product_name, product_no, 
+      plat_product_no, total_amount, product_total_periods, 
+      interest_amount, interest_period, interest_days, 
+      per_interest_amount, interest_state, interest_date, 
+      create_time, gmt_modified)
+    values (#{id,jdbcType=INTEGER}, #{productName,jdbcType=VARCHAR}, #{productNo,jdbcType=CHAR}, 
+      #{platProductNo,jdbcType=VARCHAR}, #{totalAmount,jdbcType=DECIMAL}, #{productTotalPeriods,jdbcType=INTEGER}, 
+      #{interestAmount,jdbcType=DECIMAL}, #{interestPeriod,jdbcType=INTEGER}, #{interestDays,jdbcType=INTEGER}, 
+      #{perInterestAmount,jdbcType=DECIMAL}, #{interestState,jdbcType=CHAR}, #{interestDate,jdbcType=DATE}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jinhui.scheduler.domain.core.TermPaymentSchedule" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    insert into term_payment_schedule
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="productName != null" >
+        product_name,
+      </if>
+      <if test="productNo != null" >
+        product_no,
+      </if>
+      <if test="platProductNo != null" >
+        plat_product_no,
+      </if>
+      <if test="totalAmount != null" >
+        total_amount,
+      </if>
+      <if test="productTotalPeriods != null" >
+        product_total_periods,
+      </if>
+      <if test="interestAmount != null" >
+        interest_amount,
+      </if>
+      <if test="interestPeriod != null" >
+        interest_period,
+      </if>
+      <if test="interestDays != null" >
+        interest_days,
+      </if>
+      <if test="perInterestAmount != null" >
+        per_interest_amount,
+      </if>
+      <if test="interestState != null" >
+        interest_state,
+      </if>
+      <if test="interestDate != null" >
+        interest_date,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null" >
+        #{productNo,jdbcType=CHAR},
+      </if>
+      <if test="platProductNo != null" >
+        #{platProductNo,jdbcType=VARCHAR},
+      </if>
+      <if test="totalAmount != null" >
+        #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="productTotalPeriods != null" >
+        #{productTotalPeriods,jdbcType=INTEGER},
+      </if>
+      <if test="interestAmount != null" >
+        #{interestAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="interestPeriod != null" >
+        #{interestPeriod,jdbcType=INTEGER},
+      </if>
+      <if test="interestDays != null" >
+        #{interestDays,jdbcType=INTEGER},
+      </if>
+      <if test="perInterestAmount != null" >
+        #{perInterestAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="interestState != null" >
+        #{interestState,jdbcType=CHAR},
+      </if>
+      <if test="interestDate != null" >
+        #{interestDate,jdbcType=DATE},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jinhui.scheduler.domain.core.TermPaymentSchedule" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    update term_payment_schedule
+    <set >
+      <if test="productName != null" >
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null" >
+        product_no = #{productNo,jdbcType=CHAR},
+      </if>
+      <if test="platProductNo != null" >
+        plat_product_no = #{platProductNo,jdbcType=VARCHAR},
+      </if>
+      <if test="totalAmount != null" >
+        total_amount = #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="productTotalPeriods != null" >
+        product_total_periods = #{productTotalPeriods,jdbcType=INTEGER},
+      </if>
+      <if test="interestAmount != null" >
+        interest_amount = #{interestAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="interestPeriod != null" >
+        interest_period = #{interestPeriod,jdbcType=INTEGER},
+      </if>
+      <if test="interestDays != null" >
+        interest_days = #{interestDays,jdbcType=INTEGER},
+      </if>
+      <if test="perInterestAmount != null" >
+        per_interest_amount = #{perInterestAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="interestState != null" >
+        interest_state = #{interestState,jdbcType=CHAR},
+      </if>
+      <if test="interestDate != null" >
+        interest_date = #{interestDate,jdbcType=DATE},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jinhui.scheduler.domain.core.TermPaymentSchedule" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    update term_payment_schedule
+    set product_name = #{productName,jdbcType=VARCHAR},
+      product_no = #{productNo,jdbcType=CHAR},
+      plat_product_no = #{platProductNo,jdbcType=VARCHAR},
+      total_amount = #{totalAmount,jdbcType=DECIMAL},
+      product_total_periods = #{productTotalPeriods,jdbcType=INTEGER},
+      interest_amount = #{interestAmount,jdbcType=DECIMAL},
+      interest_period = #{interestPeriod,jdbcType=INTEGER},
+      interest_days = #{interestDays,jdbcType=INTEGER},
+      per_interest_amount = #{perInterestAmount,jdbcType=DECIMAL},
+      interest_state = #{interestState,jdbcType=CHAR},
+      interest_date = #{interestDate,jdbcType=DATE},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

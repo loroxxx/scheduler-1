@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:annotation-config/>
+
+    <!-- todo 配置tasklet bean -->
+    <bean id="amqStepListener" class="com.jinhui.scheduler.biz.imiqian.listener.AmqStepListener" scope="step">
+        <constructor-arg name="chnCode" value="#{jobParameters['chnCode']}"/>
+    </bean>
+
+    <bean id="amqReceivedFileCheckInTasklet" class="com.jinhui.scheduler.biz.core.tasklet.ReceivedFileCheckInTasklet" scope="step">
+        <property name="institution" value="#{jobParameters['chnName']}"/>
+    </bean>
+
+    <bean id="upgradeBatchCurrent" class="com.jinhui.scheduler.biz.imiqian.tasklet.UpgradeBatchCurrent" scope="step"/>
+
+
+    <bean id="amqCheckIndexFile" class="com.jinhui.scheduler.biz.imiqian.tasklet.CheckIndexFileTasklet" scope="step">
+        <constructor-arg name="dirPath" value="#{jobParameters['workspacePath']}"/>
+        <constructor-arg name="date" value="#{jobParameters['applyDate']}"/>
+        <constructor-arg name="batchCode" value="#{jobParameters['batchCode']}"/>
+        <constructor-arg name="chnCode" value="#{jobParameters['chnCode']}"/>
+    </bean>
+
+    <bean id="amqGenerateIndexFile" class="com.jinhui.scheduler.biz.imiqian.tasklet.GenerateIndexFileTasklet" scope="step">
+        <property name="filePath" value="#{jobParameters['generatePath']}"/>
+        <property name="applyDate" value="#{jobParameters['applyDate']}"/>
+        <property name="chnCode" value="#{jobParameters['chnCode']}"/>
+    </bean>
+
+    <bean id="amqUploadedFileJobListener" class="com.jinhui.scheduler.biz.core.listener.UploadedFileJobListener"
+          scope="job">
+        <property name="institution" value="#{jobParameters['chnName']}" />
+    </bean>
+
+    <bean id="amqDownloadedFileJobListener" class="com.jinhui.scheduler.biz.core.listener.DownloadedFileJobListener"
+          scope="job">
+        <property name="institution" value="#{jobParameters['chnName']}" />
+    </bean>
+</beans>

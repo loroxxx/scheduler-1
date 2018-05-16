@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:annotation-config/>
+
+    <!-- 监听记录证联对账单导入记录 -->
+    <bean id="zlrtStepListener" class="com.jinhui.scheduler.biz.zlrt.listener.ZlrtStepListener" scope="step">
+        <constructor-arg name="chnCode" value="#{jobParameters['chnCode']}"/>
+    </bean>
+
+    <!-- 将T日证联对账单数据备份到历史表-->
+    <bean id="bakBalanceBill" class="com.jinhui.scheduler.biz.zlrt.tasklet.BakBalanceBillHisTasklet" scope="step"/>
+
+    <bean id="zlrtUploadedFileJobListener" class="com.jinhui.scheduler.biz.core.listener.UploadedFileJobListener"
+          scope="job">
+        <property name="institution" value="#{jobParameters['chnName']}" />
+    </bean>
+
+    <bean id="zlrtDownloadedFileJobListener" class="com.jinhui.scheduler.biz.core.listener.DownloadedFileJobListener"
+          scope="job">
+        <property name="institution" value="#{jobParameters['chnName']}" />
+    </bean>
+
+    <bean id="httpSyncHelper" class="com.jinhui.scheduler.biz.zlrt.sync.HttpSyncHelper">
+        <constructor-arg value="${trading.sync.uri}"/>
+    </bean>
+
+</beans>

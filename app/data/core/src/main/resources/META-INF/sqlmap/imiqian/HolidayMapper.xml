@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.imiqian.HolidayMapper" >
+  <resultMap id="BaseResultMap" type="com.jinhui.scheduler.domain.imiqian.domain.Holiday" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="date" property="date" jdbcType="DATE" />
+    <result column="flag" property="flag" jdbcType="VARCHAR" />
+    <result column="despict" property="despict" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, DATE_FORMAT(date,'%Y%m%d') as date, flag, despict
+  </sql>
+  <select id="findHolidayList" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from holiday where date &gt;= #{beginDate} and date &lt; #{endDate}
+  </select>
+
+</mapper>

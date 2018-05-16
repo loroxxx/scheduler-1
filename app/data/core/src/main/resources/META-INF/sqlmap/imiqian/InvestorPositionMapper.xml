@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.imiqian.InvestorPositionMapper" >
+  <resultMap id="positionMap" type="com.jinhui.scheduler.domain.imiqian.domain.InvestorPosition" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="gather_date" property="gatherDate" jdbcType="DATE" />
+    <result column="batch_code" property="batchCode" jdbcType="INTEGER" />
+    <result column="investor_id" property="investorId" jdbcType="CHAR" />
+    <result column="chn_id" property="chnId" jdbcType="CHAR" />
+    <result column="chn_code" property="chnCode" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="product_no" property="productNo" jdbcType="CHAR" />
+    <result column="child_product_no" property="childProductNo" jdbcType="CHAR" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="total_postion_vol" property="totalPostionVol" jdbcType="DECIMAL" />
+    <result column="product_vol" property="productVol" jdbcType="DECIMAL" />
+    <result column="total_postion_amount" property="totalPostionAmount" jdbcType="DECIMAL" />
+    <result column="total_income" property="totalIncome" jdbcType="DECIMAL" />
+    <result column="total_redemed_amount" property="totalRedemedAmount" jdbcType="DECIMAL" />
+    <result column="total_subs_amount" property="totalSubsAmount" jdbcType="DECIMAL" />
+    <result column="rolling_flag" property="rollingFlag" jdbcType="CHAR" />
+    <result column="rolling_vol" property="rollingVol" jdbcType="DECIMAL" />
+    <result column="position_type" property="positionType" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, gather_date, batch_code,investor_id, chn_id, chn_code, name, child_product_no, product_no, product_name, total_postion_vol,
+    product_vol, total_postion_amount, total_income, total_redemed_amount, total_subs_amount, position_type,
+    rolling_flag, rolling_vol
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="positionMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from investor_position
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <delete id="delete">
+    delete from investor_position where 1=1
+  </delete>
+
+  <insert id="save" parameterType="com.jinhui.scheduler.domain.imiqian.domain.InvestorPosition" >
+    insert into investor_position
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="batchCode != null" >
+        batch_code,
+      </if>
+      <if test="gatherDate != null" >
+        gather_date,
+      </if>
+      <if test="investorId != null" >
+        investor_id,
+      </if>
+      <if test="chnId != null" >
+        chn_id,
+      </if>
+      <if test="chnCode != null" >
+        chn_code,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="productNo != null" >
+        product_no,
+      </if>
+      <if test="childProductNo != null" >
+        child_product_no,
+      </if>
+      <if test="productName != null" >
+        product_name,
+      </if>
+      <if test="totalPostionVol != null" >
+        total_postion_vol,
+      </if>
+      <if test="productVol != null" >
+        product_vol,
+      </if>
+      <if test="totalPostionAmount != null" >
+        total_postion_amount,
+      </if>
+      <if test="totalIncome != null" >
+        total_income,
+      </if>
+      <if test="totalRedemedAmount != null" >
+        total_redemed_amount,
+      </if>
+      <if test="totalSubsAmount != null" >
+        total_subs_amount,
+      </if>
+      <if test="rollingFlag != null" >
+        rolling_flag,
+      </if>
+      <if test="rollingVol != null" >
+        rolling_vol,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="batchCode != null" >
+        #{batchCode},
+      </if>
+      <if test="gatherDate != null" >
+        #{gatherDate,jdbcType=DATE},
+      </if>
+      <if test="investorId != null" >
+        #{investorId,jdbcType=CHAR},
+      </if>
+      <if test="chnId != null" >
+        #{chnId,jdbcType=CHAR},
+      </if>
+      <if test="chnCode != null" >
+        #{chnCode,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null" >
+        #{productNo,jdbcType=CHAR},
+      </if>
+      <if test="childProductNo != null" >
+        #{childProductNo,jdbcType=CHAR},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="totalPostionVol != null" >
+        #{totalPostionVol,jdbcType=DECIMAL},
+      </if>
+      <if test="productVol != null" >
+        #{productVol,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPostionAmount != null" >
+        #{totalPostionAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="totalIncome != null" >
+        #{totalIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="totalRedemedAmount != null" >
+        #{totalRedemedAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="totalSubsAmount != null" >
+        #{totalSubsAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="rollingFlag != null" >
+        #{rollingFlag,jdbcType=CHAR},
+      </if>
+      <if test="rollingVol != null" >
+        #{rollingVol,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jinhui.scheduler.domain.imiqian.domain.InvestorPosition" >
+    update investor_position
+    <set >
+      <if test="batchCode != null" >
+        batch_code = #{batchCode},
+      </if>
+      <if test="gatherDate != null" >
+        gather_date = #{gatherDate,jdbcType=DATE},
+      </if>
+      <if test="investorId != null" >
+        investor_id = #{investorId,jdbcType=CHAR},
+      </if>
+      <if test="chnId != null" >
+        chn_id = #{chnId,jdbcType=CHAR},
+      </if>
+      <if test="chnCode != null" >
+        chn_code = #{chnCode,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null" >
+        product_no = #{productNo,jdbcType=CHAR},
+      </if>
+      <if test="childProductNo != null" >
+        child_product_no = #{childProductNo,jdbcType=CHAR},
+      </if>
+      <if test="productName != null" >
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="totalPostionVol != null" >
+        total_postion_vol = #{totalPostionVol,jdbcType=DECIMAL},
+      </if>
+      <if test="productVol != null" >
+        product_vol = #{productVol,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPostionAmount != null" >
+        total_postion_amount = #{totalPostionAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="totalIncome != null" >
+        total_income = #{totalIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="totalRedemedAmount != null" >
+        total_redemed_amount = #{totalRedemedAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="totalSubsAmount != null" >
+        total_subs_amount = #{totalSubsAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="rollingFlag != null" >
+        rolling_flag = #{rollingFlag,jdbcType=CHAR},
+      </if>
+      <if test="rollingVol != null" >
+        rolling_vol = #{rollingVol,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="findCount" parameterType="com.jinhui.scheduler.domain.imiqian.domain.InvestorPosition" resultType="java.lang.Integer">
+    select count(*) from investor_position where 1=1
+    <if test="investorId != null">
+      AND investor_id = #{investorId}
+    </if>
+    <if test="batchCode != null and batchCode != 0">
+      AND batch_code = #{batchCode}
+    </if>
+    <if test="chnCode != null">
+      AND chn_code = #{chnCode}
+    </if>
+  </select>
+
+  <select id="findList" parameterType="com.jinhui.scheduler.domain.imiqian.domain.InvestorPosition" resultMap="positionMap">
+    select
+    <include refid="Base_Column_List" />
+    from investor_position where 1=1
+    <if test="investorId != null">
+      AND investor_id = #{investorId}
+    </if>
+    <if test="batchCode != null and batchCode != 0">
+      AND batch_code = #{batchCode}
+    </if>
+    <if test="chnCode != null">
+      AND chn_code = #{chnCode}
+    </if>
+  </select>
+
+  <select id="findNormalListByChoice" parameterType="com.jinhui.scheduler.domain.imiqian.domain.InvestorPosition" resultMap="positionMap">
+    select
+    <include refid="Base_Column_List" />
+    from investor_position where 1=1 and position_type = 0
+    <if test="batchCode != null and batchCode != 0">
+      AND batch_code = #{batchCode}
+    </if>
+  </select>
+
+  <!-- 查询客户正常持仓-->
+  <select id="findNormalPositionList" parameterType="java.lang.String" resultMap="positionMap">
+    select
+    <include refid="Base_Column_List" />
+    from investor_position where position_type = 0
+  </select>
+
+  <!-- 查询差额持仓-->
+  <select id="findDiffPositionList" parameterType="java.lang.String" resultMap="positionMap">
+    select
+    <include refid="Base_Column_List" />
+    from investor_position where position_type = 1
+  </select>
+
+  <insert id="batchSave" parameterType="list"  useGeneratedKeys="true">
+    insert into investor_position(gather_date,batch_code,investor_id,
+    chn_id,
+    chn_code,
+    name,
+    product_no,
+    child_product_no,
+    product_name,
+    total_postion_vol,
+    product_vol,
+    total_postion_amount,
+    total_income,
+    total_redemed_amount,
+    total_subs_amount,
+    rolling_flag,
+    rolling_vol,
+    position_type) values
+    <foreach item="item" collection="positionList" separator=",">
+      (#{item.gatherDate},#{item.batchCode},#{item.investorId}, #{item.chnId}, #{item.chnCode}, #{item.name}, #{item.productNo}, #{item.childProductNo}, #{item.productName},
+      #{item.totalPostionVol}, #{item.productVol}, #{item.totalPostionAmount}, #{item.totalIncome}, #{item.totalRedemedAmount},
+      #{item.totalSubsAmount}, #{item.rollingFlag}, #{item.rollingVol},#{item.positionType})
+    </foreach>
+  </insert>
+
+  <update id="batchUpdate" parameterType="java.util.List">
+    <foreach close="" collection="positionList" index="index" item="item" open="" separator=";">
+      update investor_position set
+      gather_date = #{item.gatherDate},
+      batch_code = #{item.batchCode},
+      total_postion_vol = #{item.totalPostionVol},
+      total_postion_amount = #{item.totalPostionAmount},
+      total_income = #{item.totalIncome},
+      total_redemed_amount = #{item.totalRedemedAmount},
+      total_subs_amount = #{item.totalSubsAmount}
+      where investor_id=#{item.investorId} and product_no = #{item.productNo}
+    </foreach>
+  </update>
+
+  <!-- 还原T-1日的持仓数据 -->
+  <insert id="insertRollBack">
+     insert into investor_position(
+            gather_date,
+            batch_code,
+            investor_id,
+            chn_id,
+            chn_code,
+            name,
+            product_no,
+            child_product_no,
+            product_name,
+            total_postion_vol,
+            product_vol,
+            total_postion_amount,
+            total_income,
+            total_redemed_amount,
+            total_subs_amount,
+            position_type,
+            rolling_vol,
+            rolling_flag)
+      select gather_date,batch_code,investor_id,chn_id,chn_code,name,
+             product_no,child_product_no,product_name,total_postion_vol,
+             product_vol,total_postion_amount,total_income,total_redemed_amount,
+             total_subs_amount,position_type,rolling_vol,rolling_flag
+      from position_history where batch_code = #{batchCode}
+  </insert>
+
+  <!-- ***********************************  以下为定期产品相关   **************************************************-->
+  <!-- 根据渠道代码，用户ID，产品代码查询是否已存在持仓记录 -->
+  <select id="selectIsExistPosition" parameterType="com.jinhui.scheduler.domain.imiqian.domain.InvestorPosition" resultMap="positionMap">
+    select
+    <include refid="Base_Column_List" />
+    from investor_position
+    where chn_id = #{chnId} and investor_id = #{investorId} and product_no = #{productNo}
+  </select>
+
+  <!-- 定期产品成立时，添加定期产品的持仓记录-->
+  <insert id="addRegularProductPosition" parameterType="com.jinhui.scheduler.domain.imiqian.domain.InvestorPosition">
+    insert into investor_position(gather_date,
+                                  batch_code,
+                                  investor_id,
+                                  chn_id,
+                                  chn_code,
+                                  name,
+                                  product_no,
+                                  child_product_no,
+                                  product_name,
+                                  total_postion_vol,
+                                  product_vol,
+                                  total_postion_amount,
+                                  total_income,
+                                  total_redemed_amount,
+                                  total_subs_amount)
+    select #{gatherDate},#{batchCode},
+           investor_id,
+           chn_id,
+           chn_code,
+           name,
+           product_no,
+           child_product_no,
+           product_name,
+           trans_vol,
+           product_vol,
+           trans_amount,
+           0,
+           0,
+           trans_amount from investor_trans where id = #{id}
+  </insert>
+
+  <!-- 更新定期产品的持仓记录-->
+  <update id="updateRegularProductPosition" parameterType="com.jinhui.scheduler.domain.imiqian.domain.InvestorTrans" >
+    update investor_position set total_postion_vol = total_postion_vol + #{transVol},
+                                 total_postion_amount = total_postion_amount + #{transAmount},
+                                 total_subs_amount = total_subs_amount + #{transAmount}
+    where chn_id = #{chnId} and investor_id = #{investorId} and product_no = #{productNo}
+  </update>
+
+  <!-- 更新定期产品的总收益-->
+  <update id="upgrateTotalIncome" parameterType="com.jinhui.scheduler.domain.imiqian.domain.TermPaymentDetail">
+    update investor_position set total_income = total_income + #{interestAmount} where chn_code = #{chnCode} and investor_id = #{investorId} and product_no = #{productNo}
+  </update>
+
+  <!-- 更新定期产品的总收益-->
+  <update id="upgrateTotalIncomeAndClearPosition" parameterType="com.jinhui.scheduler.domain.imiqian.domain.TermPaymentDetail">
+    update investor_position set total_income = total_income + #{interestAmount}, total_redemed_amount = total_redemed_amount + #{subsTotalAmount} + #{interestAmount},total_postion_vol = 0,total_postion_amount = 0 where chn_code = #{chnCode} and investor_id = #{investorId} and product_no = #{productNo}
+  </update>
+
+</mapper>

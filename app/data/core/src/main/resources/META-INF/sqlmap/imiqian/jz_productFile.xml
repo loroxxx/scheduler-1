@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.imiqian.JzProductFileMapper">
+    <resultMap id="jzProductFileMap" type="com.jinhui.scheduler.domain.imiqian.pojo.JzProductFileInfo">
+        <id property="file_id" column="file_id"/>
+        <result property="file_name" column="file_name"/>
+        <result property="file_title" column="file_title"/>
+        <result property="file_type" column="file_type"/>
+        <result property="file_date" column="file_date"/>
+        <result property="institution" column="institution"/>
+        <result property="backup_location" column="backup_location"/>
+    </resultMap>
+
+    <insert id="save" parameterType="com.jinhui.scheduler.domain.imiqian.pojo.JzProductFileInfo">
+        insert into fissta_product_file
+        (file_id, file_name, file_title, file_type, file_date, product_name, product_code, institution, backup_location, gmt_create, gmt_modified)
+        VALUES
+        (#{file_id},#{file_name},#{file_title},#{file_type},#{file_date},#{product_name},#{product_code},#{institution},#{backup_location},sysdate(),sysdate())
+    </insert>
+
+    <delete id="delete" parameterType="com.jinhui.scheduler.domain.imiqian.pojo.JzProductFileInfo">
+        delete from fissta_product_file where file_id=#{file_id}
+    </delete>
+
+    <select id="findListCount" parameterType="com.jinhui.scheduler.domain.imiqian.pojo.JzProductFileInfo" resultType="int">
+        select count(*) from fissta_product_file where file_id=#{file_id}
+    </select>
+
+    <update id="update" parameterType="com.jinhui.scheduler.domain.imiqian.pojo.JzProductFileInfo">
+        update fissta_product_file set gmt_modified=sysdate()
+        <set>
+            <if test="file_name != null">
+                file_name=#{file_name},
+            </if>
+            <if test="file_title != null">
+                file_title=#{file_title},
+            </if>
+            <if test="file_type != null">
+                file_type=#{file_type},
+            </if>
+            <if test="file_date != null">
+                file_date=#{file_date},
+            </if>
+            <if test="product_name != null">
+                product_name=#{product_name},
+            </if>
+            <if test="product_code != null">
+                product_code=#{product_code},
+            </if>
+            <if test="institution != null">
+                institution=#{institution},
+            </if>
+            <if test="backup_location != null">
+                backup_location=#{backup_location},
+            </if>
+        </set>
+        where file_id = #{file_id}
+    </update>
+</mapper>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:batch="http://www.springframework.org/schema/batch"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd">
+
+
+      <!-- 申请文件入库 -->
+      <batch:job id="amqApplyJob">
+            <!-- 更新当前批次-->
+            <batch:step id="upgradeBatchCurrentStep" next="amqCheckIndexFileStep">
+                  <batch:tasklet ref="upgradeBatchCurrent"/>
+            </batch:step>
+            <!-- 将渠道上传的申请文件移到工作目录-->
+           <!-- <batch:step id="amqReceivedFileCheckInStep" next="amqCheckIndexFileStep">
+                  <batch:tasklet ref="amqReceivedFileCheckInTasklet"/>
+            </batch:step>-->
+            <!-- 检测索引文件-->
+            <batch:step id="amqCheckIndexFileStep" next="amqAccountApplyStep">
+                  <batch:tasklet ref="amqCheckIndexFile"/>
+            </batch:step>
+            <!-- 01账户申请文件入库-->
+            <batch:step id="amqAccountApplyStep" next="amqTradeApplyStep">
+                  <batch:tasklet>
+                        <batch:chunk reader="amqAccountApplyFileReader" processor="amqAccountApplyFileProcessor"
+                                     writer="amqAccountApplyDBWriter" commit-interval="20"/>
+                        <batch:listeners>
+                              <batch:listener ref="amqStepListener"/>
+                        </batch:listeners>
+                  </batch:tasklet>
+            </batch:step>
+            <!-- 03交易申请文件入库-->
+            <batch:step id="amqTradeApplyStep">
+                  <batch:tasklet>
+                        <batch:chunk reader="amqTradeApplyFileReader" processor="amqTradeApplyFileProcessor"
+                                     writer="amqTradeApplyDBWriter" commit-interval="20"/>
+                        <batch:listeners>
+                              <batch:listener ref="amqStepListener"/>
+                        </batch:listeners>
+                  </batch:tasklet>
+            </batch:step>
+            <!-- -->
+            <batch:listeners>
+                  <batch:listener ref="amqDownloadedFileJobListener"/>
+            </batch:listeners>
+      </batch:job>
+
+      <!-- 生成确认文件 -->
+      <batch:job id="amqConfirmJob">
+            <batch:step id="amqGenerateIndexFileStep" next="amqAccountConfirmStep">
+                  <batch:tasklet ref="amqGenerateIndexFile"/>
+            </batch:step>
+            <!-- 生成02账户确认文件-->
+            <batch:step id="amqAccountConfirmStep" next="amqTradeConfirmStep">
+                  <batch:tasklet>
+                        <batch:chunk reader="amqAccountConfirmDBReader" processor="amqAccountConfirmDBProcessor"
+                                     writer="amqAccountConfirmFileWriter" commit-interval="20"/>
+                        <batch:listeners>
+                              <batch:listener ref="amqStepListener"/>
+                        </batch:listeners>
+                  </batch:tasklet>
+            </batch:step>
+            <!-- 生成04交易确认文件-->
+            <batch:step id="amqTradeConfirmStep" next="amqReconciliateDataStep">
+                  <batch:tasklet>
+                        <batch:chunk reader="amqTradeConfirmDBReader" processor="amqTradeConfirmDBProcessor"
+                                     writer="amqTradeConfirmFileWriter" commit-interval="20"/>
+                        <batch:listeners>
+                              <batch:listener ref="amqStepListener"/>
+                        </batch:listeners>
+                  </batch:tasklet>
+            </batch:step>
+            <!-- 生成05对账数据文件-->
+            <batch:step id="amqReconciliateDataStep" next="amqIncomeStep">
+                  <batch:tasklet>
+                        <batch:chunk reader="amqReconciliateDataDBReader" processor="amqReconciliateDataDBProcessor"
+                                     writer="amqReconciliateDataFileWriter" commit-interval="20"/>
+                        <batch:listeners>
+                              <batch:listener ref="amqStepListener"/>
+                        </batch:listeners>
+                  </batch:tasklet>
+            </batch:step>
+            <!-- 生成06分红数据文件-->
+            <batch:step id="amqIncomeStep" next="amqGatherDataStep">
+                  <batch:tasklet>
+                        <batch:chunk reader="amqIncomeDBReader" processor="amqIncomeDBProcessor"
+                                     writer="amqIncomeFileWriter" commit-interval="20"/>
+                        <batch:listeners>
+                              <batch:listener ref="amqStepListener"/>
+                        </batch:listeners>
+                  </batch:tasklet>
+            </batch:step>
+            <!-- 生成12业务汇总文件-->
+            <batch:step id="amqGatherDataStep">
+                  <batch:tasklet>
+                        <batch:chunk reader="amqGatherDataDBReader" processor="amqGatherDataDBProcessor"
+                                     writer="amqGatherDataFileWriter" commit-interval="20"/>
+                        <batch:listeners>
+                              <batch:listener ref="amqStepListener"/>
+                        </batch:listeners>
+                  </batch:tasklet>
+            </batch:step>
+            <batch:listeners>
+                  <batch:listener ref="amqUploadedFileJobListener"/>
+            </batch:listeners>
+      </batch:job>
+
+</beans>

@@ -1,0 +1,12 @@
+OFDCFIDX
+20
+JFB666
+#{chnCode}
+#{applyDate}
+005
+OFD_JFB666_#{chnCode}_#{applyDate}_02.TXT
+OFD_JFB666_#{chnCode}_#{applyDate}_04.TXT
+OFD_JFB666_#{chnCode}_#{applyDate}_05.TXT
+OFD_JFB666_#{chnCode}_#{applyDate}_06.TXT
+OFD_JFB666_#{chnCode}_#{applyDate}_12.TXT
+OFDCFEND

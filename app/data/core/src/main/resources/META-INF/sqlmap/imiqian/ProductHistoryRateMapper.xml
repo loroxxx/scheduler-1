@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.imiqian.ProductHistoryRateMapper" >
+  <resultMap id="BaseResultMap" type="com.jinhui.scheduler.domain.imiqian.domain.ProductHistoryRate" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="product_no" property="productNo" jdbcType="CHAR" />
+    <result column="exchange_code" property="exchangeCode" jdbcType="VARCHAR" />
+    <result column="product_name" property="productName" jdbcType="CHAR" />
+    <result column="product_type" property="productType" jdbcType="CHAR" />
+    <result column="income_rate" property="incomeRate" jdbcType="DECIMAL" />
+    <result column="percent_income" property="percentIncome" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, product_no, exchange_code, product_name, product_type, income_rate, percent_income, 
+    create_time, update_time
+  </sql>
+
+  <insert id="save" parameterType="com.jinhui.scheduler.domain.imiqian.domain.ProductHistoryRate" >
+    insert into product_history_rate
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="productNo != null" >
+        product_no,
+      </if>
+      <if test="exchangeCode != null" >
+        exchange_code,
+      </if>
+      <if test="productName != null" >
+        product_name,
+      </if>
+      <if test="productType != null" >
+        product_type,
+      </if>
+      <if test="incomeRate != null" >
+        income_rate,
+      </if>
+      <if test="percentIncome != null" >
+        percent_income,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="productNo != null" >
+        #{productNo,jdbcType=CHAR},
+      </if>
+      <if test="exchangeCode != null" >
+        #{exchangeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=CHAR},
+      </if>
+      <if test="productType != null" >
+        #{productType,jdbcType=CHAR},
+      </if>
+      <if test="incomeRate != null" >
+        #{incomeRate,jdbcType=DECIMAL},
+      </if>
+      <if test="percentIncome != null" >
+        #{percentIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+</mapper>

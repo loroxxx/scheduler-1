@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 证联融通对账单下载603的读信息配置 start -->
+    <bean id="zlrtStatementFileReader" scope="step"
+          class="org.springframework.batch.item.file.FlatFileItemReader">
+        <property name="resource" value="file:#{jobParameters['workspacePath']}/RECONCILIATION_B00000603_#{jobParameters['applyDate']}.txt"/>
+        <!--<property name="resource" value="classpath:fRECONCILIATION_B00000603_20171113.txt.txt"/>-->
+        <property name="encoding" value="UTF-8"/>
+        <!-- 证联融通对账单，跳过5行文件头信息 -->
+        <property name="linesToSkip" value="5"/>
+        <property name="lineMapper" ref="zlrtStatementLineMapper"/>
+    </bean>
+    <!-- LineMapper配置 start -->
+    <bean id="zlrtStatementLineMapper"
+          class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+        <property name="lineTokenizer">
+            <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+                <property name="delimiter" value="|"/>
+                <property name="names" value="instuId,fundDate,fundTime,liqDate,fundSeqId,orgFundDate,orgFundSeqId,busiType,userId,userNameText,certType,certId,transAmt,fundCode,fundType,pnrDate,pnrTime,pnrSeqId,other"/>
+            </bean>
+        </property>
+        <property name="fieldSetMapper">
+            <bean class="org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper">
+                <property name="prototypeBeanName" value="zlrtStatementLineItem"/>
+            </bean>
+        </property>
+    </bean>
+    <bean id="zlrtStatementLineItem"
+          class="com.jinhui.scheduler.biz.zlrt.dto.ZlrtStatementLineItem" scope="prototype" />
+
+    <!-- LineMapper配置 end -->
+    <bean id="zlrtStatementProcessor" class="com.jinhui.scheduler.biz.zlrt.processor.ZlrtStatementProcessor" />
+    <!-- 证联融通对账单下载603的读信息配置 end -->
+
+
+    <!-- 赎回类业务305的读信息配置 start -->
+    <bean id="zlrtRedeemDBReader" class="org.springframework.batch.item.database.JdbcCursorItemReader" scope="step">
+        <property name="dataSource" ref="dataSource" />
+        <property name="sql">
+            <value><![CDATA[
+            select '0004' as business_type,
+                   DATE_FORMAT((select date from batch_state_current), '%Y%m%d') as settle_date,
+                   t.zl_fund_seqId as serial_number,
+                   DATE_FORMAT((select date from batch_state_current), '%Y%m%d') as system_date,
+                   i.zl_instu_id as instu_id,
+                   DATE_FORMAT(t.trans_time, '%Y%m%d') as fund_date,
+                   DATE_FORMAT(t.trans_time, '%H%i%s') as fund_time,
+                   t.zl_fund_seqId as fund_seq_id,
+                   case when t.trans_type='024' then '0004' when t.trans_type='088' then '0005' end as busi_type,
+                   o.zl_user_id as zl_user_id,
+                   t.name as user_name_text,
+                   case when o.id_type = '00' then '00' when o.id_type = '10' then '61' when o.id_type = '11' then '62' when o.id_type = '19' then '65' else '69' end as cert_type,
+                   o.id_no as cert_no,
+                   t.trans_bank_code as bank_type,
+                   t.trans_bank_act as card_no,
+                   t.redeem_flag as flag,
+                   t.trans_amount as trans_amt,
+                   '' as liq_date,
+                   t.product_no as fund_code,
+                   '10' as fund_type,
+                   '' as org_fund_date,
+                   '' as org_fund_seqId
+            from investor_trans t
+            left join product p on p.product_no = t.product_no
+            left join exchange_info i on i.exchange_code = p.exchange_no
+            left join chn_open o on o.investor_id = t.investor_id
+            where (t.trans_type = '024' or t.trans_type = '088') and t.trans_state = '0000' and t.batch_code = ? and i.zl_instu_id = ?]]></value>
+        </property>
+        <property name="rowMapper" ref="redeemRowMapper"/>
+        <property name="preparedStatementSetter" ref="redeemSetter" />
+    </bean>
+
+    <bean name="redeemRowMapper" class="com.jinhui.scheduler.biz.zlrt.rowMapper.RedeemRowMapper"/>
+    <bean id="redeemSetter" class="org.springframework.batch.core.resource.ListPreparedStatementSetter" scope="step">
+        <property name="parameters">
+            <list>
+                <value>#{jobParameters['batchCode']}</value>
+                <value>#{jobParameters['zlInstuId']}</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="zlrtRedeemDBProcessor" class="com.jinhui.scheduler.biz.zlrt.processor.ZlrtRedeemDBProcessor" />
+    <!-- 赎回类业务305的读信息配置 end -->
+
+
+    <!-- 结算类业务(监管银行)  申购结算701的读信息配置 start -->
+    <bean id="zlrtPurchaseDBReader" class="org.springframework.batch.item.database.JdbcCursorItemReader" scope="step">
+        <property name="dataSource" ref="dataSource" />
+        <property name="sql">
+            <value><![CDATA[
+            select   t.zl_fund_seqId as fund_seq_id,
+                     DATE_FORMAT((select date from batch_state_current), '%Y%m%d') as fund_date,
+                     case when t.trans_type='022' then '0002' end as busi_type,
+                     o.zl_user_id as zl_user_id,
+                     t.name as user_name_text,
+                     case when o.id_type = '00' then 'P01' when o.id_type = '01' then 'P31' when o.id_type = '02' then 'P04' when o.id_type = '03' then 'P04'
+                          when o.id_type = '04' then 'P19' when o.id_type = '05' then 'P16' when o.id_type = '06' then 'P13' when o.id_type = '09' then 'P99'
+                          when o.id_type = '10' then 'C09' when o.id_type = '10' then 'C09' when o.id_type = '11' then 'C01' else 'C99' end as cert_type,
+                     o.id_no as cert_no,
+                     t.trans_bank_code as bank_type,
+                     t.trans_bank_act as card_no,
+                     t.trans_amount as trans_amt,
+                     t.product_no as fund_code,
+                     '10' as fund_type,
+                     o.chn_id as fund_user_id,
+                     null as resv
+            from investor_trans t
+            left join chn_open o on o.investor_id = t.investor_id
+            left join product p on t.product_no = p.product_no
+            left join exchange_info e on p.exchange_no = e.exchange_code
+            where t.trans_type = '022' and t.trans_state = '0000' and t.batch_code = ? and e.zl_instu_id = ?]]></value>
+        </property>
+        <property name="rowMapper" ref="purchaseRowMapper"/>
+        <property name="preparedStatementSetter" ref="purchaseSetter" />
+    </bean>
+
+    <bean name="purchaseRowMapper" class="com.jinhui.scheduler.biz.zlrt.rowMapper.PurchaseRowMapper"/>
+    <bean id="purchaseSetter" class="org.springframework.batch.core.resource.ListPreparedStatementSetter" scope="step">
+        <property name="parameters">
+            <list>
+                <value>#{jobParameters['batchCode']}</value>
+                <value>#{jobParameters['zlInstuId']}</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="zlrtPurchaseDBProcessor" class="com.jinhui.scheduler.biz.zlrt.processor.ZlrtPurchaseDBProcessor" />
+    <!-- 结算类业务(监管银行)  申购结算701的的读信息配置 end -->
+
+
+    <!-- 结算类业务(监管银行)  赎回结算702的读信息配置 start -->
+    <bean id="zlrtRedemptionDBReader" class="org.springframework.batch.item.database.JdbcCursorItemReader" scope="step">
+        <property name="dataSource" ref="dataSource" />
+        <property name="sql">
+            <value><![CDATA[
+            select   t.zl_fund_seqId as fund_seq_id,
+                     DATE_FORMAT((select date from batch_state_current), '%Y%m%d') as fund_date,
+                     '02' as redeem_type,
+                     case when t.trans_type='024' then '0004' when t.trans_type='088' then '0005' end as busi_type,
+                     o.zl_user_id as zl_user_id,
+                     t.name as user_name_text,
+                     case when o.id_type = '0' then 'P01' when o.id_type = '1' then 'P31' when o.id_type = '2' then 'P04' when o.id_type = '3' then 'C01' else 'C99' end as cert_type,
+                     o.id_no as cert_no,
+                     substring(t.trans_bank_code,2,3) as bank_type,
+                     t.trans_bank_act as card_no,
+                     t.trans_amount as trans_amt,
+                     t.product_no as fund_code,
+                     '10' as fund_type,
+                     '' as org_fund_date,
+                     '' as org_fund_seqId,
+                     '' as refund_remark,
+                     null as resv
+            from investor_trans t
+            left join chn_open o on o.investor_id = t.investor_id
+            left join product p on p.product_no = t.product_no
+            left join exchange_info i on i.exchange_code = p.exchange_no
+            where (t.trans_type = '024' or t.trans_type = '088') and t.trans_state = '0000' and t.batch_code = ? and i.zl_instu_id = ?]]></value>
+        </property>
+        <property name="rowMapper" ref="RedemptionRowMapper"/>
+        <property name="preparedStatementSetter" ref="RedemptionSetter" />
+    </bean>
+
+    <bean name="RedemptionRowMapper" class="com.jinhui.scheduler.biz.zlrt.rowMapper.RedemptionRowMapper"/>
+    <bean id="RedemptionSetter" class="org.springframework.batch.core.resource.ListPreparedStatementSetter" scope="step">
+        <property name="parameters">
+            <list>
+                <value>#{jobParameters['batchCode']}</value>
+                <value>#{jobParameters['zlInstuId']}</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="zlrtRedemptionDBProcessor" class="com.jinhui.scheduler.biz.zlrt.processor.ZlrtRedemptionDBProcessor" />
+    <!-- 结算类业务(监管银行)  赎回结算702的的读信息配置 end -->
+
+
+
+</beans>

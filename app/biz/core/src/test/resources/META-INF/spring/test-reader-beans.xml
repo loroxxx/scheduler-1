@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:annotation-config/>
+
+    <!-- todo 配置reader bean -->
+
+    <!-- fixme 测试job -->
+    <bean id="testJDBCItemReader"
+          class="org.springframework.batch.item.database.JdbcCursorItemReader"
+          scope="step">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="sql"
+                  value="select * from schedule_id_sequence "/>
+        <property name="rowMapper">
+            <bean class="org.springframework.jdbc.core.ColumnMapRowMapper"/>
+        </property>
+    </bean>
+
+
+
+</beans>

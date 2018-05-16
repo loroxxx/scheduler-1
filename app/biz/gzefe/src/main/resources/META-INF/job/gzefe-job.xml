@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:batch="http://www.springframework.org/schema/batch"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd">
+
+
+      <!-- 生成日终文件 -->
+      <batch:job id="gzefeApplyJob">
+            <!--生成索引文件-->
+            <batch:step id="gzefeGenerateIndexFileStep" next="gzefeAccountApplyStep">
+                  <batch:tasklet ref="gzefeGenerateIndexFile"/>
+            </batch:step>
+            <!-- 生成账户申请文件01-->
+            <batch:step id="gzefeAccountApplyStep" next="gzefeTransApplyStep">
+                  <batch:tasklet>
+                        <batch:chunk reader="gzefeAccountApplyDBReader" processor="gzefeAccountApplyDBProcessor"
+                                  writer="gzefeAccountApplyDBWriter"   commit-interval="20"/>
+                        <batch:listeners>
+                              <batch:listener ref="gzefeStepListener"/>
+                        </batch:listeners>
+                  </batch:tasklet>
+            </batch:step>
+
+           <batch:step id="gzefeTransApplyStep" next="gzefeIncomingStep">
+                 <batch:tasklet>
+                       <batch:chunk reader="gzefeTransApplyDBReader" processor="gzefeTradeConfirmDBProcessor"
+                                 writer="gzefeTradeConfirmFileWriter"   commit-interval="20"/>
+                       <batch:listeners>
+                             <batch:listener ref="gzefeStepListener"/>
+                       </batch:listeners>
+                 </batch:tasklet>
+           </batch:step>
+
+          <batch:step id="gzefeIncomingStep" next="gzefeGatherStep">
+              <batch:tasklet>
+                  <batch:chunk reader="gzefeIncomeDBReader" processor="gzefeIncomeDBProcessor"
+                               writer="gzefeIncomeFileWriter" commit-interval="20"/>
+                  <batch:listeners>
+                        <batch:listener ref="gzefeStepListener"/>
+                  </batch:listeners>
+              </batch:tasklet>
+          </batch:step>
+
+          <batch:step id="gzefeGatherStep">
+              <batch:tasklet>
+                  <batch:chunk reader="gzefeGatherReader" processor="gzefeGatherProcessor"
+                               writer="gzefeGatherFileWriter" commit-interval="20"/>
+                  <batch:listeners>
+                        <batch:listener ref="gzefeStepListener"/>
+                  </batch:listeners>
+              </batch:tasklet>
+          </batch:step>
+          <batch:listeners>
+              <batch:listener ref="gzefeUploadedFileJobListener"/>
+          </batch:listeners>
+
+      </batch:job>
+
+
+</beans>

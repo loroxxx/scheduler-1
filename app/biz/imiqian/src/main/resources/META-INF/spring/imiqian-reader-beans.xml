@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 开户申请文件的读信息配置 start -->
+    <bean id="amqAccountApplyFileReader" scope="step"
+          class="org.springframework.batch.item.file.FlatFileItemReader">
+        <property name="resource" value="file:#{jobParameters['workspacePath']}/OFD_#{jobParameters['chnCode']}_JFB666_#{jobParameters['applyDate']}_01.TXT"/>
+        <property name="encoding" value="GBK"/>
+        <!-- 开户申请文件，跳过95行文件头信息 -->
+        <property name="linesToSkip" value="96"/>
+        <!-- 开户申请文件，处理文件尾信息 -->
+        <property name="comments" value="OFDCFEND"/>
+        <property name="lineMapper" ref="amqAccOpenApplyLineMapper"/>
+        <!-- 开户申请文件，处理文件头信息 -->
+        <!-- <property name="skippedLinesCallback" ref="jzTradeFileSkippedLinesCallback"/>-->
+    </bean>
+    <!-- LineMapper配置 start -->
+    <bean id="amqAccOpenApplyLineMapper"
+          class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+        <property name="lineTokenizer" ref="lineTokenizer" />
+        <property name="fieldSetMapper">
+            <bean class="org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper">
+                <property name="prototypeBeanName" value="amqAccOpenApplyLineItem"/>
+            </bean>
+        </property>
+    </bean>
+    <bean id="amqAccOpenApplyLineItem"
+          class="com.jinhui.scheduler.biz.imiqian.dto.AmqAccOpenApplyLineItem" scope="prototype" />
+    <bean id="lineTokenizer" class="com.jinhui.scheduler.biz.core.common.FixedByteLengthTokenizer">
+        <property name="charset" value="GBK"/>
+        <property name="columns" value="1-120,121-150,151-151,152-171,172-195,196-196,197-226,227-346,347-354,355-360,361-361,362-367,419-435,436-444,445-475,576-578,579-618,619-642,643-645,668-675,676-699,700-708,751-751,903-930,931-939,940-947,1028-1035,1036-1036,1037-1038,1039-1118,1260-1263,1264-1265,1266-1281,1283-1289,1290-1295,1296-1301,1457-1468" />
+        <property name="names" value="address,instReprIDCode,instReprIDType,instReprName,appSheetSerialNo,certificateType,certificateNo,investorName,transactionDate,transactionTime,individualOrInstitution,postCode,transactionAccountID,distributorCode,businessCode,educationLevel,emailAddress,faxNo,vocationCode,annualIncome,mobileTelNo,branchCode,sex,acctNoOfInvestorInClearingAgency,clearingAgency,deliverWay,instReprCertValidDate,ClientRiskRate,instReprManageRange,controlHolder,vocation,corpoProperty,staffNum,province,city,country,zlUserId" />
+    </bean>
+    <!-- LineMapper配置 end -->
+    <!--<bean id="jzTradeFileSkippedLinesCallback" claimiqiannhui.scheduler.biz.core.imiqianannhui.header.JzTradeFileSkippedLinesCallback" />-->
+    <bean id="amqAccountApplyFileProcessor" class="com.jinhui.scheduler.biz.imiqian.processor.AmqAccountApplyFileProcessor" scope="step">
+        <constructor-arg name="chnCode" value="#{jobParameters['chnCode']}"/>
+    </bean>
+    <!-- 开户申请文件的读信息配置 end -->
+
+    <!-- 开户确认的读信息配置 start -->
+    <bean id="amqAccountConfirmDBReader" class="org.springframework.batch.item.database.JdbcCursorItemReader" scope="step">
+        <property name="dataSource" ref="dataSource" />
+        <property name="sql">
+            <value><![CDATA[
+            select serial_number,
+                   app_sheet_serial_no,
+                   DATE_FORMAT(confirm_date,'%Y%m%d') as confirm_date,
+                   chn_id,chn_code,
+                   investor_id,
+                   DATE_FORMAT(apply_date,'%Y%m%d%H%i%s') as apply_date,
+                   id_type,
+                   id_no,
+                   name,
+                   user_flag
+            from chn_open where batch_code = ? and chn_code = ?]]></value>
+        </property>
+        <property name="rowMapper" ref="chnOpenRowMapper"/>
+        <property name="preparedStatementSetter" ref="amqAccountConfirmStatementSetter" />
+    </bean>
+
+    <bean name="chnOpenRowMapper" class="com.jinhui.scheduler.biz.imiqian.rowMapper.ChnOpenRowMapper"/>
+    <bean id="amqAccountConfirmStatementSetter" class="org.springframework.batch.core.resource.ListPreparedStatementSetter" scope="step">
+        <property name="parameters">
+            <list>
+                <value>#{jobParameters['batchCode']}</value>
+                <value>#{jobParameters['chnCode']}</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="amqAccountConfirmDBProcessor" class="com.jinhui.scheduler.biz.imiqian.processor.AmqAccountConfirmDBProcessor" />
+    <!-- 开户确认的读信息配置 end -->
+
+    <!-- 交易申请文件的读信息配置 start -->
+    <bean id="amqTradeApplyFileReader" scope="step"
+          class="org.springframework.batch.item.file.FlatFileItemReader">
+        <property name="resource" value="file:#{jobParameters['workspacePath']}/OFD_#{jobParameters['chnCode']}_JFB666_#{jobParameters['applyDate']}_03.TXT"/>
+        <property name="encoding" value="GBK"/>
+        <!-- 开户申请文件，跳过95行文件头信息 -->
+        <property name="linesToSkip" value="89"/>
+        <!-- 开户申请文件，处理文件尾信息 -->
+        <property name="comments" value="OFDCFEND"/>
+        <property name="lineMapper" ref="amqTradeApplyLineMapper"/>
+        <!-- 开户申请文件，处理文件头信息 -->
+        <!-- <property name="skippedLinesCallback" ref="jzTradeFileSkippedLinesCallback"/>-->
+    </bean>
+    <!-- LineMapper配置 start -->
+    <bean id="amqTradeApplyLineMapper"
+          class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+        <property name="lineTokenizer" ref="tradeLineTokenizer" />
+        <property name="fieldSetMapper">
+            <bean class="org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper">
+                <property name="prototypeBeanName" value="amqTradeApplyLineItem"/>
+            </bean>
+        </property>
+    </bean>
+    <bean id="amqTradeApplyLineItem"
+          class="com.jinhui.scheduler.biz.imiqian.dto.AmqTradeApplyLineItem" scope="prototype" />
+    <bean id="tradeLineTokenizer" class="com.jinhui.scheduler.biz.core.common.FixedByteLengthTokenizer">
+        <property name="charset" value="GBK"/>
+        <property name="columns" value="1-24,25-30,31-31,32-39,40-45,46-62,63-71,72-87,88-103,104-106,107-118,147-149,150-158,191-191,277-286,415-415,544-544,545-545,639-639,640-640,641-649,650-665,666-697,698-698,699-758,759-782" />
+        <property name="names" value="appSheetSerialNo,fundCode,largeRedemptionFlag,transactionDate,transactionTime,transactionAccountID,distributorCode,applicationVol,applicationAmount,businessCode,taAccountID,currencyType,branchCode,individualOrInstitution,charge,shareClass,forceRedemptionType,takeIncomeFlag,largeBuyFlag,chargeType,specifyRateFee,specifyFee,zlFundSeqId,redeemFlag,transBankCode,transBankAct" />
+
+    </bean>
+    <!-- LineMapper配置 end -->
+    <!--<bean id="jzTradeFileSkippedLinesCallback" claimiqiannhui.scheduler.biz.core.imiqianannhui.header.JzTradeFileSkippedLinesCallback" />-->
+    <bean id="amqTradeApplyFileProcessor" class="com.jinhui.scheduler.biz.imiqian.processor.AmqTradeApplyFileProcessor" scope="step">
+        <constructor-arg name="chnCode" value="#{jobParameters['chnCode']}"/>
+    </bean>
+    <!-- 交易申请文件的读信息配置 end -->
+
+    <!-- 交易确认的读信息配置 start -->
+    <bean id="amqTradeConfirmDBReader" class="org.springframework.batch.item.database.JdbcCursorItemReader" scope="step">
+        <property name="dataSource" ref="dataSource" />
+        <property name="sql">
+            <value><![CDATA[
+            select serial_number,
+                   app_sheet_serial_no,
+                   chn_code,
+                   DATE_FORMAT(confirm_date,'%Y%m%d') as confirm_date,
+                   chn_id,chn_code,investor_id,
+                   DATE_FORMAT(trans_time,'%Y%m%d%H%i%s') as trans_time,
+                   name,trans_vol,trans_amount,product_no,huge_redem_flag,trans_time,
+                   trans_state,trans_type,trans_fix,product_vol,charge_type,
+                   take_income_flag,
+                   case
+                   when is_excess = '0' then '0000'
+                   when is_excess = '1' then '0011'
+                   when is_excess = '2' then '0012'
+                   when is_excess = '3' then '0013' end as is_excess
+            from investor_trans where batch_code = ? and chn_code = ?]]></value>
+        </property>
+        <property name="rowMapper" ref="investorTransRowMapper"/>
+        <property name="preparedStatementSetter" ref="amqTradeConfirmStatementSetter" />
+    </bean>
+
+    <bean name="investorTransRowMapper" class="com.jinhui.scheduler.biz.imiqian.rowMapper.InvestorTransRowMapper"/>
+    <bean id="amqTradeConfirmStatementSetter" class="org.springframework.batch.core.resource.ListPreparedStatementSetter" scope="step">
+        <property name="parameters">
+            <list>
+                <value>#{jobParameters['batchCode']}</value>
+                <value>#{jobParameters['chnCode']}</value>
+            </list>
+        </property>
+    </bean>
+
+
+    <bean id="amqTradeConfirmDBProcessor" class="com.jinhui.scheduler.biz.imiqian.processor.AmqTradeConfirmDBProcessor" />
+    <!-- 交易确认的读信息配置 end -->
+
+
+    <!-- 分红数据的读信息配置 start -->
+    <bean id="amqIncomeDBReader" class="org.springframework.batch.item.database.JdbcCursorItemReader" scope="step">
+        <property name="dataSource" ref="dataSource" />
+        <property name="sql">
+            <value><![CDATA[
+            select i.serial_number,
+			       i.total_postion_amount,
+                   DATE_FORMAT(i.apply_date,'%Y%m%d') as apply_date,
+                   DATE_FORMAT(i.gather_date,'%Y%m%d') as gather_date,
+                   i.income_amount,
+                   DATE_FORMAT(i.confirm_date,'%Y%m%d') as confirm_date,
+                   i.product_no,
+                   i.income_state,
+                   i.chn_id,
+                   i.chn_code,
+                   i.investor_id,
+                   i.percent_income,
+                   p.product_vol
+            from investor_income i, product p
+            where i.product_no = p.product_no and i.gather_date >= ? and i.gather_date < ? and i.chn_code = ?]]></value>
+        </property>
+        <property name="rowMapper" ref="investorIncomeRowMapper"/>
+        <property name="preparedStatementSetter" ref="amqIncomeStatementSetter" />
+    </bean>
+
+    <bean name="investorIncomeRowMapper" class="com.jinhui.scheduler.biz.imiqian.rowMapper.InvestorIncomeRowMapper"/>
+    <bean id="amqIncomeStatementSetter" class="org.springframework.batch.core.resource.ListPreparedStatementSetter" scope="step">
+        <property name="parameters">
+            <list>
+                <value>#{jobParameters['beginDate']}</value>
+                <value>#{jobParameters['endDate']}</value>
+                <value>#{jobParameters['chnCode']}</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="amqIncomeDBProcessor" class="com.jinhui.scheduler.biz.imiqian.processor.AmqIncomeDBProcessor" />
+    <!-- 分红数据的读信息配置 end -->
+
+    <!-- 基金账户对账数据的读信息配置 start -->
+    <bean id="amqReconciliateDataDBReader" class="org.springframework.batch.item.database.JdbcCursorItemReader" scope="step">
+        <property name="dataSource" ref="dataSource" />
+        <property name="sql">
+            <value><![CDATA[
+            select total_postion_vol,
+                 DATE_FORMAT(gather_date,'%Y%m%d') as gather_date,
+                 product_no,
+                 chn_code,
+                 chn_id,
+                 investor_id
+            from investor_position where chn_code = ?]]></value>
+        </property>
+        <property name="rowMapper" ref="reconciliateDataRowMapper"/>
+        <property name="preparedStatementSetter" ref="amqReconciliateDataStatementSetter" />
+    </bean>
+
+    <bean name="reconciliateDataRowMapper" class="com.jinhui.scheduler.biz.imiqian.rowMapper.ReconciliateDataRowMapper"/>
+    <bean id="amqReconciliateDataStatementSetter" class="org.springframework.batch.core.resource.ListPreparedStatementSetter" scope="step">
+        <property name="parameters">
+            <list>
+                <value>#{jobParameters['chnCode']}</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="amqReconciliateDataDBProcessor" class="com.jinhui.scheduler.biz.imiqian.processor.AmqReconciliateDataDBProcessor" />
+    <!-- 基金账户对账数据的读信息配置 end -->
+
+
+    <!-- 业务申请汇总数据的读信息配置 start -->
+    <bean id="amqGatherDataDBReader" class="org.springframework.batch.item.database.JdbcCursorItemReader" scope="step">
+        <property name="dataSource" ref="dataSource" />
+        <property name="sql">
+            <value><![CDATA[
+            select product_no,
+                   chn_code,
+                   trans_type,
+                   DATE_FORMAT(gather_date,'%Y%m%d') as gather_date,
+                   trans_num,
+                   success_vol,
+                   success_amount,
+                   fail_vol,
+                   fail_amount,
+                   success_num,
+                   fail_num
+            from business_gather where gather_date >=? and gather_date < ? and chn_code = ?]]></value>
+        </property>
+        <property name="rowMapper" ref="gatherDataRowMapper"/>
+        <property name="preparedStatementSetter" ref="amqGatherDataStatementSetter" />
+    </bean>
+
+    <bean name="gatherDataRowMapper" class="com.jinhui.scheduler.biz.imiqian.rowMapper.GatherDataRowMapper"/>
+    <bean id="amqGatherDataStatementSetter" class="org.springframework.batch.core.resource.ListPreparedStatementSetter" scope="step">
+        <property name="parameters">
+            <list>
+                <value>#{jobParameters['beginDate']}</value>
+                <value>#{jobParameters['endDate']}</value>
+                <value>#{jobParameters['chnCode']}</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="amqGatherDataDBProcessor" class="com.jinhui.scheduler.biz.imiqian.processor.AmqGatherDataDBProcessor" />
+    <!-- 业务申请汇总数据的读信息配置 end -->
+
+</beans>

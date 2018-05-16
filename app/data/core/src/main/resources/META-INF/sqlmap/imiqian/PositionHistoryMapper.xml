@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.imiqian.PositionHistoryMapper" >
+  <resultMap id="BaseResultMap" type="com.jinhui.scheduler.domain.imiqian.domain.PositionHistory" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+    <result column="gather_date" property="gatherDate" jdbcType="DATE" />
+    <result column="batch_code" property="batchCode" jdbcType="INTEGER" />
+    <result column="investor_id" property="investorId" jdbcType="CHAR" />
+    <result column="chn_id" property="chnId" jdbcType="CHAR" />
+    <result column="chn_code" property="chnCode" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="product_no" property="productNo" jdbcType="CHAR" />
+    <result column="child_product_no" property="childProductNo" jdbcType="CHAR" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="total_postion_vol" property="totalPostionVol" jdbcType="DECIMAL" />
+    <result column="product_vol" property="productVol" jdbcType="DECIMAL" />
+    <result column="total_postion_amount" property="totalPostionAmount" jdbcType="DECIMAL" />
+    <result column="total_income" property="totalIncome" jdbcType="DECIMAL" />
+    <result column="total_redemed_amount" property="totalRedemedAmount" jdbcType="DECIMAL" />
+    <result column="total_subs_amount" property="totalSubsAmount" jdbcType="DECIMAL" />
+    <result column="rolling_flag" property="rollingFlag" jdbcType="CHAR" />
+    <result column="rolling_vol" property="rollingVol" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, serial_number, gather_date, batch_code,investor_id, chn_id, chn_code, name, child_product_no, product_no,
+    product_name, total_postion_vol, product_vol, total_postion_amount,
+    total_income, total_redemed_amount, total_subs_amount, rolling_flag, rolling_vol,
+    create_time, update_time
+  </sql>
+
+  <delete id="delete">
+    delete from position_history where 1=1
+    <if test="batchCode != null">
+      AND batch_code &gt;= #{batchCode}
+    </if>
+  </delete>
+
+  <select id="findPosHistory" parameterType="com.jinhui.scheduler.domain.imiqian.domain.PositionHistory" resultMap="BaseResultMap">
+     select
+     <include refid="Base_Column_List"/>
+      from position_history where 1=1
+      <if test="gatherDate != null">
+          AND gather_date = #{gatherDate}
+      </if>
+      <if test="chnCode != null">
+          AND chn_code = #{chnCode}
+      </if>
+      <if test="investorId != null">
+          AND investor_id = #{investorId}
+      </if>
+      <if test="productNo != null">
+          AND product_no = #{productNo}
+      </if>
+  </select>
+
+  <insert id="save" parameterType="com.jinhui.scheduler.domain.imiqian.domain.PositionHistory" >
+    insert into position_history
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="batchCode != null" >
+        batch_code,
+      </if>
+      <if test="serialNumber != null" >
+        serial_number,
+      </if>
+      <if test="gatherDate != null" >
+        gather_date,
+      </if>
+      <if test="investorId != null" >
+        investor_id,
+      </if>
+      <if test="chnId != null" >
+        chn_id,
+      </if>
+      <if test="chnCode != null" >
+        chn_code,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="productNo != null" >
+        product_no,
+      </if>
+      <if test="childProductNo != null" >
+        child_product_no,
+      </if>
+      <if test="productName != null" >
+        product_name,
+      </if>
+      <if test="totalPostionVol != null" >
+        total_postion_vol,
+      </if>
+      <if test="productVol != null" >
+        product_vol,
+      </if>
+      <if test="totalPostionAmount != null" >
+        total_postion_amount,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="batchCode != null" >
+        #{batchCode},
+      </if>
+      <if test="serialNumber != null" >
+        #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="gatherDate != null" >
+        #{gatherDate,jdbcType=DATE},
+      </if>
+      <if test="investorId != null" >
+        #{investorId,jdbcType=CHAR},
+      </if>
+      <if test="chnId != null" >
+        #{chnId,jdbcType=CHAR},
+      </if>
+      <if test="chnCode != null" >
+        #{chnCode,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null" >
+        #{productNo,jdbcType=CHAR},
+      </if>
+      <if test="childProductNo != null" >
+        #{childProductNo,jdbcType=CHAR},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="totalPostionVol != null" >
+        #{totalPostionVol,jdbcType=DECIMAL},
+      </if>
+      <if test="productVol != null" >
+        #{productVol,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPostionAmount != null" >
+        #{totalPostionAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <!-- 批量备份T日之前的历史持仓数据 -->
+  <insert id="bakcupToPosHis" parameterType="java.util.List" useGeneratedKeys="true" >
+        insert into position_history(serial_number,gather_date,batch_code,investor_id,
+        chn_id,
+        chn_code,
+        name,
+        product_no,
+        child_product_no,
+        product_name,
+        total_postion_vol,
+        product_vol,
+        total_postion_amount,
+        total_income,
+        total_redemed_amount,
+        total_subs_amount,
+        rolling_vol,
+        rolling_flag,
+        position_type,
+        create_time,
+        update_time) values
+        <foreach item="item" collection="posHisList" separator=",">
+          (#{item.serialNumber},
+           #{item.gatherDate},
+           #{item.batchCode},
+           #{item.investorId},
+           #{item.chnId},
+           #{item.chnCode},
+           #{item.name},
+           #{item.productNo},
+           #{item.childProductNo},
+           #{item.productName},
+           #{item.totalPostionVol},
+           #{item.productVol},
+           #{item.totalPostionAmount},
+           #{item.totalIncome},
+           #{item.totalRedemedAmount},
+           #{item.totalSubsAmount},
+           #{item.rollingVol},
+           #{item.rollingFlag},
+           #{item.positionType},
+           #{item.createTime},
+           #{item.updateTime})
+        </foreach>
+    </insert>
+
+    <select id="findHisCount" resultType="java.lang.Integer">
+        select count(*) from position_history
+        where batch_code = #{batchCode}
+    </select>
+
+</mapper>

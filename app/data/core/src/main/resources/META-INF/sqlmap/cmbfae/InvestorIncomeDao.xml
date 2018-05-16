@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.cmbfae.InvestorIncomeDao">
+
+
+	<select id="queryChildProductNo" resultType="java.lang.String">
+
+	select DISTINCT child_product_no from investor_position t,product p
+	where t.product_no=p.product_no
+	and t.position_type='0'
+	and p.exchange_no= #{exchangeNo}
+
+	</select>
+	
+
+</mapper>

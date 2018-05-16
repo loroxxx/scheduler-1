@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="zlrtStatementDBWriter" class="com.jinhui.scheduler.biz.zlrt.writer.ZlrtStatementDBWriter" />
+
+
+    <!--赎回类业务305的写信息配置  start -->
+    <bean id="zlrtRedeemFileWriter" scope="step"
+          class="com.jinhui.scheduler.biz.zlrt.writer.ZlrtRedeemFileWriter">
+        <property name="resource" value="file:#{jobParameters['generatePath']}/Redeem_#{jobParameters['zlInstuId']}_#{jobParameters['applyDate']}_#{jobParameters['xuhao']}.txt" />
+        <!--<property name="resource" value="file:F:/test/Redeem_B00000603_20171113_01.txt"/>-->
+        <property name="encoding" value="GBK"/>
+        <!--<property name="lineSeparator" value="&#13;&#10;"/>-->
+        <property name="headerCallback" ref="zlrtRedeemFileHeaderCallback" />
+        <property name="delimiter" value="|"/>
+    </bean>
+    <bean id="zlrtRedeemFileHeaderCallback" class="com.jinhui.scheduler.biz.zlrt.header.ZlrtRedeemFileHeaderCallback" />
+    <!-- 赎回类业务305的写信息配置  end -->
+
+    <!--结算类业务(监管银行)  申购结算701的写信息配置  start -->
+    <bean id="zlrtPurchaseFileWriter" scope="step"
+          class="org.springframework.batch.item.file.FlatFileItemWriter">
+        <property name="resource" value="file:#{jobParameters['generatePath']}/purchase_#{jobParameters['zlInstuId']}_#{jobParameters['applyDate']}_#{jobParameters['xuhao']}.txt" />
+        <!--<property name="resource" value="file:F:/test/purchase_B00000603_20171113_01.txt"/>-->
+        <property name="encoding" value="GBK"/>
+        <!--<property name="lineSeparator" value="&#13;&#10;"/>-->
+        <property name="headerCallback" ref="zlrtPurchaseFileHeaderCallback" />
+        <property name="lineAggregator">
+            <bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
+                <property name="delimiter" value="~"/>
+                <property name="fieldExtractor">
+                    <bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+                        <property name="names" value="fundSeqId,fundDate,busiType,userId,userNameText,certType,certId,fundCode,
+                                              fundType,transAmt,bankType,cardNo,fundUserId,resv"/>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+    <bean id="zlrtPurchaseFileHeaderCallback" class="com.jinhui.scheduler.biz.zlrt.header.ZlrtPurchaseFileHeaderCallback" />
+    <!-- 结算类业务(监管银行)  申购结算701的写信息配置  end -->
+
+    <!--结算类业务(监管银行)  赎回结算702的写信息配置  start -->
+    <bean id="zlrtRedemptionFileWriter" scope="step"
+          class="org.springframework.batch.item.file.FlatFileItemWriter">
+        <property name="resource" value="file:#{jobParameters['generatePath']}/redemption_#{jobParameters['zlInstuId']}_#{jobParameters['applyDate']}_#{jobParameters['xuhao']}.txt" />
+        <!--<property name="resource" value="file:F:/test/redemption_B00000603_20171113_01.txt"/>-->
+        <property name="encoding" value="GBK"/>
+        <!--<property name="lineSeparator" value="&#13;&#10;"/>-->
+        <property name="headerCallback" ref="zlrtRedemptionFileHeaderCallback" />
+        <property name="lineAggregator">
+            <bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
+                <property name="delimiter" value="~"/>
+                <property name="fieldExtractor">
+                    <bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+                        <property name="names" value="fundSeqId,fundDate,redeemType,busiType,userId,userNameText,certType,certId,fundCode,
+                                              fundType,bankType,cardNo,orgFundDate,orgFundSeqId,refundRemark,transAmt,resv"/>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+    <bean id="zlrtRedemptionFileHeaderCallback" class="com.jinhui.scheduler.biz.zlrt.header.ZlrtRedemptionFileHeaderCallback" />
+    <!-- 结算类业务(监管银行)  赎回结算702的写信息配置  end -->
+
+</beans>

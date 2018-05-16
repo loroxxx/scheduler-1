@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.cmbfae.ExchangeFileLogDao" >
+  <resultMap id="BaseResultMap" type="com.jinhui.scheduler.domain.cmbfae.ExchangeFileLog" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="batch_date" property="batchDate" jdbcType="DATE" />
+    <result column="batch_code" property="batchCode" jdbcType="INTEGER" />
+    <result column="exchange_code" property="exchangeCode" jdbcType="VARCHAR" />
+    <result column="step" property="step" jdbcType="VARCHAR" />
+    <result column="step_code" property="stepCode" jdbcType="VARCHAR" />
+    <result column="step_desc" property="stepDesc" jdbcType="VARCHAR" />
+    <result column="total_count" property="totalCount" jdbcType="INTEGER" />
+    <result column="file_path" property="filePath" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    id, batch_date, batch_code, exchange_code, step, step_code, step_desc, total_count, 
+    file_path, status, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    from exchange_file_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    delete from exchange_file_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jinhui.scheduler.domain.cmbfae.ExchangeFileLog" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    insert into exchange_file_log (id, batch_date, batch_code, 
+      exchange_code, step, step_code, 
+      step_desc, total_count, file_path, 
+      status, create_time)
+    values (#{id,jdbcType=INTEGER}, #{batchDate,jdbcType=DATE}, #{batchCode,jdbcType=INTEGER}, 
+      #{exchangeCode,jdbcType=VARCHAR}, #{step,jdbcType=VARCHAR}, #{stepCode,jdbcType=VARCHAR}, 
+      #{stepDesc,jdbcType=VARCHAR}, #{totalCount,jdbcType=INTEGER}, #{filePath,jdbcType=VARCHAR}, 
+      #{status,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jinhui.scheduler.domain.cmbfae.ExchangeFileLog" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    insert into exchange_file_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="batchDate != null" >
+        batch_date,
+      </if>
+      <if test="batchCode != null" >
+        batch_code,
+      </if>
+      <if test="exchangeCode != null" >
+        exchange_code,
+      </if>
+      <if test="step != null" >
+        step,
+      </if>
+      <if test="stepCode != null" >
+        step_code,
+      </if>
+      <if test="stepDesc != null" >
+        step_desc,
+      </if>
+      <if test="totalCount != null" >
+        total_count,
+      </if>
+      <if test="filePath != null" >
+        file_path,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="batchDate != null" >
+        #{batchDate,jdbcType=DATE},
+      </if>
+      <if test="batchCode != null" >
+        #{batchCode,jdbcType=INTEGER},
+      </if>
+      <if test="exchangeCode != null" >
+        #{exchangeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="step != null" >
+        #{step,jdbcType=VARCHAR},
+      </if>
+      <if test="stepCode != null" >
+        #{stepCode,jdbcType=VARCHAR},
+      </if>
+      <if test="stepDesc != null" >
+        #{stepDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="totalCount != null" >
+        #{totalCount,jdbcType=INTEGER},
+      </if>
+      <if test="filePath != null" >
+        #{filePath,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jinhui.scheduler.domain.cmbfae.ExchangeFileLog" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    update exchange_file_log
+    <set >
+      <if test="batchDate != null" >
+        batch_date = #{batchDate,jdbcType=DATE},
+      </if>
+      <if test="batchCode != null" >
+        batch_code = #{batchCode,jdbcType=INTEGER},
+      </if>
+      <if test="exchangeCode != null" >
+        exchange_code = #{exchangeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="step != null" >
+        step = #{step,jdbcType=VARCHAR},
+      </if>
+      <if test="stepCode != null" >
+        step_code = #{stepCode,jdbcType=VARCHAR},
+      </if>
+      <if test="stepDesc != null" >
+        step_desc = #{stepDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="totalCount != null" >
+        total_count = #{totalCount,jdbcType=INTEGER},
+      </if>
+      <if test="filePath != null" >
+        file_path = #{filePath,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+
+  <select id="queryProductFileCount" resultType="java.lang.Integer">
+
+    select count(*) from exchange_file_log
+    where batch_date = #{batchDate,jdbcType=DATE}
+    and exchange_code = #{exchangeCode}
+    and step ='STEP_0'
+
+  </select>
+
+
+
+  <select id="queryStepByCode" resultMap="BaseResultMap">
+
+    select <include refid="Base_Column_List" /> from exchange_file_log
+    where batch_date = #{batchDate,jdbcType=DATE}
+    and exchange_code = #{exchangeCode}
+    and step =#{step}
+    order by id desc limit 1
+  </select>
+
+
+
+  <select id="queryStep" resultType="com.jinhui.scheduler.domain.cmbfae.ExchangeFileLog">
+
+    select <include refid="Base_Column_List" /> from exchange_file_log
+    where batch_date = #{batchDate,jdbcType=DATE}
+    and exchange_code = #{exchangeCode}
+    order by id desc limit 1
+  </select>
+
+
+  <select id="queryStepCount" resultType="java.lang.Integer">
+
+    select count(*) from exchange_file_log
+    where batch_date = #{batchDate,jdbcType=DATE}
+    and exchange_code = #{exchangeCode}
+    and step in ('STEP_1','STEP_2','STEP_3')
+
+  </select>
+
+
+</mapper>

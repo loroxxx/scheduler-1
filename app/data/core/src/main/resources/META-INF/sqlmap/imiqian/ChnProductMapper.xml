@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.imiqian.ChnProductMapper">
+  <resultMap id="chnProductMap" type="com.jinhui.scheduler.domain.imiqian.domain.ChnProduct">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="chn_code" jdbcType="CHAR" property="chnCode" />
+    <result column="product_name" jdbcType="CHAR" property="productName" />
+    <result column="product_no" jdbcType="VARCHAR" property="productNo" />
+    <result column="plat_product_no" jdbcType="CHAR" property="platProductNo" />
+    <result column="total_limit" jdbcType="DECIMAL" property="totalLimit" />
+    <result column="assign_limit" jdbcType="DECIMAL" property="assignLimit" />
+    <result column="total_vol" jdbcType="DECIMAL" property="totalVol" />
+    <result column="assign_vol" jdbcType="DECIMAL" property="assignVol" />
+    <result column="limit_control" jdbcType="DECIMAL" property="limitControl" />
+    <result column="income_rate" jdbcType="DECIMAL" property="incomeRate" />
+    <result column="prefer_date" jdbcType="DATE" property="preferDate" />
+    <result column="product_vol" property="productVol" jdbcType="DECIMAL" />
+    <result column="percent_income_rate" property="percentIncomeRate" jdbcType="DECIMAL" />
+    <result column="nominal_percent_income_rate" property="normalPercentIncomeRate" jdbcType="DECIMAL" />
+    <result column="subs_toplimit" property="subsToplimit" jdbcType="DECIMAL" />
+    <result column="redeem_toplimit" property="redeemToplimit" jdbcType="DECIMAL" />
+  </resultMap>
+  <select id="findList" resultMap="chnProductMap">
+    select cp.product_no,cp.product_name,cp.income_rate,cp.percent_income_rate,p.product_vol from chn_product cp, product p
+    where  cp.product_no = p.product_no
+    and cp.product_no = #{productNo} and cp.chn_code = #{chnCode}
+  </select>
+
+  <select id="findAllProduct" resultMap="chnProductMap">
+    select cp.product_no,cp.product_name,cp.income_rate,cp.percent_income_rate,
+       cp.nominal_percent_income_rate,cp.subs_toplimit,cp.redeem_toplimit,
+       p.product_vol,p.total_limit
+    from chn_product cp,product p
+    where cp.product_no = p.product_no
+  </select>
+
+</mapper>

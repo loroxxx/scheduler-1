@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.imiqian.ChnInfoMapper" >
+  <resultMap id="chnInfoMap" type="com.jinhui.scheduler.domain.imiqian.domain.ChnInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="chn_code" property="chnCode" jdbcType="CHAR" />
+    <result column="chn_name" property="chnName" jdbcType="VARCHAR" />
+    <result column="id_type" property="idType" jdbcType="CHAR" />
+    <result column="id_no" property="idNo" jdbcType="CHAR" />
+    <result column="contacts" property="contacts" jdbcType="VARCHAR" />
+    <result column="artificial" property="artificial" jdbcType="VARCHAR" />
+    <result column="adress" property="adress" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, chn_code, chn_name, id_type, id_no, contacts, artificial, adress, phone
+  </sql>
+  <select id="findChnInfo" resultMap="chnInfoMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from chn_info
+    where chn_code = #{chnCode}
+  </select>
+
+  <!-- 查询接入的渠道列表-->
+  <select id="findChnInfoList" resultMap="chnInfoMap" >
+    select
+    <include refid="Base_Column_List" />
+    from chn_info
+  </select>
+
+</mapper>

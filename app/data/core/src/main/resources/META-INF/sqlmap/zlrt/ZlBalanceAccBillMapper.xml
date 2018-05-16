@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.zlrt.ZlBalanceAccBillMapper" >
+  <resultMap id="BaseResultMap" type="com.jinhui.scheduler.domain.zlrt.ZlBalanceAccBill" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="instu_id" property="instuId" jdbcType="VARCHAR" />
+    <result column="fund_date" property="fundDate" jdbcType="VARCHAR" />
+    <result column="fund_time" property="fundTime" jdbcType="VARCHAR" />
+    <result column="liq_date" property="liqDate" jdbcType="VARCHAR" />
+    <result column="fund_seq_id" property="fundSeqId" jdbcType="VARCHAR" />
+    <result column="org_fund_date" property="orgFundDate" jdbcType="VARCHAR" />
+    <result column="org_fund_seq_id" property="orgFundSeqId" jdbcType="VARCHAR" />
+    <result column="busi_type" property="busiType" jdbcType="CHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="user_name_text" property="userNameText" jdbcType="VARCHAR" />
+    <result column="cert_type" property="certType" jdbcType="CHAR" />
+    <result column="cert_id" property="certId" jdbcType="VARCHAR" />
+    <result column="trans_amt" property="transAmt" jdbcType="DECIMAL" />
+    <result column="fund_code" property="fundCode" jdbcType="VARCHAR" />
+    <result column="fund_type" property="fundType" jdbcType="CHAR" />
+    <result column="pnr_date" property="pnrDate" jdbcType="VARCHAR" />
+    <result column="pnr_time" property="pnrTime" jdbcType="VARCHAR" />
+    <result column="pnr_seq_id" property="pnrSeqId" jdbcType="VARCHAR" />
+    <result column="batch_code" property="batchCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, batch_code, instu_id, fund_date, fund_time, liq_date, fund_seq_id, org_fund_date, org_fund_seq_id,
+    busi_type, user_id, user_name_text, cert_type, cert_id, trans_amt, fund_code, fund_type, pnr_date,
+    pnr_time, pnr_seq_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from zl_balance_acc_bill
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="queryListAfterImport" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from zl_balance_acc_bill
+    where batch_code = #{batchCode}
+  </select>
+
+  <insert id="insertSelective" parameterType="com.jinhui.scheduler.domain.zlrt.ZlBalanceAccBill" >
+    insert into zl_balance_acc_bill
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="batchCode != null" >
+        batch_code,
+      </if>
+      <if test="instuId != null" >
+        instu_id,
+      </if>
+      <if test="fundDate != null" >
+        fund_date,
+      </if>
+      <if test="fundTime != null" >
+        fund_time,
+      </if>
+      <if test="liqDate != null" >
+        liq_date,
+      </if>
+      <if test="fundSeqId != null" >
+        fund_seq_id,
+      </if>
+      <if test="orgFundDate != null" >
+        org_fund_date,
+      </if>
+      <if test="orgFundSeqId != null" >
+        org_fund_seq_id,
+      </if>
+      <if test="busiType != null" >
+        busi_type,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="userNameText != null" >
+        user_name_text,
+      </if>
+      <if test="certType != null" >
+        cert_type,
+      </if>
+      <if test="certId != null" >
+        cert_id,
+      </if>
+      <if test="transAmt != null" >
+        trans_amt,
+      </if>
+      <if test="fundCode != null" >
+        fund_code,
+      </if>
+      <if test="fundType != null" >
+        fund_type,
+      </if>
+      <if test="pnrDate != null" >
+        pnr_date,
+      </if>
+      <if test="pnrTime != null" >
+        pnr_time,
+      </if>
+      <if test="pnrSeqId != null" >
+        pnr_seq_id,
+      </if>
+      <if test="1 == 1" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="batchCode != null" >
+        #{batchCode,jdbcType=VARCHAR},
+      </if>
+      <if test="instuId != null" >
+        #{instuId,jdbcType=VARCHAR},
+      </if>
+      <if test="fundDate != null" >
+        #{fundDate,jdbcType=VARCHAR},
+      </if>
+      <if test="fundTime != null" >
+        #{fundTime,jdbcType=VARCHAR},
+      </if>
+      <if test="liqDate != null" >
+        #{liqDate,jdbcType=VARCHAR},
+      </if>
+      <if test="fundSeqId != null" >
+        #{fundSeqId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgFundDate != null" >
+        #{orgFundDate,jdbcType=VARCHAR},
+      </if>
+      <if test="orgFundSeqId != null" >
+        #{orgFundSeqId,jdbcType=VARCHAR},
+      </if>
+      <if test="busiType != null" >
+        #{busiType,jdbcType=CHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userNameText != null" >
+        #{userNameText,jdbcType=VARCHAR},
+      </if>
+      <if test="certType != null" >
+        #{certType,jdbcType=CHAR},
+      </if>
+      <if test="certId != null" >
+        #{certId,jdbcType=VARCHAR},
+      </if>
+      <if test="transAmt != null" >
+        #{transAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="fundCode != null" >
+        #{fundCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fundType != null" >
+        #{fundType,jdbcType=CHAR},
+      </if>
+      <if test="pnrDate != null" >
+        #{pnrDate,jdbcType=VARCHAR},
+      </if>
+      <if test="pnrTime != null" >
+        #{pnrTime,jdbcType=VARCHAR},
+      </if>
+      <if test="pnrSeqId != null" >
+        #{pnrSeqId,jdbcType=VARCHAR},
+      </if>
+      <if test="1 == 1" >
+        now(),
+      </if>
+    </trim>
+  </insert>
+
+  <insert id="bakBalanceBillHis" parameterType="java.lang.Integer">
+    insert into zl_balance_acc_bill_his
+          select id,batch_code,instu_id,fund_date,fund_time,liq_date,fund_seq_id,org_fund_date,
+                  org_fund_seq_id,busi_type,user_id,user_name_text,cert_type,cert_id,trans_amt,
+                  fund_code,fund_type,pnr_date,pnr_time,pnr_seq_id,create_time from zl_balance_acc_bill
+          where batch_code = #{batchCode}
+  </insert>
+
+</mapper>

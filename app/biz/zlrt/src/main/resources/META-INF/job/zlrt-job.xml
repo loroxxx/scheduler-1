@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:batch="http://www.springframework.org/schema/batch"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd">
+
+
+      <!-- 导入证联对账单-->
+      <batch:job id="zlrtStatementJob">
+            <batch:step id="importBalanceAccStep" next="bakBalanceBillStep">
+                  <batch:tasklet>
+                        <batch:chunk reader="zlrtStatementFileReader" processor="zlrtStatementProcessor" writer="zlrtStatementDBWriter" commit-interval="1000"/>
+                        <batch:listeners>
+                              <batch:listener ref="zlrtStepListener"/>
+                        </batch:listeners>
+                  </batch:tasklet>
+            </batch:step>
+            <batch:step id="bakBalanceBillStep">
+                  <batch:tasklet ref="bakBalanceBill"/>
+            </batch:step>
+            <batch:listeners>
+                  <batch:listener ref="zlrtDownloadedFileJobListener"/>
+            </batch:listeners>
+      </batch:job>
+
+      <!-- 赎回类业务305-->
+      <batch:job id="zlrtRedeemJob">
+            <batch:step id="redeemStep">
+                  <batch:tasklet>
+                        <batch:chunk reader="zlrtRedeemDBReader" processor="zlrtRedeemDBProcessor" writer="zlrtRedeemFileWriter" commit-interval="1000"/>
+                  </batch:tasklet>
+                  <batch:listeners>
+                        <batch:listener ref="zlrtStepListener"/>
+                  </batch:listeners>
+            </batch:step>
+            <batch:listeners>
+                  <batch:listener ref="zlrtUploadedFileJobListener"/>
+            </batch:listeners>
+      </batch:job>
+
+      <!-- 结算类业务(监管银行)  监管报送-->
+      <batch:job id="zlrtBankJob">
+            <batch:step id="purchaseStep" next="redemptionStep">
+                  <batch:tasklet>
+                        <batch:chunk reader="zlrtPurchaseDBReader" processor="zlrtPurchaseDBProcessor" writer="zlrtPurchaseFileWriter" commit-interval="1000"/>
+                        <batch:listeners>
+                              <batch:listener ref="zlrtStepListener"/>
+                        </batch:listeners>
+                  </batch:tasklet>
+            </batch:step>
+            <batch:step id="redemptionStep">
+                  <batch:tasklet>
+                        <batch:chunk reader="zlrtRedemptionDBReader" processor="zlrtRedemptionDBProcessor" writer="zlrtRedemptionFileWriter" commit-interval="1000"/>
+                        <batch:listeners>
+                              <batch:listener ref="zlrtStepListener"/>
+                        </batch:listeners>
+                  </batch:tasklet>
+            </batch:step>
+            <batch:listeners>
+                  <batch:listener ref="zlrtUploadedFileJobListener"/>
+            </batch:listeners>
+      </batch:job>
+
+</beans>

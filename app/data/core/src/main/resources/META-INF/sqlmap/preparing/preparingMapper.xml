@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.preparing.PreparingMapper" >
+
+    <!-- 交易试算 start -->
+    <resultMap id="findTradingRM" type="com.jinhui.scheduler.data.core.query.preparing.entity.TradingEntity">
+        <result column="product_no" property="productNo" />
+        <result column="product_name" property="productName" />
+        <result column="investor_id" property="investorId" />
+        <result column="investor_name" property="investorName" />
+        <result column="subscribe_amount" property="subscribeAmount" />
+        <result column="subscribe_limit" property="subscribeLimit" />
+        <result column="redeem_amount" property="redeemAmount" />
+        <result column="redeem_limit" property="redeemLimit" />
+        <result column="position_amount" property="positionAmount" />
+        <result column="position_limit" property="positionLimit" />
+        <result column="batch_date" property="batchDate" />
+    </resultMap>
+
+    <select id="findTrading" resultMap="findTradingRM"
+            parameterType="com.jinhui.scheduler.data.core.query.preparing.criteria.TradingCriteria">
+        SELECT tra.*, position_amount, position_limit FROM
+        <include refid="trading" /> INNER JOIN
+        <include refid="position"/> ON (tra.product_no = pos.product_no AND tra.investor_id = pos.investor_id)
+        <include refid="findTradingWhere" />
+        LIMIT ${size} OFFSET ${offset}
+    </select>
+    <select id="countTrading" resultType="Integer"
+            parameterType="com.jinhui.scheduler.data.core.query.preparing.criteria.TradingCriteria">
+        SELECT COUNT(*) FROM
+        <include refid="trading" /> INNER JOIN
+        <include refid="position"/> ON (tra.product_no = pos.product_no AND tra.investor_id = pos.investor_id)
+        <include refid="findTradingWhere" />
+    </select>
+    <sql id="trading">
+        (SELECT
+        cp.product_no, cp.product_name product_name, investor_id,
+        it.`name` investor_name,
+        SUM(CASE trans_type WHEN '022' THEN trans_amount END) subscribe_amount,
+        SUM(CASE trans_type WHEN '024' THEN trans_amount END) redeem_amount,
+        subs_toplimit subscribe_limit, redeem_toplimit redeem_limit,
+        bs.date batch_date
+        <include refid="tradingFrom" />
+        GROUP BY cp.product_no, investor_id, it.batch_code) tra
+    </sql>
+    <sql id="tradingFrom">
+        FROM chn_product cp, investor_trans it, batch_state bs
+        WHERE cp.product_no = it.product_no AND `date`=#{batchDate}
+            AND it.batch_code = bs.batch_code
+    </sql>
+    <sql id="position">
+        (SELECT
+        new_p.*,
+        /* T日持仓=T-1日收益+T-1日持仓+T日交易持仓 */
+        TRUNCATE(ifnull(old_p.total_postion_amount,0)*percent_income_rate/10000 +
+        ifnull(old_p.total_postion_amount,0) + new_p.new_position_amount,2) position_amount
+        <include refid="positionFrom"/>) pos
+    </sql>
+    <sql id="positionFrom">
+        FROM
+        /* 计算T-1日前的持仓 */
+          investor_position old_p
+        RIGHT JOIN (
+        /* 计算T日当天的交易持仓 */
+            SELECT
+              it.product_no, cp.product_name product_name, investor_id,
+              it.`name` investor_name, cp.percent_income_rate percent_income_rate,
+              SUM(if(trans_type='022', trans_amount, -trans_amount)) new_position_amount,
+              position_limit position_limit, bs.date batch_date
+            FROM investor_trans it INNER JOIN (
+              SELECT batch_code, `date` from batch_state WHERE `date`=#{batchDate}
+            ) bs ON it.batch_code=bs.batch_code
+            INNER JOIN chn_product cp ON cp.product_no = it.product_no
+            GROUP BY cp.product_no, investor_id
+        ) new_p ON( old_p.investor_id=new_p.investor_id AND old_p.product_no=new_p.product_no )
+    </sql>
+    <sql id="findTradingWhere">
+        <if test="productNo != null">
+            AND tra.product_no = #{productNo}
+        </if>
+        <if test="productName != null">
+            AND tra.product_name = #{productName}
+        </if>
+        <if test="investorId != null">
+            AND investor_id = #{investorId}
+        </if>
+        <if test="investorName != null">
+            AND investor_name = #{investorName}
+        </if>
+        AND (
+          ifnull(subscribe_amount,0)>subscribe_limit OR
+          ifnull(redeem_amount,0)>redeem_limit OR
+          ifnull(position_amount,0)>position_limit
+        )
+    </sql>
+    <!-- 交易试算 end -->
+
+    <!-- T日持仓试算 start -->
+
+    <resultMap id="findPositionRM" type="com.jinhui.scheduler.data.core.query.preparing.entity.PositionEntity">
+        <result column="product_no" property="productNo" />
+        <result column="product_name" property="productName" />
+        <result column="investor_id" property="investorId" />
+        <result column="investor_name" property="investorName" />
+        <result column="position_amount" property="positionAmount" />
+        <result column="position_limit" property="positionLimit" />
+        <result column="batch_date" property="batchDate" />
+    </resultMap>
+    <select id="findPosition" resultMap="findPositionRM"
+            parameterType="com.jinhui.scheduler.data.core.query.preparing.criteria.PositionCriteria">
+        SELECT
+            new_p.*,
+            /* T日持仓=T-1日收益+T-1日持仓+T日交易持仓 */
+            TRUNCATE(old_p.total_postion_amount*percent_income_rate/10000 +
+              old_p.total_postion_amount + new_p.new_position_amount,2) position_amount
+        <include refid="findPositionFrom" />
+        <include refid="findPositionWhere" />
+        LIMIT ${size} OFFSET ${offset}
+    </select>
+    <select id="countPosition" resultType="Integer"
+            parameterType="com.jinhui.scheduler.data.core.query.preparing.criteria.PositionCriteria">
+        SELECT COUNT(*)
+        <include refid="findPositionFrom" />
+        <include refid="findPositionWhere" />
+    </select>
+    <sql id="findPositionFrom">
+        FROM
+        /* 计算T-1日前的持仓 */
+          investor_position old_p
+        INNER JOIN (
+        /* 计算T日当天的交易持仓 */
+            SELECT
+              it.product_no, cp.product_name product_name, investor_id,
+              it.`name` investor_name, cp.percent_income_rate percent_income_rate,
+              SUM(if(trans_type='022', trans_amount, -trans_amount)) new_position_amount,
+              position_limit position_limit, bs.date batch_date
+            FROM investor_trans it INNER JOIN (
+              SELECT batch_code, `date` from batch_state WHERE `date`=#{batchDate}
+            ) bs ON it.batch_code=bs.batch_code
+            INNER JOIN chn_product cp ON cp.product_no = it.product_no
+            GROUP BY cp.product_no, investor_id
+        ) new_p ON( old_p.investor_id=new_p.investor_id AND old_p.product_no=new_p.product_no )
+    </sql>
+    <sql id="findPositionWhere">
+        WHERE 1=1
+        <if test="productNo != null">
+            AND new_p.product_no = #{productNo}
+        </if>
+        <if test="productName != null">
+            AND new_p.product_name = #{productName}
+        </if>
+        <if test="investorId != null">
+            AND new_p.investor_id = #{investorId}
+        </if>
+        <if test="investorName != null">
+            AND new_p.investor_name = #{investorName}
+        </if>
+    </sql>
+
+    <!-- 持仓试算 end -->
+
+    <!-- 产品试算 start -->
+    <resultMap id="findProductRM" type="com.jinhui.scheduler.data.core.query.preparing.entity.ProductEntity">
+        <result column="product_no" property="productNo" />
+        <result column="product_name" property="productName" />
+        <result column="subscribe_amount" property="subscribeAmount" />
+        <result column="redeem_amount" property="redeemAmount" />
+        <result column="subscribe_limit" property="subscribeLimit" />
+        <result column="redeem_limit" property="redeemLimit" />
+        <result column="scale" property="scale" />
+        <result column="scale_limit" property="scaleLimit" />
+        <result column="batch_date" property="batchDate" />
+    </resultMap>
+    <select id="findProductTScale" parameterType="com.jinhui.scheduler.data.core.query.preparing.criteria.ProductCriteria"
+            resultMap="findProductRM">
+        SELECT
+            cp.product_no, cp.product_name product_name,
+            SUM(CASE trans_type WHEN '022' THEN trans_amount END) subscribe_amount,
+            SUM(CASE trans_type WHEN '024' THEN trans_amount END) redeem_amount,
+            product_subs_toplimit subscribe_limit, product_redeem_toplimit redeem_limit,
+            total_limit scale_limit, bs.date batch_date
+        <include refid="findProductFromWhere" />
+        GROUP BY cp.product_no
+    </select>
+    <sql id="findProductFromWhere">
+        FROM investor_trans it INNER JOIN (
+        SELECT batch_code, `date` from batch_state WHERE `date`=#{batchDate}
+        ) bs ON it.batch_code=bs.batch_code
+        INNER JOIN chn_product cp ON cp.product_no = it.product_no
+        WHERE 1=1
+        <if test="productNo != null">
+            AND cp.product_no = #{productNo}
+        </if>
+        <if test="productName != null">
+            AND cp.product_name = #{productName}
+        </if>
+    </sql>
+    <select id="findProductHistoryScale" parameterType="com.jinhui.scheduler.data.core.query.preparing.criteria.ProductCriteria"
+            resultMap="findProductRM">
+        select cp.product_no, sum(total_postion_amount) scale,
+          cp.product_name product_name,
+          product_subs_toplimit subscribe_limit,
+          product_redeem_toplimit redeem_limit,
+          total_limit scale_limit, #{batchDate} batch_date
+        from investor_position ip
+        RIGHT JOIN chn_product cp ON cp.product_no = ip.product_no
+        GROUP BY product_no
+    </select>
+    <!-- 产品试算 end -->
+
+    <!-- TA试算 start -->
+    <resultMap id="findTARM" type="com.jinhui.scheduler.data.core.query.preparing.entity.TAEntity">
+        <result column="exchange_no" property="taCode" />
+        <result column="chn_name" property="taName" />
+        <result column="issue_scale" property="issueScale" />
+        <result column="issue_limit" property="issueLimit" />
+        <result column="batch_date" property="batchDate" />
+    </resultMap>
+
+    <select id="findTATissueScale" resultMap="findTARM"
+            parameterType="com.jinhui.scheduler.data.core.query.preparing.criteria.TACriteria">
+        SELECT
+            exchange_no, SUM(if(trans_type='022', trans_amount, -trans_amount)) issue_scale,
+            ei.exchange_name chn_name, ei.current_product_limit issue_limit,
+            bs.`date` batch_date
+        FROM product p
+        INNER JOIN investor_trans it ON p.product_no=it.product_no
+        INNER JOIN exchange_info ei ON p.exchange_no=ei.exchange_code
+        INNER JOIN batch_state bs ON (
+          it.batch_code=bs.batch_code AND
+          bs.`date` = #{batchDate}
+        )
+        <include refid="taIssueScaleWhere" />
+        GROUP BY exchange_no
+    </select>
+
+    <select id="findTAHistIssueScale" resultMap="findTARM"
+            parameterType="com.jinhui.scheduler.data.core.query.preparing.criteria.TACriteria">
+        SELECT
+            ei.exchange_code exchange_no, SUM(total_postion_amount) issue_scale,
+            ei.exchange_name chn_name, ei.current_product_limit issue_limit,
+            #{batchDate} batch_date
+        FROM product p
+        INNER JOIN investor_position ip ON p.product_no=ip.product_no
+        RIGHT JOIN exchange_info ei ON p.exchange_no=ei.exchange_code
+        <include refid="taIssueScaleWhere" />
+        GROUP BY exchange_no
+    </select>
+
+    <sql id="taIssueScaleWhere">
+        WHERE 1=1
+        <if test="taCode != null">
+            AND exchange_no = #{taCode}
+        </if>
+        <if test="taName != null">
+            AND ei.exchange_name = #{taName}
+        </if>
+    </sql>
+
+    <!-- TA试算 end -->
+
+    <!-- 渠道试算 start -->
+
+    <resultMap id="findChannelRM" type="com.jinhui.scheduler.data.core.query.preparing.entity.ChannelEntity">
+        <result column="chn_code" property="channelCode" />
+        <result column="chn_name" property="channelName" />
+        <result column="sell_scale" property="sellScale" />
+        <result column="sell_limit" property="sellLimit" />
+        <result column="batch_date" property="batchDate" />
+    </resultMap>
+    <select id="findChannelTSellScale" resultMap="findChannelRM"
+            parameterType="com.jinhui.scheduler.data.core.query.preparing.criteria.ChannelCriteria">
+        SELECT
+		ci.chn_code, SUM(if(trans_type='022', trans_amount, -trans_amount)) sell_scale,
+		ci.chn_name chn_name, ci.total_limit sell_limit,
+		bs.`date` batch_date
+        FROM chn_info ci
+        INNER JOIN investor_trans it ON ci.chn_code=it.chn_code
+        INNER JOIN batch_state bs ON (
+                  it.batch_code=bs.batch_code AND
+                  bs.`date` = #{batchDate}
+                )
+        GROUP BY ci.chn_code
+    </select>
+    <select id="findChannelHistSellScale"  resultMap="findChannelRM"
+            parameterType="com.jinhui.scheduler.data.core.query.preparing.criteria.ChannelCriteria">
+        SELECT
+        ci.chn_code, SUM(total_postion_amount) sell_scale,
+        ci.chn_name chn_name, ci.total_limit sell_limit,
+        #{batchDate} batch_date
+        FROM chn_info ci
+        LEFT JOIN investor_position ip ON ci.chn_code=ip.chn_code
+        GROUP BY ci.chn_code
+    </select>
+    <!-- 渠道试算 end -->
+</mapper>

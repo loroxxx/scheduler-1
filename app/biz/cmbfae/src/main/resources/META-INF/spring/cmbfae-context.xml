@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd">
+
+    <context:component-scan base-package="com.jinhui.scheduler.biz.cmbfae"/>
+
+	<bean id="contextUtil" class="com.jinhui.scheduler.biz.cmbfae.util.ContextUtil"></bean>
+
+
+	<task:scheduler id="taskScheduler" pool-size="1" />
+	<task:scheduled-tasks scheduler="taskScheduler"> 
+
+		<!-- 定时上传招银的文件，并且检查确认文件返回 -->
+		<task:scheduled ref="UploadFileService" method="uploadFile" cron="${cmbfae.timer.corn}"/>
+
+		<!-- 定时检查是否有子产品确认文件返回,有则导入-->
+		<task:scheduled ref="ProductDividedService" method="confirmChildProductFile" cron="${cmbfae.product.timer.corn}"/>
+	</task:scheduled-tasks>
+
+
+</beans>

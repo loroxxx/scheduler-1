@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!-- 开户申请的读信息配置 start -->
+    <bean id="gzefeAccountApplyDBReader" class="org.springframework.batch.item.database.JdbcCursorItemReader"
+          scope="step">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="sql">
+            <value><![CDATA[
+            SELECT address,inst_repr_id_no,inst_repr_id_type,inst_repr_id_name,app_sheet_serial_no,
+	            id_type,
+	            id_no,
+	            NAME,
+	            DATE_FORMAT(apply_date, '%Y%m%d') AS apply_date,
+	            DATE_FORMAT(apply_date, '%H%i%s') AS apply_time,
+	            user_flag,
+	            zipcode,
+	            chn_id,
+	            chn_code,
+	            fax,
+	            phone,
+	            bank_account,
+	            open_bank,
+	            risk_level
+               FROM
+	        chn_open where batch_code = ? and chn_code = ?]]></value>
+        </property>
+        <property name="rowMapper" ref="gzefeChnOpenRowMapper"/>
+        <property name="preparedStatementSetter" ref="gzefeAccountConfirmStatementSetter"/>
+    </bean>
+
+    <bean name="gzefeChnOpenRowMapper" class="com.jinhui.scheduler.biz.gzefe.rowMapper.ChnOpenRowMapper"/>
+    <bean id="gzefeAccountConfirmStatementSetter"
+          class="org.springframework.batch.core.resource.ListPreparedStatementSetter" scope="step">
+        <property name="parameters">
+            <list>
+                <value>#{jobParameters['batchCode']}</value>
+                <value>#{jobParameters['chnCode']}</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="gzefeAccountApplyDBProcessor"
+          class="com.jinhui.scheduler.biz.gzefe.processor.GzefeAccountApplyDBProcessor"/>
+    <!-- 开户申请的读信息配置 end -->
+
+
+    <!-- 交易申请的读信息配置 start -->
+    <bean id="gzefeTransApplyDBReader" class="org.springframework.batch.item.database.JdbcCursorItemReader"
+          scope="step">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="sql">
+            <value><![CDATA[
+               select
+	                t.app_sheet_serial_no,
+	                t.product_no,
+	                t.name,
+	                t.product_name,
+                    DATE_FORMAT(t.trans_time,'%Y%m%d') as trans_date,
+                    DATE_FORMAT(t.trans_time,'%H%i%s') as trans_time,
+                    t.chn_id,
+                    t.chn_code,
+                    t.trans_vol,
+                    t.trans_amount,
+                    t.trans_type,
+                    t.investor_id,
+                    t.chn_code,
+                    t.app_sheet_serial_no,
+                    t.trans_fix,
+                    t.child_product_no,
+                    t.charge_type,
+                    t.serial_number,
+                    c.artificial,
+                    c.chn_name,
+                    u.address,
+                    u.id_no,
+                    u.id_type,
+                    u.phone,
+                    u.user_flag
+                 FROM
+	        investor_trans t,chn_info c,user u,product p
+            where t.chn_code=c.chn_code
+            and t.investor_id=u.investor_id
+			and t.product_no=p.product_no
+			and t.is_excess = '0'
+            and t.batch_code = ? and p.exchange_no = ?
+            ]]></value>
+        </property>
+        <property name="rowMapper" ref="gzefeInvestorTransRowMapper"/>
+        <property name="preparedStatementSetter" ref="gzefeTradeConfirmStatementSetter"/>
+    </bean>
+
+    <bean name="gzefeInvestorTransRowMapper" class="com.jinhui.scheduler.biz.gzefe.rowMapper.InvestorTransRowMapper"/>
+    <bean id="gzefeTradeConfirmStatementSetter"
+          class="org.springframework.batch.core.resource.ListPreparedStatementSetter" scope="step">
+        <property name="parameters">
+            <list>
+                <value>#{jobParameters['batchCode']}</value>
+                <value>#{jobParameters['exchangeCode']}</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="gzefeTradeConfirmDBProcessor"
+          class="com.jinhui.scheduler.biz.gzefe.processor.GzefeTradeApplyDBProcessor"/>
+    <!-- 交易申请的读信息配置 end -->
+
+
+    <!-- 分红数据的读信息配置 start -->
+    <bean id="gzefeIncomeDBReader" class="org.springframework.batch.item.database.JdbcCursorItemReader" scope="step">
+        <property name="dataSource" ref="dataSource" />
+        <property name="sql">
+            <value><![CDATA[
+            select
+                i.serial_number,
+                i.total_postion_amount,
+                p.product_vol,
+                u.id_no,
+                u.id_type,
+                u.phone,
+                i.chn_id,
+                i.income_amount,
+                DATE_FORMAT(i.confirm_date,'%Y%m%d') as confirm_date,
+                DATE_FORMAT(i.apply_date,'%Y%m%d') as apply_date,
+                i.product_no,
+                i.chn_code,
+                i.investor_id,
+                i.percent_income,
+                i.child_product_no
+            from investor_income i,user u,product p
+                where i.investor_id=u.investor_id
+                and i.product_no = p.product_no
+                and i.income_type = '0'
+                and i.apply_date=? and p.exchange_no = ? ]]></value>
+        </property>
+        <property name="rowMapper" ref="gzefeInvestorIncomeRowMapper"/>
+        <property name="preparedStatementSetter" ref="gzefeIncomeStatementSetter" />
+    </bean>
+
+    <bean name="gzefeInvestorIncomeRowMapper" class="com.jinhui.scheduler.biz.gzefe.rowMapper.InvestorIncomeRowMapper" />
+    <bean id="gzefeIncomeStatementSetter" class="org.springframework.batch.core.resource.ListPreparedStatementSetter" scope="step">
+        <property name="parameters">
+            <list>
+                <value>#{jobParameters['applyDate']}</value>
+                <value>#{jobParameters['exchangeCode']}</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="gzefeIncomeDBProcessor" class="com.jinhui.scheduler.biz.gzefe.processor.GzefeIncomeDBProcessor" />
+    <!-- 分红数据的读信息配置 end -->
+
+
+    <!-- 汇总文件读取配置 start -->
+    <bean id="gzefeGatherReader" class="org.springframework.batch.item.database.JdbcCursorItemReader"
+          scope="step">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="sql">
+            <value><![CDATA[
+            select
+             DATE_FORMAT(gather_date,'%Y%m%d') as gather_date,
+                 child_product_no, chn_code, trans_type, success_vol,
+                 fail_vol, success_amount, fail_amount, success_num, fail_num from gzefe_business_gather
+	         where batch_code = ? ]]></value>
+        </property>
+        <property name="rowMapper" ref="gzefeGatherRowMapper"/>
+        <property name="preparedStatementSetter" ref="gzefeGatherStatementSetter"/>
+    </bean>
+
+    <bean name="gzefeGatherRowMapper" class="com.jinhui.scheduler.biz.gzefe.rowMapper.GatherRowMapper"/>
+    <bean id="gzefeGatherStatementSetter"
+          class="org.springframework.batch.core.resource.ListPreparedStatementSetter" scope="step">
+        <property name="parameters">
+            <list>
+                <value>#{jobParameters['batchCode']}</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="gzefeGatherProcessor"
+          class="com.jinhui.scheduler.biz.gzefe.processor.GzefeGatherDBProcessor"/>
+    <!-- 汇总文件读取配置 end -->
+
+
+
+</beans>

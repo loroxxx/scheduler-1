@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--开户确认文件的写信息配置  start -->
+    <bean id="amqAccountConfirmFileWriter" scope="step"
+          class="org.springframework.batch.item.file.FlatFileItemWriter">
+        <property name="resource" value="file:#{jobParameters['generatePath']}/OFD_JFB666_#{jobParameters['chnCode']}_#{jobParameters['applyDate']}_02.TXT" />
+        <property name="encoding" value="GBK"/>
+        <property name="headerCallback" ref="amqAccountConfirmFileHeaderCallback" />
+        <property name="footerCallback" ref="amqAccountConfirmFileFooterCallback" />
+        <property name="lineAggregator">
+            <bean class="com.jinhui.scheduler.biz.imiqian.writer.AccountFormatterLineAggregator">
+                <property name="fieldExtractor">
+                    <bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+                        <property name="names" value="appSheetSerialNo,transactionCfmDate,returnCode,transactionAccountID,
+                        distributorCode,businessCode,tAAccountID,multiAcctFlag,tASerialNO,transactionDate,transactionTime,
+                        branchCode,fromTAFlag,certificateType,certificateNo,investorName,individualOrInstitution,accountAbbr,
+                        accountCardID,regionCode,targetTransactionAccountID,netNo,specification,customerNo,frozenCause,freezingDeadline,
+                        errorDetail" />
+                    </bean>
+                </property>
+                <property name="format" value="%-24s%-8s%-4s%-17s%-9s%-3s%-12s%-1s%-20s%-8s%-6s%-9s%-1s%-1s%-30s%-120s%-1s%-12s%-8s%-4s%-17s%-9s%-60s%-12s%-1s%-8s%-60s" />
+            </bean>
+        </property>
+    </bean>
+    <bean id="amqAccountConfirmFileHeaderCallback" class="com.jinhui.scheduler.biz.imiqian.header.AmqAccountConfirmFileHeaderCallback" />
+    <bean id="amqAccountConfirmFileFooterCallback" class="com.jinhui.scheduler.biz.imiqian.footer.AmqCommonFooterCallback" />
+    <!-- 开户确认的写信息配置  end -->
+
+    <!--交易确认文件的写信息配置  start -->
+    <bean id="amqTradeConfirmFileWriter" scope="step"
+          class="org.springframework.batch.item.file.FlatFileItemWriter">
+        <property name="resource" value="file:#{jobParameters['generatePath']}/OFD_JFB666_#{jobParameters['chnCode']}_#{jobParameters['applyDate']}_04.TXT" />
+        <property name="encoding" value="GBK"/>
+        <!--<property name="lineSeparator" value="&#13;&#10;"/>-->
+        <property name="headerCallback" ref="amqTradeConfirmFileHeaderCallback" />
+        <property name="footerCallback" ref="amqTradeConfirmFileFooterCallback" />
+        <property name="lineAggregator">
+            <bean class="com.jinhui.scheduler.biz.imiqian.writer.AccountFormatterLineAggregator">
+                <property name="fieldExtractor">
+                    <bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+                        <property name="names" value="AppSheetSerialNo,TransactionCfmDate,CurrencyType,ConfirmedVol,ConfirmedAmount,FundCode,LargeRedemptionFlag,TransactionDate,TransactionTime,
+                                                      ReturnCode,TransactionAccountID,DistributorCode,ApplicationVol,ApplicationAmount,BusinessCode,TAAccountID,TASerialNO,other1,
+                                                      DownLoaddate,Charge,AgencyFee,NAV,BranchCode,other2,TransferFee,other3,ShareClass,other4,
+                                                      CustomerNo,other5,Broker,other6,ErrorDetail,other7" />
+                    </bean>
+                </property>
+                <property name="format" value="%-24s%-8s%-3s%-16s%-16s%-6s%-1s%-8s%-6s%-4s%-17s%-9s%-16s%-16s%-3s%-12s%-20s%-29s%-8s%-10s%-10s%-7s%-9s%-377s%-10s%-1s%-1s%-62s%-12s%-39s%-12s%-312s%-60s%-26s" />
+            </bean>
+        </property>
+    </bean>
+    <bean id="amqTradeConfirmFileHeaderCallback" class="com.jinhui.scheduler.biz.imiqian.header.AmqTradeConfirmFileHeaderCallback" />
+    <bean id="amqTradeConfirmFileFooterCallback" class="com.jinhui.scheduler.biz.imiqian.footer.AmqCommonFooterCallback" />
+    <!-- 交易确认的写信息配置  end -->
+
+    <bean id="amqAccountApplyDBWriter" class="com.jinhui.scheduler.biz.imiqian.writer.AmqAccountApplyDBWriter" />
+
+    <bean id="amqTradeApplyDBWriter" class="com.jinhui.scheduler.biz.imiqian.writer.AmqTradeApplyDBWriter" />
+
+
+    <!--分红文件的写信息配置  start -->
+    <bean id="amqIncomeFileWriter" scope="step"
+          class="org.springframework.batch.item.file.FlatFileItemWriter">
+        <property name="resource" value="file:#{jobParameters['generatePath']}/OFD_JFB666_#{jobParameters['chnCode']}_#{jobParameters['applyDate']}_06.TXT" />
+        <property name="encoding" value="GBK"/>
+        <!--<property name="lineSeparator" value="&#13;&#10;"/>-->
+        <property name="headerCallback" ref="amqIncomeFileHeaderCallback" />
+        <property name="footerCallback" ref="amqIncomeFileFooterCallback" />
+        <property name="lineAggregator">
+            <bean class="com.jinhui.scheduler.biz.imiqian.writer.AccountFormatterLineAggregator">
+                <property name="fieldExtractor">
+                    <bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+                        <property name="names" value="BasisforCalculatingDividend,TransactionCfmDate,CurrencyType,VolOfDividendforReinvestment,
+                                           DividentDate,DividendAmount,XRDate,ConfirmedAmount,FundCode,RegistrationDate,ReturnCode,TransactionAccountID,
+                                           DistributorCode,BusinessCode,TAAccountID,DividendPerUnit,DefDividendMethod,DepositAcct,RegionCode,DownLoaddate,Charge,other1,IndividualOrInstitution,
+                                           DividendRatio,TASerialNO,other2,DrawBonusUnit,FrozenSharesforReinvest,DividendType,other3" />
+                    </bean>
+                </property>
+                <property name="format" value="%-16s%-8s%-3s%-16s%-8s%-16s%-8s%-16s%-6s%-8s%-4s%-17s%-9s%-3s%-12s%-16s%-1s%-4s%-4s%-8s%-10s%-68s%-1s%-16s%-20s%-44s%-10s%-16s%-1s%-56s" />
+            </bean>
+        </property>
+    </bean>
+    <bean id="amqIncomeFileHeaderCallback" class="com.jinhui.scheduler.biz.imiqian.header.AmqIncomeFileHeaderCallback" />
+    <bean id="amqIncomeFileFooterCallback" class="com.jinhui.scheduler.biz.imiqian.footer.AmqCommonFooterCallback" />
+    <!-- 分红文件的写信息配置  end -->
+
+    <!--对账数据的写信息配置  start -->
+    <bean id="amqReconciliateDataFileWriter" scope="step"
+          class="org.springframework.batch.item.file.FlatFileItemWriter">
+        <property name="resource" value="file:#{jobParameters['generatePath']}/OFD_JFB666_#{jobParameters['chnCode']}_#{jobParameters['applyDate']}_05.TXT" />
+        <property name="encoding" value="GBK"/>
+        <!--<property name="lineSeparator" value="&#13;&#10;"/>-->
+        <property name="headerCallback" ref="amqReconciliateDataFileHeaderCallback" />
+        <property name="footerCallback" ref="amqReconciliateDataFileFooterCallback" />
+        <property name="lineAggregator">
+            <bean class="com.jinhui.scheduler.biz.imiqian.writer.AccountFormatterLineAggregator">
+                <property name="fieldExtractor">
+                    <bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+                        <property name="names" value="AvailableVol,TotalVolOfDistributorInTA,TransactionCfmDate,FundCode,TransactionAccountID,DistributorCode,
+                                               TAAccountID,TotalFrozenVol,BranchCode,other1,DetailFlag,other2" />
+                    </bean>
+                </property>
+                <property name="format" value="%-16s%-16s%-8s%-6s%-17s%-9s%-12s%-16s%-9s%-37s%-1s%-44s" />
+            </bean>
+        </property>
+    </bean>
+    <bean id="amqReconciliateDataFileHeaderCallback" class="com.jinhui.scheduler.biz.imiqian.header.AmqReconciliateDataFileHeaderCallback" />
+    <bean id="amqReconciliateDataFileFooterCallback" class="com.jinhui.scheduler.biz.imiqian.footer.AmqCommonFooterCallback" />
+    <!-- 对账数据的写信息配置  end -->
+
+
+    <!--业务汇总数据的写信息配置  start -->
+    <bean id="amqGatherDataFileWriter" scope="step"
+          class="org.springframework.batch.item.file.FlatFileItemWriter">
+        <property name="resource" value="file:#{jobParameters['generatePath']}/OFD_JFB666_#{jobParameters['chnCode']}_#{jobParameters['applyDate']}_12.TXT" />
+        <property name="encoding" value="GBK"/>
+        <!--<property name="lineSeparator" value="&#13;&#10;"/>-->
+        <property name="headerCallback" ref="amqGatherDataFileHeaderCallback" />
+        <property name="footerCallback" ref="amqGatherDataFileFooterCallback" />
+        <property name="lineAggregator">
+            <bean class="com.jinhui.scheduler.biz.imiqian.writer.AccountFormatterLineAggregator">
+                <property name="fieldExtractor">
+                    <bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+                        <property name="names" value="FundCode,DistributorCode,BusinessCode,AggregationOfTransactionByBusinessType,
+                                               AggregationDate,TotalFailingVol,TotalSuccessfulVol,TotalFailingAmount,TotalSuccessfulAmount,
+                                                TotalFailingDealingNum,TotalSuccessfulDealingNum" />
+                    </bean>
+                </property>
+                <property name="format" value="%-6s%-9s%-3s%-8s%-8s%-16s%-16s%-16s%-16s%-6s%-6s" />
+            </bean>
+        </property>
+    </bean>
+    <bean id="amqGatherDataFileHeaderCallback" class="com.jinhui.scheduler.biz.imiqian.header.AmqGatherDataFileHeaderCallback" />
+    <bean id="amqGatherDataFileFooterCallback" class="com.jinhui.scheduler.biz.imiqian.footer.AmqCommonFooterCallback" />
+    <!-- 业务汇总数据的写信息配置  end -->
+
+
+
+</beans>

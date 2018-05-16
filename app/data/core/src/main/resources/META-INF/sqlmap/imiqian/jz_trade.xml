@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.imiqian.JzTradeMapper">
+    <resultMap id="jzTradeMap" type="com.jinhui.scheduler.domain.imiqian.pojo.JzTradeInfo">
+        <result property="id" column="id"/>
+        <result property="user_id" column="user_id"/>
+        <result property="account_id" column="account_id"/>
+        <result property="trading_id" column="trading_id"/>
+        <result property="tradingconfirm_id" column="tradingconfirm_id"/>
+        <result property="distributor_code" column="distributor_code"/>
+        <result property="product_code" column="product_code"/>
+        <result property="project_code" column="project_code"/>
+        <result property="product_name" column="product_name"/>
+        <result property="product_type" column="product_type"/>
+        <result property="trading_type" column="trading_type"/>
+        <result property="currency_type" column="currency_type"/>
+        <result property="shareclass" column="shareclass"/>
+        <result property="trading_status" column="trading_status"/>
+        <result property="money_amount" column="money_amount"/>
+        <result property="share_amount" column="share_amount"/>
+        <result property="charge" column="charge"/>
+        <result property="confirmed_money" column="confirmed_money"/>
+        <result property="confirmed_share" column="confirmed_share"/>
+        <result property="apply_date" column="apply_date"/>
+        <result property="apply_time" column="apply_time"/>
+        <result property="confirm_date" column="confirm_date"/>
+        <result property="confirm_time" column="confirm_time"/>
+        <result property="return_code" column="return_code"/>
+        <result property="error_info" column="error_info"/>
+    </resultMap>
+
+    <insert id="save" parameterType="com.jinhui.scheduler.domain.imiqian.pojo.JzTradeInfo">
+        insert into ta_trade
+        (user_id,account_id,trading_id,tradingconfirm_id,distributor_code,product_code,project_code,product_name,product_type,trading_type,
+        shareclass,currency_type,trading_status,money_amount,share_amount,charge,confirmed_money,confirmed_share,apply_date,apply_time,confirm_date,
+        confirm_time,return_code,error_info,gmt_create,gmt_modified)
+        VALUES
+        (#{user_id},#{account_id},#{trading_id},#{tradingconfirm_id},#{distributor_code},#{product_code},#{project_code},#{product_name},#{product_type},#{trading_type},
+        #{shareclass},#{currency_type},#{trading_status},#{money_amount},#{share_amount},#{charge},#{confirmed_money},#{confirmed_share},#{apply_date},#{apply_time},#{confirm_date},
+        #{confirm_time},#{return_code},#{error_info},sysdate(),sysdate())
+    </insert>
+
+    <delete id="deleteById" parameterType="int">
+        delete from ta_trade where id=#{id}
+    </delete>
+
+    <select id="findByDate" parameterType="String" resultType="int">
+        select count(*) from ta_trade where confirm_date=#{date}
+    </select>
+
+    <select id="findByTradingid" parameterType="String" resultType="int">
+        select count(*) from ta_trade where trading_id=#{trading_id}
+    </select>
+
+    <update id="updateTradeRecord" parameterType="com.jinhui.scheduler.domain.imiqian.pojo.JzTradeInfo" >
+        update ta_trade set return_code=#{return_code},error_info=#{error_info},gmt_modified=sysdate()
+        where trading_id=#{trading_id}
+    </update>
+
+    <update id="updateConfirmStatus" parameterType="int">
+        update ta_trade set trading_status="1" where id=#{id}
+    </update>
+
+    <select id="findListCount" parameterType="com.jinhui.scheduler.domain.imiqian.pojo.JzTradeInfo" resultType="java.lang.Integer">
+        select count(*) from ta_trade where 1=1
+        <if test="user_id != null">
+            AND user_id=#{user_id}
+        </if>
+        <if test="account_id != null">
+            AND account_id=#{account_id}
+        </if>
+        <if test="trading_id != null">
+            AND trading_id=#{trading_id}
+        </if>
+        <if test="tradingconfirm_id != null">
+            AND tradingconfirm_id=#{tradingconfirm_id}
+        </if>
+        <if test="product_code != null">
+            AND product_code=#{product_code}
+        </if>
+        <if test="product_name != null">
+            AND product_name like "%"#{product_name}"%"
+        </if>
+        <if test="apply_date != null">
+            AND apply_date=#{apply_date}
+        </if>
+        <if test="confirm_date != null">
+            AND confirm_date=#{confirm_date}
+        </if>
+        <if test="trading_status != null">
+            AND trading_status=#{trading_status}
+        </if>
+    </select>
+
+    <select id="findList" parameterType="com.jinhui.scheduler.domain.imiqian.pojo.JzTradeInfo" resultMap="jzTradeMap">
+        select * from ta_trade where 1=1
+        <if test="user_id != null">
+            AND user_id=#{user_id}
+        </if>
+        <if test="account_id != null">
+            AND account_id=#{account_id}
+        </if>
+        <if test="trading_id != null">
+            AND trading_id=#{trading_id}
+        </if>
+        <if test="tradingconfirm_id != null">
+            AND tradingconfirm_id=#{tradingconfirm_id}
+        </if>
+        <if test="product_code != null">
+            AND product_code=#{product_code}
+        </if>
+        <if test="product_name != null">
+            AND product_name like "%"#{product_name}"%"
+        </if>
+        <if test="apply_date != null">
+            AND apply_date=#{apply_date}
+        </if>
+        <if test="confirm_date != null">
+            AND confirm_date=#{confirm_date}
+        </if>
+        <if test="trading_status != null">
+            AND trading_status=#{trading_status}
+        </if>
+        <if test="offset &gt;= 0 and page_size &gt;0">
+            ORDER BY trading_status, confirm_date limit #{offset},#{page_size}
+        </if>
+    </select>
+
+</mapper>

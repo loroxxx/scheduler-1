@@ -1,0 +1,668 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.imiqian.InvestorTransMapper" >
+  <resultMap id="investorTransMap" type="com.jinhui.scheduler.domain.imiqian.domain.InvestorTrans" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+    <result column="batch_code" property="batchCode" jdbcType="INTEGER" />
+    <result column="investor_id" property="investorId" jdbcType="CHAR" />
+    <result column="chn_id" property="chnId" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="trans_time" property="transTime" jdbcType="TIMESTAMP" />
+    <result column="confirm_date" property="confirmDate" jdbcType="TIMESTAMP" />
+    <result column="app_sheet_serial_no" property="appSheetSerialNo" jdbcType="CHAR" />
+    <result column="product_no" property="productNo" jdbcType="CHAR" />
+    <result column="child_product_no" property="childProductNo" jdbcType="CHAR" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="trans_type" property="transType" jdbcType="CHAR" />
+    <result column="trans_vol" property="transVol" jdbcType="DECIMAL" />
+    <result column="trans_amount" property="transAmount" jdbcType="DECIMAL" />
+    <result column="product_vol" property="productVol" jdbcType="DECIMAL" />
+    <result column="trans_fix" property="transFix" jdbcType="DECIMAL" />
+    <result column="take_income_flag" property="takeIncomeFlag" jdbcType="VARCHAR" />
+    <result column="huge_subs_flag" property="hugeSubsFlag" jdbcType="CHAR" />
+    <result column="huge_redem_flag" property="hugeRedemFlag" jdbcType="CHAR" />
+    <result column="chn_code" property="chnCode" jdbcType="VARCHAR" />
+    <result column="risk_disclosure" property="riskDisclosure" jdbcType="CHAR" />
+    <result column="charge_type" property="chargeType" jdbcType="CHAR" />
+    <result column="charge_way" property="chargeWay" jdbcType="CHAR" />
+    <result column="charge_rate" property="chargeRate" jdbcType="DECIMAL" />
+    <result column="specify_fee" property="specifyFee" jdbcType="DECIMAL" />
+    <result column="rolling_flag" property="rollingFlag" jdbcType="CHAR" />
+    <result column="force_redem_reason" property="forceRedemReason" jdbcType="CHAR" />
+    <result column="force_redem_type" property="forceRedemType" jdbcType="CHAR" />
+    <result column="trans_state" property="transState" jdbcType="CHAR" />
+    <result column="is_excess" property="isExcess" jdbcType="CHAR" />
+    <result column="create_time" property="createTime" jdbcType="DATE" />
+    <result column="update_time" property="updateTime" jdbcType="DATE" />
+    <result column="total_postion_amount" property="totalPostionAmount" jdbcType="DECIMAL" />
+    <result column="total_redemed_amount" property="totalRedemedAmount" jdbcType="DECIMAL" />
+    <result column="total_subs_amount" property="totalSubsAmount" jdbcType="DECIMAL" />
+    <result column="num" property="num" jdbcType="VARCHAR" />
+    <result column="zl_fund_seqId" property="zlFundSeqId" jdbcType="CHAR" />
+    <result column="redeem_flag" property="redeemFlag" jdbcType="CHAR" />
+    <result column="trans_bank_act" property="transBankAct" jdbcType="CHAR" />
+    <result column="trans_bank_code" property="transBankCode" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, batch_code,serial_number, investor_id, chn_id, name, DATE_FORMAT(trans_time,'%Y%m%d%H%i%s') as trans_time, confirm_date, app_sheet_serial_no,
+    child_product_no,product_no, product_name, trans_type, trans_vol, trans_amount, product_vol,
+    trans_fix, take_income_flag, huge_subs_flag, huge_redem_flag, chn_code, risk_disclosure, 
+    trans_bank_code, trans_bank_act, charge_type, charge_way, charge_rate, specify_fee,
+    rolling_flag, force_redem_reason, force_redem_type, trans_state, is_excess
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="investorTransMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from investor_trans
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectTransByChoice" resultMap="investorTransMap" parameterType="com.jinhui.scheduler.domain.imiqian.domain.InvestorTrans">
+    select
+    <include refid="Base_Column_List" />
+    from investor_trans
+    where chn_id = #{chnId}
+    and chn_code = #{chnCode}
+    and product_no = #{productNo}
+    and trans_type = #{transType}
+    order by create_time desc limit 1
+  </select>
+
+  <delete id="delete">
+    delete from investor_trans where 1=1
+    <if test="batchCode != null">
+      AND batch_code &gt;= #{batchCode}
+    </if>
+  </delete>
+  <insert id="save" parameterType="com.jinhui.scheduler.domain.imiqian.domain.InvestorTrans" >
+    insert into investor_trans
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="batchCode != null" >
+        batch_code,
+      </if>
+      <if test="serialNumber != null" >
+        serial_number,
+      </if>
+      <if test="zlFundSeqId != null" >
+        zl_fund_seqId,
+      </if>
+      <if test="investorId != null" >
+        investor_id,
+      </if>
+      <if test="chnId != null" >
+        chn_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="transTime != null" >
+        trans_time,
+      </if>
+      <if test="confirmDate != null" >
+        confirm_date,
+      </if>
+      <if test="1 == 1" >
+        trans_state,
+      </if>
+      <if test="appSheetSerialNo != null" >
+        app_sheet_serial_no,
+      </if>
+      <if test="productNo != null" >
+        product_no,
+      </if>
+      <if test="childProductNo != null" >
+        child_product_no,
+      </if>
+      <if test="productName != null" >
+        product_name,
+      </if>
+      <if test="transType != null" >
+        trans_type,
+      </if>
+      <if test="transVol != null" >
+        trans_vol,
+      </if>
+      <if test="transAmount != null" >
+        trans_amount,
+      </if>
+      <if test="productVol != null" >
+        product_vol,
+      </if>
+      <if test="transFix != null" >
+        trans_fix,
+      </if>
+      <if test="takeIncomeFlag != null" >
+        take_income_flag,
+      </if>
+      <if test="hugeSubsFlag != null" >
+        huge_subs_flag,
+      </if>
+      <if test="hugeRedemFlag != null" >
+        huge_redem_flag,
+      </if>
+      <if test="chnCode != null" >
+        chn_code,
+      </if>
+      <if test="riskDisclosure != null" >
+        risk_disclosure,
+      </if>
+      <if test="transBankCode != null" >
+        trans_bank_Code,
+      </if>
+      <if test="transBankAct != null" >
+        trans_bank_act,
+      </if>
+      <if test="chargeType != null" >
+        charge_type,
+      </if>
+      <if test="chargeWay != null" >
+        charge_way,
+      </if>
+      <if test="chargeRate != null" >
+        charge_rate,
+      </if>
+      <if test="specifyFee != null" >
+        specify_fee,
+      </if>
+      <if test="rollingFlag != null" >
+        rolling_flag,
+      </if>
+      <if test="forceRedemReason != null" >
+        force_redem_reason,
+      </if>
+      <if test="forceRedemType != null" >
+        force_redem_type,
+      </if>
+      <if test="redeemFlag != null" >
+        redeem_flag,
+      </if>
+      <if test="transState != null" >
+        trans_state,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="batchCode != null" >
+        #{batchCode},
+      </if>
+      <if test="serialNumber != null" >
+        #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="zlFundSeqId != null" >
+        #{zlFundSeqId,jdbcType=VARCHAR},
+      </if>
+      <if test="investorId != null" >
+        #{investorId,jdbcType=CHAR},
+      </if>
+      <if test="chnId != null" >
+        #{chnId,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="transTime != null" >
+        #{transTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="confirmDate != null" >
+        #{confirmDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="1 == 1" >
+        '0000',
+      </if>
+      <if test="appSheetSerialNo != null" >
+        #{appSheetSerialNo,jdbcType=CHAR},
+      </if>
+      <if test="productNo != null" >
+        #{productNo,jdbcType=CHAR},
+      </if>
+      <if test="childProductNo != null" >
+        #{childProductNo,jdbcType=CHAR},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="transType != null" >
+        #{transType,jdbcType=CHAR},
+      </if>
+      <if test="transVol != null" >
+        #{transVol,jdbcType=DECIMAL},
+      </if>
+      <if test="transAmount != null" >
+        #{transAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="productVol != null" >
+        #{productVol,jdbcType=DECIMAL},
+      </if>
+      <if test="transFix != null" >
+        #{transFix,jdbcType=DECIMAL},
+      </if>
+      <if test="takeIncomeFlag != null" >
+        #{takeIncomeFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="hugeSubsFlag != null" >
+        #{hugeSubsFlag,jdbcType=CHAR},
+      </if>
+      <if test="hugeRedemFlag != null" >
+        #{hugeRedemFlag,jdbcType=CHAR},
+      </if>
+      <if test="chnCode != null" >
+        #{chnCode,jdbcType=VARCHAR},
+      </if>
+      <if test="riskDisclosure != null" >
+        #{riskDisclosure,jdbcType=CHAR},
+      </if>
+      <if test="transBankCode != null" >
+        #{transBankCode,jdbcType=VARCHAR},
+      </if>
+      <if test="transBankAct != null" >
+        #{transBankAct,jdbcType=CHAR},
+      </if>
+      <if test="chargeType != null" >
+        #{chargeType,jdbcType=CHAR},
+      </if>
+      <if test="chargeWay != null" >
+        #{chargeWay,jdbcType=CHAR},
+      </if>
+      <if test="chargeRate != null" >
+        #{chargeRate,jdbcType=DECIMAL},
+      </if>
+      <if test="specifyFee != null" >
+        #{specifyFee,jdbcType=DECIMAL},
+      </if>
+      <if test="rollingFlag != null" >
+        #{rollingFlag,jdbcType=CHAR},
+      </if>
+      <if test="forceRedemReason != null" >
+        #{forceRedemReason,jdbcType=CHAR},
+      </if>
+      <if test="forceRedemType != null" >
+        #{forceRedemType,jdbcType=CHAR},
+      </if>
+      <if test="redeemFlag != null" >
+        #{redeemFlag,jdbcType=CHAR},
+      </if>
+      <if test="transState != null" >
+        #{transState,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+
+  <insert id="saveTransTemp" parameterType="com.jinhui.scheduler.domain.imiqian.domain.InvestorTrans" >
+    insert into investor_trans_temp
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="batchCode != null" >
+        batch_code,
+      </if>
+      <if test="serialNumber != null" >
+        serial_number,
+      </if>
+      <if test="zlFundSeqId != null" >
+        zl_fund_seqId,
+      </if>
+      <if test="investorId != null" >
+        investor_id,
+      </if>
+      <if test="chnId != null" >
+        chn_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="transTime != null" >
+        trans_time,
+      </if>
+      <if test="confirmDate != null" >
+        confirm_date,
+      </if>
+      <if test="1 == 1" >
+        trans_state,
+      </if>
+      <if test="appSheetSerialNo != null" >
+        app_sheet_serial_no,
+      </if>
+      <if test="productNo != null" >
+        product_no,
+      </if>
+      <if test="childProductNo != null" >
+        child_product_no,
+      </if>
+      <if test="productName != null" >
+        product_name,
+      </if>
+      <if test="transType != null" >
+        trans_type,
+      </if>
+      <if test="transVol != null" >
+        trans_vol,
+      </if>
+      <if test="transAmount != null" >
+        trans_amount,
+      </if>
+      <if test="productVol != null" >
+        product_vol,
+      </if>
+      <if test="transFix != null" >
+        trans_fix,
+      </if>
+      <if test="takeIncomeFlag != null" >
+        take_income_flag,
+      </if>
+      <if test="hugeSubsFlag != null" >
+        huge_subs_flag,
+      </if>
+      <if test="hugeRedemFlag != null" >
+        huge_redem_flag,
+      </if>
+      <if test="chnCode != null" >
+        chn_code,
+      </if>
+      <if test="riskDisclosure != null" >
+        risk_disclosure,
+      </if>
+      <if test="transBankCode != null" >
+        trans_bank_Code,
+      </if>
+      <if test="transBankAct != null" >
+        trans_bank_act,
+      </if>
+      <if test="chargeType != null" >
+        charge_type,
+      </if>
+      <if test="chargeWay != null" >
+        charge_way,
+      </if>
+      <if test="chargeRate != null" >
+        charge_rate,
+      </if>
+      <if test="specifyFee != null" >
+        specify_fee,
+      </if>
+      <if test="rollingFlag != null" >
+        rolling_flag,
+      </if>
+      <if test="forceRedemReason != null" >
+        force_redem_reason,
+      </if>
+      <if test="forceRedemType != null" >
+        force_redem_type,
+      </if>
+      <if test="redeemFlag != null" >
+        redeem_flag,
+      </if>
+      <if test="transState != null" >
+        trans_state,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="batchCode != null" >
+        #{batchCode},
+      </if>
+      <if test="serialNumber != null" >
+        #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="zlFundSeqId != null" >
+        #{zlFundSeqId,jdbcType=VARCHAR},
+      </if>
+      <if test="investorId != null" >
+        #{investorId,jdbcType=CHAR},
+      </if>
+      <if test="chnId != null" >
+        #{chnId,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="transTime != null" >
+        #{transTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="confirmDate != null" >
+        #{confirmDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="1 == 1" >
+        '0000',
+      </if>
+      <if test="appSheetSerialNo != null" >
+        #{appSheetSerialNo,jdbcType=CHAR},
+      </if>
+      <if test="productNo != null" >
+        #{productNo,jdbcType=CHAR},
+      </if>
+      <if test="childProductNo != null" >
+        #{childProductNo,jdbcType=CHAR},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="transType != null" >
+        #{transType,jdbcType=CHAR},
+      </if>
+      <if test="transVol != null" >
+        #{transVol,jdbcType=DECIMAL},
+      </if>
+      <if test="transAmount != null" >
+        #{transAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="productVol != null" >
+        #{productVol,jdbcType=DECIMAL},
+      </if>
+      <if test="transFix != null" >
+        #{transFix,jdbcType=DECIMAL},
+      </if>
+      <if test="takeIncomeFlag != null" >
+        #{takeIncomeFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="hugeSubsFlag != null" >
+        #{hugeSubsFlag,jdbcType=CHAR},
+      </if>
+      <if test="hugeRedemFlag != null" >
+        #{hugeRedemFlag,jdbcType=CHAR},
+      </if>
+      <if test="chnCode != null" >
+        #{chnCode,jdbcType=VARCHAR},
+      </if>
+      <if test="riskDisclosure != null" >
+        #{riskDisclosure,jdbcType=CHAR},
+      </if>
+      <if test="transBankCode != null" >
+        #{transBankCode,jdbcType=VARCHAR},
+      </if>
+      <if test="transBankAct != null" >
+        #{transBankAct,jdbcType=CHAR},
+      </if>
+      <if test="chargeType != null" >
+        #{chargeType,jdbcType=CHAR},
+      </if>
+      <if test="chargeWay != null" >
+        #{chargeWay,jdbcType=CHAR},
+      </if>
+      <if test="chargeRate != null" >
+        #{chargeRate,jdbcType=DECIMAL},
+      </if>
+      <if test="specifyFee != null" >
+        #{specifyFee,jdbcType=DECIMAL},
+      </if>
+      <if test="rollingFlag != null" >
+        #{rollingFlag,jdbcType=CHAR},
+      </if>
+      <if test="forceRedemReason != null" >
+        #{forceRedemReason,jdbcType=CHAR},
+      </if>
+      <if test="forceRedemType != null" >
+        #{forceRedemType,jdbcType=CHAR},
+      </if>
+      <if test="redeemFlag != null" >
+        #{redeemFlag,jdbcType=CHAR},
+      </if>
+      <if test="transState != null" >
+        #{transState,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateTrans" parameterType="com.jinhui.scheduler.domain.imiqian.domain.InvestorTrans" >
+    update investor_trans
+    <set >
+      <if test="isExcess != null" >
+        is_excess = #{isExcess},
+      </if>
+      <if test="transState != null" >
+        trans_state = #{transState},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+  <update id="updateTransTemp" parameterType="com.jinhui.scheduler.domain.imiqian.domain.InvestorTrans" >
+    update investor_trans_temp
+    <set >
+      <if test="isExcess != null" >
+        is_excess = #{isExcess},
+      </if>
+      <if test="transState != null" >
+        trans_state = #{transState},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+
+  <select id="findListCount" parameterType="com.jinhui.scheduler.domain.imiqian.domain.InvestorTrans" resultType="java.lang.Integer">
+    select count(*) from investor_trans where 1=1
+    <if test="batchCode != null and batchCode != 0">
+      AND batch_code=#{batchCode}
+    </if>
+    <if test="chnCode != null">
+      AND chn_code=#{chnCode}
+    </if>
+  </select>
+
+  <select id="findList" parameterType="com.jinhui.scheduler.domain.imiqian.domain.InvestorTrans" resultMap="investorTransMap">
+    select
+    <include refid="Base_Column_List" />
+    from investor_trans where 1=1
+    <if test="appSheetSerialNo != null">
+      AND app_sheet_serial_no = #{appSheetSerialNo}
+    </if>
+    <if test="confirmDate != null">
+      AND confirm_date = #{confirmDate}
+    </if>
+    <if test="batchCode != null and batchCode != 0">
+      AND batch_code = #{batchCode}
+    </if>
+  </select>
+
+  <select id="findTransTempList" parameterType="com.jinhui.scheduler.domain.imiqian.domain.InvestorTrans" resultMap="investorTransMap">
+    select
+    <include refid="Base_Column_List" />
+    from investor_trans_temp where 1=1
+    <if test="batchCode != null">
+      AND batch_code = #{batchCode}
+    </if>
+    <if test="productNo != null">
+      AND product_no = #{productNo}
+    </if>
+    <if test="investorId != null">
+      AND investor_id = #{investorId}
+    </if>
+    order by trans_time
+  </select>
+
+  <!-- 查询确认成功的交易记录 -->
+  <select id="findConfrimedList" parameterType="com.jinhui.scheduler.domain.imiqian.domain.InvestorTrans" resultMap="investorTransMap">
+    select
+        t.batch_code,
+        t.investor_id,
+        t.chn_id,
+        t.chn_code,
+        t.name,
+        t.product_no,
+        t.child_product_no,
+        t.product_name,
+        t.product_vol,
+        if(p.total_purchase_amount != '',p.total_purchase_amount,0) as total_subs_amount,
+        if(r.total_redeem_amount != '',r.total_redeem_amount,0) as total_redemed_amount,
+        if(p.total_purchase_amount != '',p.total_purchase_amount,0) - if(r.total_redeem_amount != '',r.total_redeem_amount,0) as total_postion_amount
+    from
+        (select
+        distinct investor_id,
+        chn_id,
+        chn_code,
+        name,
+        product_no,
+        child_product_no,
+        product_name,
+        product_vol,
+        batch_code
+    from investor_trans_temp where batch_code = #{batchCode}) t
+    left join
+        (select investor_id,sum(trans_vol) as total_purchase_vol,sum(trans_amount) as total_purchase_amount
+           from investor_trans_temp where trans_type = '022' and batch_code = #{batchCode}  group by investor_id) p
+    on t.investor_id = p.investor_id
+    left join
+        (select investor_id,sum(trans_vol) as total_redeem_vol,sum(trans_amount) as total_redeem_amount
+           from investor_trans_temp where trans_type = '024' and batch_code = #{batchCode} group by investor_id) r
+    on t.investor_id = r.investor_id
+  </select>
+
+  <!-- 删除交易临时表数据-->
+  <delete id="deleteTransTemp">
+    delete from investor_trans_temp
+  </delete>
+
+  <!-- 将T日交易数据移到临时表 -->
+  <insert id="transferDataToTemp" parameterType="com.jinhui.scheduler.domain.imiqian.domain.InvestorTrans">
+    insert into investor_trans_temp
+    select * from investor_trans where batch_code = #{batchCode}
+  </insert>
+
+  <!-- 业务汇总 -->
+  <select id="gatherBusiness" resultMap="investorTransMap" parameterType="com.jinhui.scheduler.domain.imiqian.domain.InvestorTrans">
+    select product_no,
+    product_name,
+    chn_code,
+    trans_type,
+    case
+	    when is_excess = '0' then '0000'
+	    when is_excess = '1' then '0010'
+	    when is_excess = '2' then '0010'
+	    when is_excess = '3' then '0010' end as is_excess,
+    count(trans_type) as num,
+    sum(trans_vol) as trans_vol,
+    sum(trans_amount) as trans_amount
+    from investor_trans_temp where batch_code = #{batchCode}
+    group by product_no,product_name,chn_code,trans_type,is_excess
+  </select>
+
+  <!-- ***********************************  以下为定期产品相关   **************************************************-->
+  <!-- 根据产品代码查询客户投资记录-->
+  <select id="findRegularProductTransList" resultMap="investorTransMap" parameterType="com.jinhui.scheduler.domain.imiqian.domain.InvestorTrans" >
+    select
+    <include refid="Base_Column_List" />
+    from investor_trans
+    where product_no = #{productNo} and trans_type = '020'
+  </select>
+
+</mapper>

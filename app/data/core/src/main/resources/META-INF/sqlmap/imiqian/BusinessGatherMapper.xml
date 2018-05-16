@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.imiqian.BusinessGatherMapper" >
+  <resultMap id="BaseResultMap" type="com.jinhui.scheduler.domain.imiqian.domain.BusinessGather" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="batch_code" property="batchCode" jdbcType="INTEGER" />
+    <result column="gather_date" property="gatherDate" jdbcType="DATE" />
+    <result column="plat_product_no" property="platProductNo" jdbcType="VARCHAR" />
+    <result column="product_no" property="productNo" jdbcType="CHAR" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="chn_code" property="chnCode" jdbcType="CHAR" />
+    <result column="trans_type" property="transType" jdbcType="CHAR" />
+    <result column="trans_num" property="transNum" jdbcType="INTEGER" />
+    <result column="trans_vol" property="transVol" jdbcType="DECIMAL" />
+    <result column="trans_amount" property="transAmount" jdbcType="DECIMAL" />
+    <result column="success_vol" property="successVol" jdbcType="DECIMAL" />
+    <result column="fail_vol" property="failVol" jdbcType="DECIMAL" />
+    <result column="success_amount" property="successAmount" jdbcType="DECIMAL" />
+    <result column="fail_amount" property="failAmount" jdbcType="DECIMAL" />
+    <result column="success_num" property="successNum" jdbcType="INTEGER" />
+    <result column="fail_num" property="failNum" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, batch_code, gather_date, plat_product_no, product_no, product_name, chn_code, 
+    trans_type, trans_num, trans_vol, trans_amount, success_vol, fail_vol, success_amount, 
+    fail_amount, success_num, fail_num
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from business_gather
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <delete id="delete">
+    delete from business_gather where 1=1
+    <if test="batchCode != null">
+      AND batch_code &gt;= #{batchCode}
+    </if>
+  </delete>
+
+  <insert id="save" parameterType="com.jinhui.scheduler.domain.imiqian.domain.BusinessGather" >
+    insert into business_gather
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="batchCode != null" >
+        batch_code,
+      </if>
+      <if test="gatherDate != null" >
+        gather_date,
+      </if>
+      <if test="platProductNo != null" >
+        plat_product_no,
+      </if>
+      <if test="productNo != null" >
+        product_no,
+      </if>
+      <if test="productName != null" >
+        product_name,
+      </if>
+      <if test="chnCode != null" >
+        chn_code,
+      </if>
+      <if test="transType != null" >
+        trans_type,
+      </if>
+      <if test="transNum != null" >
+        trans_num,
+      </if>
+      <if test="transVol != null" >
+        trans_vol,
+      </if>
+      <if test="transAmount != null" >
+        trans_amount,
+      </if>
+      <if test="successVol != null" >
+        success_vol,
+      </if>
+      <if test="failVol != null" >
+        fail_vol,
+      </if>
+      <if test="successAmount != null" >
+        success_amount,
+      </if>
+      <if test="failAmount != null" >
+        fail_amount,
+      </if>
+      <if test="successNum != null" >
+        success_num,
+      </if>
+      <if test="failNum != null" >
+        fail_num,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="batchCode != null" >
+        #{batchCode},
+      </if>
+      <if test="gatherDate != null" >
+        #{gatherDate,jdbcType=DATE},
+      </if>
+      <if test="platProductNo != null" >
+        #{platProductNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null" >
+        #{productNo,jdbcType=CHAR},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="chnCode != null" >
+        #{chnCode,jdbcType=CHAR},
+      </if>
+      <if test="transType != null" >
+        #{transType,jdbcType=CHAR},
+      </if>
+      <if test="transNum != null" >
+        #{transNum,jdbcType=DECIMAL},
+      </if>
+      <if test="transVol != null" >
+        #{transVol,jdbcType=DECIMAL},
+      </if>
+      <if test="transAmount != null" >
+        #{transAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="successVol != null" >
+        #{successVol,jdbcType=DECIMAL},
+      </if>
+      <if test="failVol != null" >
+        #{failVol,jdbcType=DECIMAL},
+      </if>
+      <if test="successAmount != null" >
+        #{successAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="failAmount != null" >
+        #{failAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="successNum != null" >
+        #{successNum,jdbcType=DECIMAL},
+      </if>
+      <if test="failNum != null" >
+        #{failNum,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="findCount" parameterType="com.jinhui.scheduler.domain.imiqian.domain.BusinessGather" resultType="java.lang.Integer">
+    select count(*) from business_gather where 1=1
+    <if test="beginDate != null">
+      AND gather_date &gt;= #{beginDate}
+    </if>
+    <if test="endDate != null">
+      AND gather_date &lt; #{endDate}
+    </if>
+    <if test="chnCode != null">
+      AND chn_code = #{chnCode}
+    </if>
+  </select>
+
+</mapper>

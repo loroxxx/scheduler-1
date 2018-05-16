@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.imiqian.ClearResultRegularProductMapper" >
+  <resultMap id="BaseResultMap" type="com.jinhui.scheduler.domain.imiqian.domain.ClearResultRegularProduct" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="batch_code" property="batchCode" jdbcType="INTEGER" />
+    <result column="batch_date" property="batchDate" jdbcType="DATE" />
+    <result column="chn_code" property="chnCode" jdbcType="VARCHAR" />
+    <result column="product_no" property="productNo" jdbcType="CHAR" />
+    <result column="step_code" property="stepCode" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="exchange_no" property="exchangeNo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, batch_code, batch_date, chn_code,  product_no, step_code, status,create_time
+  </sql>
+  <sql id="search_List" >
+    p.exchange_no,c.product_no, c.step_code, c.status,c.create_time,c.id,c.batch_code,c.batch_date,c.chn_code,c.create_time
+  </sql>
+  <select id="selectByChoice" resultMap="BaseResultMap" parameterType="com.jinhui.scheduler.domain.imiqian.domain.ClearResultRegularProduct" >
+    select 
+    <include refid="Base_Column_List" />
+    from clear_result_regular_product
+    where batch_code = #{batchCode} and chn_code = #{chnCode}
+          and product_no = #{productNo} and step_code = #{stepCode}
+  </select>
+
+  <select id="selectListByChoice" resultMap="BaseResultMap" parameterType="com.jinhui.scheduler.domain.imiqian.domain.ClearResultRegularProduct" >
+    select
+    <include refid="search_List" />
+    from clear_result_regular_product c,product p
+    where c.product_no = p.product_no and c.batch_date = #{batchDate} and c.chn_code = #{chnCode}
+  </select>
+
+  <insert id="insertSelective" parameterType="com.jinhui.scheduler.domain.imiqian.domain.ClearResultRegularProduct" >
+    insert into clear_result_regular_product
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="batchCode != null" >
+        batch_code,
+      </if>
+      <if test="batchDate != null" >
+        batch_date,
+      </if>
+      <if test="chnCode != null" >
+        chn_code,
+      </if>
+      <if test="productNo != null" >
+        product_no,
+      </if>
+      <if test="stepCode != null" >
+        step_code,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="1 == 1" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="batchCode != null" >
+        #{batchCode,jdbcType=INTEGER},
+      </if>
+      <if test="batchDate != null" >
+        #{batchDate,jdbcType=DATE},
+      </if>
+      <if test="chnCode != null" >
+        #{chnCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null" >
+        #{productNo,jdbcType=CHAR},
+      </if>
+      <if test="stepCode != null" >
+        #{stepCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="1 == 1" >
+        now(),
+      </if>
+    </trim>
+  </insert>
+
+</mapper>

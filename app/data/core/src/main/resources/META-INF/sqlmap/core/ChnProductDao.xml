@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.core.ChnProductDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.jinhui.scheduler.domain.cmbfae.model.ChnProduct" id="chnProductMap">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="product_name" property="productName" jdbcType="VARCHAR" />
+		<result column="product_no" property="productNo" jdbcType="VARCHAR" />
+		<result column="income_rate" property="incomeRate" jdbcType="DECIMAL" />
+		<result column="percent_income_rate" property="percentIncomeRate" jdbcType="DECIMAL" />
+		<result column="nominal_income_rate" property="nominalIncomeRate" jdbcType="DECIMAL" />
+		<result column="nominal_percent_income_rate" property="nominalPercentIncomeRate" jdbcType="DECIMAL" />
+		<result column="income_difference" property="incomeDifference" jdbcType="DECIMAL" />
+		<result column="subs_toplimit" property="subsToplimit" jdbcType="DECIMAL" />
+		<result column="redeem_toplimit" property="redeemToplimit" jdbcType="DECIMAL" />
+		<result column="position_limit" property="positionLimit" jdbcType="DECIMAL" />
+		<result column="product_subs_toplimit" property="productSubsToplimit" jdbcType="DECIMAL" />
+		<result column="product_redeem_toplimit" property="productRedeemToplimit" jdbcType="DECIMAL" />
+		<result column="total_limit" property="totalLimit" jdbcType="DECIMAL" />
+		<result column="assign_limit" property="assignLimit" jdbcType="DECIMAL" />
+		<result column="prefer_date" property="preferDate" jdbcType="DATE" />
+		<result column="chn_code" property="chnCode" jdbcType="CHAR" />
+    </resultMap>
+
+
+	<sql id="Base_Column_List" >
+		id, product_name, product_no, income_rate, percent_income_rate, nominal_income_rate,
+		nominal_percent_income_rate, income_difference, subs_toplimit, redeem_toplimit, position_limit,
+		product_subs_toplimit, product_redeem_toplimit, total_limit, assign_limit, prefer_date,
+		chn_code
+	</sql>
+
+
+	<insert id="saveChnProduct" parameterType="com.jinhui.scheduler.domain.cmbfae.model.ChnProduct" >
+    insert into chn_product (id, product_name, product_no,
+      income_rate, percent_income_rate, nominal_income_rate,
+      nominal_percent_income_rate, income_difference,
+      subs_toplimit, redeem_toplimit, position_limit,
+      product_subs_toplimit, product_redeem_toplimit,
+      total_limit, assign_limit, prefer_date,
+      chn_code)
+    values (#{id,jdbcType=INTEGER}, #{productName,jdbcType=VARCHAR}, #{productNo,jdbcType=VARCHAR},
+      #{incomeRate,jdbcType=DECIMAL}, #{percentIncomeRate,jdbcType=DECIMAL}, #{nominalIncomeRate,jdbcType=DECIMAL},
+      #{nominalPercentIncomeRate,jdbcType=DECIMAL}, #{incomeDifference,jdbcType=DECIMAL},
+      #{subsToplimit,jdbcType=DECIMAL}, #{redeemToplimit,jdbcType=DECIMAL}, #{positionLimit,jdbcType=DECIMAL},
+      #{productSubsToplimit,jdbcType=DECIMAL}, #{productRedeemToplimit,jdbcType=DECIMAL},
+      #{totalLimit,jdbcType=DECIMAL}, #{assignLimit,jdbcType=DECIMAL}, #{preferDate,jdbcType=DATE},
+      #{chnCode,jdbcType=CHAR})
+	</insert>
+
+	<update id="updateChnProduct" parameterType="com.jinhui.scheduler.domain.cmbfae.model.ChnProduct">
+		update chn_product
+		<set>
+			<if test="productName != null">`product_name` = #{productName}, </if>
+			<if test="incomeRate != null">`income_rate` = #{incomeRate}, </if>
+			<if test="percentIncomeRate != null">`percent_income_rate` = #{percentIncomeRate}, </if>
+            <if test="nominalIncomeRate != null" > nominal_income_rate = #{nominalIncomeRate,jdbcType=DECIMAL},</if>
+            <if test="nominalPercentIncomeRate != null" >nominal_percent_income_rate = #{nominalPercentIncomeRate,jdbcType=DECIMAL},</if>
+            <if test="incomeDifference != null" > income_difference = #{incomeDifference,jdbcType=DECIMAL},</if>
+            <if test="subsToplimit != null">`subs_toplimit` = #{subsToplimit}, </if>
+			<if test="redeemToplimit != null">`redeem_toplimit` = #{redeemToplimit}, </if>
+			<if test="positionLimit != null">`position_limit` = #{positionLimit}, </if>
+			<if test="productSubsToplimit != null">`product_subs_toplimit` = #{productSubsToplimit}, </if>
+			<if test="productRedeemToplimit != null">`product_redeem_toplimit` = #{productRedeemToplimit}, </if>
+			<if test="totalLimit != null">`total_limit` = #{totalLimit}, </if>
+			<if test="assignLimit != null">`assign_limit` = #{assignLimit}, </if>
+			<if test="preferDate != null">`prefer_date` = #{preferDate}, </if>
+			<if test="chnCode != null">`chn_code` = #{chnCode}</if>
+		</set>
+		where product_no = #{productNo}
+	</update>
+
+
+    <delete id="deleteByProductNo">
+		delete from chn_product where product_no = #{productNo}
+	</delete>
+
+
+
+	<resultMap type="com.jinhui.scheduler.domain.cmbfae.template.ProfitContent" id="profitContontMap">
+        <result property="productName" column="product_name"/>
+        <result property="productCode" column="product_no"/>
+        <result property="profitType" column="cal_income_way"/>
+        <result property="profitValue" column="income_rate"/>
+    </resultMap>
+
+
+	<select id="queryProfitContont" resultMap="profitContontMap">
+		SELECT
+	t.product_name,
+	t.product_no,
+	t.income_rate,
+	'0' AS cal_income_way
+	FROM
+	chn_product t,schedule_product_divided p
+	WHERE
+	t.product_no = p.product_no
+	and p.child_product_no=#{childProductNo}
+	</select>
+
+
+
+	<select id="queryChnProduct" resultMap="chnProductMap">
+		select  <include refid="Base_Column_List" /> from chn_product where chn_code=#{chnCode}
+	</select>
+
+	<!-- 清算备份产品使用-->
+	<select id="queryAllChnProduct" resultMap="chnProductMap">
+		select  <include refid="Base_Column_List" /> from chn_product
+	</select>
+
+
+    <select id="selectByProductNo" resultMap="chnProductMap">
+		select  <include refid="Base_Column_List" />
+		from chn_product where product_no=#{productNo}
+	</select>
+
+
+</mapper>

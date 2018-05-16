@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.cmbfae.InvestorPositionDao">
+
+
+	  <resultMap type="com.jinhui.scheduler.domain.cmbfae.template.PositionDetailContent" id="PositionDetailMap">
+        <result property="coProductCode" column="product_no"/>
+        <result property="productCode" column="child_product_no"/>
+        <result property="productName" column="product_name"/>
+  		<result property="coInvestUserId" column="investor_id"/>
+  		<result property="certificateNo" column="id_no"/>
+  		<result property="certificateType" column="id_type"/>
+  		<result property="userFlag" column="user_flag"/>
+  		<result property="mobilePhoneNo" column="phone"/>
+  		<result property="investorName" column="name"/>
+        <result property="totalVolumn" column="total_postion_vol"/>
+        <result property="perVolumn" column="product_vol"/>
+        <result property="totalBalance" column="total_postion_amount"/>
+        <result property="totalProfit" column="total_income"/>
+        <result property="summarizeDate" column="gather_date"/>
+    </resultMap>
+    
+
+
+	<select id="queryPositionDetailInfo" resultMap="PositionDetailMap" >
+	select t.id,u.id_no,id_type,u.phone,u.name,u.user_flag,p.plat_product_no,t.gather_date, t.investor_id, t.chn_id, t.chn_code, t.child_product_no, t.product_name, t.total_postion_vol, t.product_vol, t.total_postion_amount, t.total_income, t.total_redemed_amount, t.total_subs_amount, t.rolling_flag, t.rolling_vol
+			from investor_position t,product p,user u
+			where t.product_no=p.product_no
+			and t.investor_id=u.investor_id
+			and t.position_type='0'
+			and p.exchange_no=#{exchangeNo}
+		  ORDER BY t.id ASC LIMIT #{_skiprows}, #{_pagesize}
+
+	</select>
+
+
+	<select id="queryPositionCount" resultType="com.jinhui.scheduler.domain.cmbfae.template.PositionSuContent">
+
+	select t.child_product_no as productCode, t.product_name as productName, count(*) as sumRecord
+			from investor_position t,product p
+			where t.product_no=p.product_no
+			and t.position_type='0'
+			and p.exchange_no=#{exchangeNo}
+			group by t.child_product_no, t.product_name
+	</select>
+
+
+	<select id="queryTotalCount" resultType="java.lang.Integer">
+
+
+	select count(*)
+			from investor_position t,product p
+			where t.product_no=p.product_no
+			and t.position_type='0'
+			and p.exchange_no=#{exchangeNo}
+	</select>
+
+
+</mapper>

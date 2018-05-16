@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.imiqian.TermPaymentScheduleMapperDAO" >
+  <resultMap id="BaseResultMap" type="com.jinhui.scheduler.domain.imiqian.domain.TermPaymentSchedule" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="product_no" property="productNo" jdbcType="CHAR" />
+    <result column="plat_product_no" property="platProductNo" jdbcType="VARCHAR" />
+    <result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
+    <result column="product_total_periods" property="productTotalPeriods" jdbcType="INTEGER" />
+    <result column="interest_amount" property="interestAmount" jdbcType="DECIMAL" />
+    <result column="interest_period" property="interestPeriod" jdbcType="INTEGER" />
+    <result column="interest_days" property="interestDays" jdbcType="INTEGER" />
+    <result column="per_interest_amount" property="perInterestAmount" jdbcType="DECIMAL" />
+    <result column="interest_state" property="interestState" jdbcType="CHAR" />
+    <result column="interest_date" property="interestDate" jdbcType="DATE" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, product_name, product_no, plat_product_no, total_amount, product_total_periods, 
+    interest_amount, interest_period, interest_days, per_interest_amount, interest_state, 
+    interest_date, create_time, gmt_modified
+  </sql>
+  <select id="selectPlanByProductNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from term_payment_schedule
+    where product_no = #{productNo,jdbcType=INTEGER}
+    order by interest_period
+  </select>
+
+  <!-- 更新产品的回款计划状态为“已付息”-->
+  <update id="updateToPayInterest">
+    update term_payment_schedule set interest_state = '1' where product_no = #{productNo} and interest_period = #{interestPeriod}
+  </update>
+
+</mapper>

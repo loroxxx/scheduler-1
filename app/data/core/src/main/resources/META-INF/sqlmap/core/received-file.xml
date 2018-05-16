@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.core.ReceivedFileMapper">
+
+    <resultMap id="fileMap" type="com.jinhui.scheduler.domain.core.ReceivedFile">
+        <id property="fileId" column="file_id"/>
+        <result property="fileName" column="file_name"/>
+        <result property="institution" column="institution"/>
+        <result property="receiveTime" column="receive_time" javaType="date"/>
+        <result property="batchDate" column="batch_date" javaType="date"/>
+        <result property="backupLocation" column="backup_location"/>
+    </resultMap>
+
+    <select id="findByFileId" parameterType="int" resultMap="fileMap">
+        SELECT file_id,
+        file_name,
+        institution,
+        receive_time,
+        batch_date,
+        backup_location
+        FROM schedule_received_file
+        WHERE file_id = #{fileId}
+    </select>
+
+    <insert id="save" parameterType="com.jinhui.scheduler.domain.core.ReceivedFile">
+        INSERT INTO schedule_received_file
+        (
+        file_name,
+        institution,
+        receive_time,
+        batch_date,
+        backup_location
+        )
+        VALUES
+        (
+        #{fileName},
+        #{institution},
+        #{receiveTime},
+        #{batchDate},
+        #{backupLocation}
+        )
+    </insert>
+
+    <delete id="rollbackFile" parameterType="com.jinhui.scheduler.domain.core.AbstractBatchFile$Criteria">
+        DELETE FROM schedule_received_file
+        WHERE institution = #{institution}
+        AND DATE_FORMAT(batch_date,'%Y%m%d') = DATE_FORMAT(#{batchDate}, '%Y%m%d')
+    </delete>
+
+    <select id="queryFile" parameterType="com.jinhui.scheduler.domain.core.AbstractBatchFile$Criteria"
+            resultMap="fileMap">
+        SELECT file_id,
+        file_name,
+        institution,
+        receive_time,
+        batch_date,
+        backup_location
+        FROM schedule_received_file
+        WHERE 1=1
+            <if test="batchDate != null">
+                AND DATE_FORMAT(batch_date,'%Y%m%d') = DATE_FORMAT(#{batchDate}, '%Y%m%d')
+            </if>
+            <if test="fileName != null">
+                AND file_name LIKE CONCAT('%', #{fileName}, '%')
+            </if>
+            <if test="institution != null">
+                AND institution = #{institution}
+            </if>
+        ORDER BY receive_time DESC
+    </select>
+
+</mapper>

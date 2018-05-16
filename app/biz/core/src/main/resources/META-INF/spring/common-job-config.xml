@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- todo 全局job配置的 -->
+    <import resource="classpath*:META-INF/job/*.xml" />
+
+    <bean id="fileJobMapper"
+          class="com.jinhui.scheduler.biz.core.config.support.SimpleFileBatchJobMapper">
+    </bean>
+
+    <bean id="instFileJobMapper" abstract="true">
+        <property name="jobRegistry" ref="jobRegistry"/>
+    </bean>
+</beans>

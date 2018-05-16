@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.imiqian.BatchStateMapper" >
+  <resultMap id="batchStateMap" type="com.jinhui.scheduler.domain.imiqian.domain.BatchState" >
+    <id column="batch_code" property="batchCode" jdbcType="INTEGER" />
+    <result column="date" property="date" jdbcType="DATE" />
+    <result column="create_time" property="createTime" jdbcType="DATE" />
+    <result column="clear_task" property="clearTask" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    batch_code, DATE_FORMAT(date,'%Y%m%d') as date
+  </sql>
+  <select id="findNewest" resultMap="batchStateMap">
+    select 
+    <include refid="Base_Column_List" />
+    from batch_state order by batch_code desc limit 1
+  </select>
+
+  <select id="findNextBatch" resultMap="batchStateMap">
+    select max(batch_code)+1 as batch_code,date_add(max(date),interval 1 day) as date from batch_state
+  </select>
+
+  <!-- 更新批次日期-->
+  <insert id="upgrateBatchCode">
+    insert into batch_state(batch_code,date,create_time)
+    values(#{batchCode},#{date},now())
+  </insert>
+
+  <select id="findBatchStateByDate" resultMap="batchStateMap">
+    select
+    <include refid="Base_Column_List" />
+    from batch_state where date = #{date}
+  </select>
+
+  <select id="findClearTask" resultMap="batchStateMap">
+    select CONCAT(CONCAT(CONCAT('清算任务',DATE_FORMAT(date,'%Y%m%d')),'_'),batch_code) as clear_task,batch_code
+    from batch_state where date = #{batchDate}
+  </select>
+
+  <delete id="delete">
+    delete from batch_state where 1=1
+    <if test="batchCode != null">
+      AND batch_code &gt; #{batchCode}
+    </if>
+  </delete>
+
+  <select id="findFirstBatch" resultMap="batchStateMap">
+    select batch_code,date from batch_state order by batch_code limit 1
+  </select>
+
+</mapper>

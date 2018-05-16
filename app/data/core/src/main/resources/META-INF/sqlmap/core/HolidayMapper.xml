@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.core.HolidayDao">
+	<!-- Result Map com.jinhui.investor_trans.vo.Holiday -->
+	<resultMap id="BaseResultMap" type="com.jinhui.scheduler.domain.core.Holiday">
+		<result column="date" property="date" jdbcType="DATE"/>
+		<result column="flag" property="flag" />
+		<result column="despict" property="despict" />
+	</resultMap>
+
+	<!-- holiday table all fields -->
+	<sql id="Base_Column_List">
+		t.id,t.date,t.flag,t.despict
+	</sql>
+
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		<where>
+			<if test="id != null  "> and t.id=#{id}
+			</if>
+			<if test="date != null  ">
+				and t.date=#{date}
+			</if>
+			<if test="flag != null  and flag != '' ">
+				and t.flag=#{flag}
+			</if>
+			<if test="despict != null  and despict != '' ">
+				and t.despict=#{despict}
+			</if>
+		</where>
+	</sql>
+
+
+	<insert id="save" parameterType="com.jinhui.scheduler.domain.core.Holiday">
+		insert into holiday(id,date,flag,despict)
+		values(#{id},#{date},#{flag},#{despict})
+	</insert>
+	
+	<!--批量插入记录 -->
+	<insert id="addList" parameterType="java.util.List">
+		insert into holiday(date,flag,despict) values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.date},#{item.flag},#{item.despict}
+			)
+		</foreach>
+	</insert>
+
+
+	<!-- 根据id查询 -->
+	<select id="queryHoliday" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select t.date,t.flag,t.despict
+		from holiday t where  DATE_FORMAT(t.date,'%Y%m%d')= #{date}
+	</select>
+
+ 	<update id="updateHoliday" parameterType="com.jinhui.scheduler.domain.core.Holiday" >
+ 	 update holiday set date=#{date},flag=#{flag},despict=#{despict} where date=#{date}
+ 	</update>
+
+</mapper>

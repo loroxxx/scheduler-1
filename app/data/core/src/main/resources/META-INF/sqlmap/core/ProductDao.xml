@@ -1,0 +1,624 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.core.ProductDao" >
+  <resultMap id="BaseResultMap" type="com.jinhui.scheduler.domain.core.Product" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="product_no" property="productNo" jdbcType="CHAR" />
+    <result column="plat_product_no" property="platProductNo" jdbcType="VARCHAR" />
+    <result column="product_issuer" property="productIssuer" jdbcType="VARCHAR" />
+    <result column="exchange_no" property="exchangeNo" jdbcType="CHAR" />
+    <result column="sub_class" property="subClass" jdbcType="VARCHAR" />
+    <result column="product_type" property="productType" jdbcType="VARCHAR" />
+    <result column="product_expdate" property="productExpdate" jdbcType="DECIMAL" />
+    <result column="expdate_unit" property="expdateUnit" jdbcType="DECIMAL" />
+    <result column="cal_income_way" property="calIncomeWay" jdbcType="CHAR" />
+    <result column="cal_rate_way" property="calRateWay" jdbcType="CHAR" />
+    <result column="setup_date" property="setupDate" jdbcType="DATE" />
+    <result column="rate_date" property="rateDate" jdbcType="DATE" />
+    <result column="term_date" property="termDate" jdbcType="DATE" />
+    <result column="cashe_date" property="casheDate" jdbcType="DATE" />
+    <result column="income_rate" property="incomeRate" jdbcType="DECIMAL" />
+    <result column="percent_income_rate" property="percentIncomeRate" jdbcType="DECIMAL" />
+    <result column="nominal_income_rate" property="nominalIncomeRate" jdbcType="DECIMAL" />
+    <result column="nominal_percent_income_rate" property="nominalPercentIncomeRate" jdbcType="DECIMAL" />
+    <result column="income_difference" property="incomeDifference" jdbcType="DECIMAL" />
+    <result column="ipo_start_date" property="ipoStartDate" jdbcType="TIMESTAMP" />
+    <result column="ipo_end_date" property="ipoEndDate" jdbcType="TIMESTAMP" />
+    <result column="product_total_periods" property="productTotalPeriods" jdbcType="INTEGER" />
+    <result column="start_periods" property="startPeriods" jdbcType="INTEGER" />
+    <result column="end_periods" property="endPeriods" jdbcType="INTEGER" />
+    <result column="total_limit" property="totalLimit" jdbcType="DECIMAL" />
+    <result column="total_vol" property="totalVol" jdbcType="DECIMAL" />
+    <result column="product_vol" property="productVol" jdbcType="DECIMAL" />
+    <result column="subs_start_amount" property="subsStartAmount" jdbcType="DECIMAL" />
+    <result column="subs_range" property="subsRange" jdbcType="DECIMAL" />
+    <result column="risk_assess" property="riskAssess" jdbcType="CHAR" />
+    <result column="risk_level" property="riskLevel" jdbcType="CHAR" />
+    <result column="interest_type" property="interestType" jdbcType="VARCHAR" />
+    <result column="product_state" property="productState" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    id, product_name, product_no, plat_product_no, product_issuer, exchange_no, sub_class, 
+    product_type, product_expdate, expdate_unit, cal_income_way, cal_rate_way, setup_date, 
+    rate_date, term_date, cashe_date, income_rate, percent_income_rate, nominal_income_rate, 
+    nominal_percent_income_rate, income_difference, ipo_start_date, ipo_end_date, product_total_periods, 
+    start_periods, end_periods, total_limit, total_vol, product_vol, subs_start_amount, 
+    subs_range, risk_assess, risk_level, interest_type, product_state, create_time, gmt_modified
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    from product
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    delete from product
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jinhui.scheduler.domain.core.Product" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    insert into product (id, product_name, product_no, 
+      plat_product_no, product_issuer, exchange_no, 
+      sub_class, product_type, product_expdate, 
+      expdate_unit, cal_income_way, cal_rate_way, 
+      setup_date, rate_date, term_date, 
+      cashe_date, income_rate, percent_income_rate, 
+      nominal_income_rate, nominal_percent_income_rate, 
+      income_difference, ipo_start_date, ipo_end_date, 
+      product_total_periods, start_periods, end_periods, 
+      total_limit, total_vol, product_vol, 
+      subs_start_amount, subs_range, risk_assess, 
+      risk_level, interest_type, product_state, 
+      create_time, gmt_modified)
+    values (#{id,jdbcType=INTEGER}, #{productName,jdbcType=VARCHAR}, #{productNo,jdbcType=CHAR}, 
+      #{platProductNo,jdbcType=VARCHAR}, #{productIssuer,jdbcType=VARCHAR}, #{exchangeNo,jdbcType=CHAR}, 
+      #{subClass,jdbcType=VARCHAR}, #{productType,jdbcType=VARCHAR}, #{productExpdate,jdbcType=DECIMAL}, 
+      #{expdateUnit,jdbcType=DECIMAL}, #{calIncomeWay,jdbcType=CHAR}, #{calRateWay,jdbcType=CHAR}, 
+      #{setupDate,jdbcType=DATE}, #{rateDate,jdbcType=DATE}, #{termDate,jdbcType=DATE}, 
+      #{casheDate,jdbcType=DATE}, #{incomeRate,jdbcType=DECIMAL}, #{percentIncomeRate,jdbcType=DECIMAL}, 
+      #{nominalIncomeRate,jdbcType=DECIMAL}, #{nominalPercentIncomeRate,jdbcType=DECIMAL}, 
+      #{incomeDifference,jdbcType=DECIMAL}, #{ipoStartDate,jdbcType=TIMESTAMP}, #{ipoEndDate,jdbcType=TIMESTAMP}, 
+      #{productTotalPeriods,jdbcType=INTEGER}, #{startPeriods,jdbcType=INTEGER}, #{endPeriods,jdbcType=INTEGER}, 
+      #{totalLimit,jdbcType=DECIMAL}, #{totalVol,jdbcType=DECIMAL}, #{productVol,jdbcType=DECIMAL}, 
+      #{subsStartAmount,jdbcType=DECIMAL}, #{subsRange,jdbcType=DECIMAL}, #{riskAssess,jdbcType=CHAR}, 
+      #{riskLevel,jdbcType=CHAR}, #{interestType,jdbcType=VARCHAR}, #{productState,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jinhui.scheduler.domain.core.Product" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    insert into product
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="productName != null" >
+        product_name,
+      </if>
+      <if test="productNo != null" >
+        product_no,
+      </if>
+      <if test="platProductNo != null" >
+        plat_product_no,
+      </if>
+      <if test="productIssuer != null" >
+        product_issuer,
+      </if>
+      <if test="exchangeNo != null" >
+        exchange_no,
+      </if>
+      <if test="subClass != null" >
+        sub_class,
+      </if>
+      <if test="productType != null" >
+        product_type,
+      </if>
+      <if test="productExpdate != null" >
+        product_expdate,
+      </if>
+      <if test="expdateUnit != null" >
+        expdate_unit,
+      </if>
+      <if test="calIncomeWay != null" >
+        cal_income_way,
+      </if>
+      <if test="calRateWay != null" >
+        cal_rate_way,
+      </if>
+      <if test="setupDate != null" >
+        setup_date,
+      </if>
+      <if test="rateDate != null" >
+        rate_date,
+      </if>
+      <if test="termDate != null" >
+        term_date,
+      </if>
+      <if test="casheDate != null" >
+        cashe_date,
+      </if>
+      <if test="incomeRate != null" >
+        income_rate,
+      </if>
+      <if test="percentIncomeRate != null" >
+        percent_income_rate,
+      </if>
+      <if test="nominalIncomeRate != null" >
+        nominal_income_rate,
+      </if>
+      <if test="nominalPercentIncomeRate != null" >
+        nominal_percent_income_rate,
+      </if>
+      <if test="incomeDifference != null" >
+        income_difference,
+      </if>
+      <if test="ipoStartDate != null" >
+        ipo_start_date,
+      </if>
+      <if test="ipoEndDate != null" >
+        ipo_end_date,
+      </if>
+      <if test="productTotalPeriods != null" >
+        product_total_periods,
+      </if>
+      <if test="startPeriods != null" >
+        start_periods,
+      </if>
+      <if test="endPeriods != null" >
+        end_periods,
+      </if>
+      <if test="totalLimit != null" >
+        total_limit,
+      </if>
+      <if test="totalVol != null" >
+        total_vol,
+      </if>
+      <if test="productVol != null" >
+        product_vol,
+      </if>
+      <if test="subsStartAmount != null" >
+        subs_start_amount,
+      </if>
+      <if test="subsRange != null" >
+        subs_range,
+      </if>
+      <if test="riskAssess != null" >
+        risk_assess,
+      </if>
+      <if test="riskLevel != null" >
+        risk_level,
+      </if>
+      <if test="interestType != null" >
+        interest_type,
+      </if>
+      <if test="productState != null" >
+        product_state,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null" >
+        #{productNo,jdbcType=CHAR},
+      </if>
+      <if test="platProductNo != null" >
+        #{platProductNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productIssuer != null" >
+        #{productIssuer,jdbcType=VARCHAR},
+      </if>
+      <if test="exchangeNo != null" >
+        #{exchangeNo,jdbcType=CHAR},
+      </if>
+      <if test="subClass != null" >
+        #{subClass,jdbcType=VARCHAR},
+      </if>
+      <if test="productType != null" >
+        #{productType,jdbcType=VARCHAR},
+      </if>
+      <if test="productExpdate != null" >
+        #{productExpdate,jdbcType=DECIMAL},
+      </if>
+      <if test="expdateUnit != null" >
+        #{expdateUnit,jdbcType=DECIMAL},
+      </if>
+      <if test="calIncomeWay != null" >
+        #{calIncomeWay,jdbcType=CHAR},
+      </if>
+      <if test="calRateWay != null" >
+        #{calRateWay,jdbcType=CHAR},
+      </if>
+      <if test="setupDate != null" >
+        #{setupDate,jdbcType=DATE},
+      </if>
+      <if test="rateDate != null" >
+        #{rateDate,jdbcType=DATE},
+      </if>
+      <if test="termDate != null" >
+        #{termDate,jdbcType=DATE},
+      </if>
+      <if test="casheDate != null" >
+        #{casheDate,jdbcType=DATE},
+      </if>
+      <if test="incomeRate != null" >
+        #{incomeRate,jdbcType=DECIMAL},
+      </if>
+      <if test="percentIncomeRate != null" >
+        #{percentIncomeRate,jdbcType=DECIMAL},
+      </if>
+      <if test="nominalIncomeRate != null" >
+        #{nominalIncomeRate,jdbcType=DECIMAL},
+      </if>
+      <if test="nominalPercentIncomeRate != null" >
+        #{nominalPercentIncomeRate,jdbcType=DECIMAL},
+      </if>
+      <if test="incomeDifference != null" >
+        #{incomeDifference,jdbcType=DECIMAL},
+      </if>
+      <if test="ipoStartDate != null" >
+        #{ipoStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ipoEndDate != null" >
+        #{ipoEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="productTotalPeriods != null" >
+        #{productTotalPeriods,jdbcType=INTEGER},
+      </if>
+      <if test="startPeriods != null" >
+        #{startPeriods,jdbcType=INTEGER},
+      </if>
+      <if test="endPeriods != null" >
+        #{endPeriods,jdbcType=INTEGER},
+      </if>
+      <if test="totalLimit != null" >
+        #{totalLimit,jdbcType=DECIMAL},
+      </if>
+      <if test="totalVol != null" >
+        #{totalVol,jdbcType=DECIMAL},
+      </if>
+      <if test="productVol != null" >
+        #{productVol,jdbcType=DECIMAL},
+      </if>
+      <if test="subsStartAmount != null" >
+        #{subsStartAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="subsRange != null" >
+        #{subsRange,jdbcType=DECIMAL},
+      </if>
+      <if test="riskAssess != null" >
+        #{riskAssess,jdbcType=CHAR},
+      </if>
+      <if test="riskLevel != null" >
+        #{riskLevel,jdbcType=CHAR},
+      </if>
+      <if test="interestType != null" >
+        #{interestType,jdbcType=VARCHAR},
+      </if>
+      <if test="productState != null" >
+        #{productState,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jinhui.scheduler.domain.core.Product" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    update product
+    <set >
+      <if test="productName != null" >
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null" >
+        product_no = #{productNo,jdbcType=CHAR},
+      </if>
+      <if test="platProductNo != null" >
+        plat_product_no = #{platProductNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productIssuer != null" >
+        product_issuer = #{productIssuer,jdbcType=VARCHAR},
+      </if>
+      <if test="exchangeNo != null" >
+        exchange_no = #{exchangeNo,jdbcType=CHAR},
+      </if>
+      <if test="subClass != null" >
+        sub_class = #{subClass,jdbcType=VARCHAR},
+      </if>
+      <if test="productType != null" >
+        product_type = #{productType,jdbcType=VARCHAR},
+      </if>
+      <if test="productExpdate != null" >
+        product_expdate = #{productExpdate,jdbcType=DECIMAL},
+      </if>
+      <if test="expdateUnit != null" >
+        expdate_unit = #{expdateUnit,jdbcType=DECIMAL},
+      </if>
+      <if test="calIncomeWay != null" >
+        cal_income_way = #{calIncomeWay,jdbcType=CHAR},
+      </if>
+      <if test="calRateWay != null" >
+        cal_rate_way = #{calRateWay,jdbcType=CHAR},
+      </if>
+      <if test="setupDate != null" >
+        setup_date = #{setupDate,jdbcType=DATE},
+      </if>
+      <if test="rateDate != null" >
+        rate_date = #{rateDate,jdbcType=DATE},
+      </if>
+      <if test="termDate != null" >
+        term_date = #{termDate,jdbcType=DATE},
+      </if>
+      <if test="casheDate != null" >
+        cashe_date = #{casheDate,jdbcType=DATE},
+      </if>
+      <if test="incomeRate != null" >
+        income_rate = #{incomeRate,jdbcType=DECIMAL},
+      </if>
+      <if test="percentIncomeRate != null" >
+        percent_income_rate = #{percentIncomeRate,jdbcType=DECIMAL},
+      </if>
+      <if test="nominalIncomeRate != null" >
+        nominal_income_rate = #{nominalIncomeRate,jdbcType=DECIMAL},
+      </if>
+      <if test="nominalPercentIncomeRate != null" >
+        nominal_percent_income_rate = #{nominalPercentIncomeRate,jdbcType=DECIMAL},
+      </if>
+      <if test="incomeDifference != null" >
+        income_difference = #{incomeDifference,jdbcType=DECIMAL},
+      </if>
+      <if test="ipoStartDate != null" >
+        ipo_start_date = #{ipoStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ipoEndDate != null" >
+        ipo_end_date = #{ipoEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="productTotalPeriods != null" >
+        product_total_periods = #{productTotalPeriods,jdbcType=INTEGER},
+      </if>
+      <if test="startPeriods != null" >
+        start_periods = #{startPeriods,jdbcType=INTEGER},
+      </if>
+      <if test="endPeriods != null" >
+        end_periods = #{endPeriods,jdbcType=INTEGER},
+      </if>
+      <if test="totalLimit != null" >
+        total_limit = #{totalLimit,jdbcType=DECIMAL},
+      </if>
+      <if test="totalVol != null" >
+        total_vol = #{totalVol,jdbcType=DECIMAL},
+      </if>
+      <if test="productVol != null" >
+        product_vol = #{productVol,jdbcType=DECIMAL},
+      </if>
+      <if test="subsStartAmount != null" >
+        subs_start_amount = #{subsStartAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="subsRange != null" >
+        subs_range = #{subsRange,jdbcType=DECIMAL},
+      </if>
+      <if test="riskAssess != null" >
+        risk_assess = #{riskAssess,jdbcType=CHAR},
+      </if>
+      <if test="riskLevel != null" >
+        risk_level = #{riskLevel,jdbcType=CHAR},
+      </if>
+      <if test="interestType != null" >
+        interest_type = #{interestType,jdbcType=VARCHAR},
+      </if>
+      <if test="productState != null" >
+        product_state = #{productState,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jinhui.scheduler.domain.core.Product" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    update product
+    set product_name = #{productName,jdbcType=VARCHAR},
+      product_no = #{productNo,jdbcType=CHAR},
+      plat_product_no = #{platProductNo,jdbcType=VARCHAR},
+      product_issuer = #{productIssuer,jdbcType=VARCHAR},
+      exchange_no = #{exchangeNo,jdbcType=CHAR},
+      sub_class = #{subClass,jdbcType=VARCHAR},
+      product_type = #{productType,jdbcType=VARCHAR},
+      product_expdate = #{productExpdate,jdbcType=DECIMAL},
+      expdate_unit = #{expdateUnit,jdbcType=DECIMAL},
+      cal_income_way = #{calIncomeWay,jdbcType=CHAR},
+      cal_rate_way = #{calRateWay,jdbcType=CHAR},
+      setup_date = #{setupDate,jdbcType=DATE},
+      rate_date = #{rateDate,jdbcType=DATE},
+      term_date = #{termDate,jdbcType=DATE},
+      cashe_date = #{casheDate,jdbcType=DATE},
+      income_rate = #{incomeRate,jdbcType=DECIMAL},
+      percent_income_rate = #{percentIncomeRate,jdbcType=DECIMAL},
+      nominal_income_rate = #{nominalIncomeRate,jdbcType=DECIMAL},
+      nominal_percent_income_rate = #{nominalPercentIncomeRate,jdbcType=DECIMAL},
+      income_difference = #{incomeDifference,jdbcType=DECIMAL},
+      ipo_start_date = #{ipoStartDate,jdbcType=TIMESTAMP},
+      ipo_end_date = #{ipoEndDate,jdbcType=TIMESTAMP},
+      product_total_periods = #{productTotalPeriods,jdbcType=INTEGER},
+      start_periods = #{startPeriods,jdbcType=INTEGER},
+      end_periods = #{endPeriods,jdbcType=INTEGER},
+      total_limit = #{totalLimit,jdbcType=DECIMAL},
+      total_vol = #{totalVol,jdbcType=DECIMAL},
+      product_vol = #{productVol,jdbcType=DECIMAL},
+      subs_start_amount = #{subsStartAmount,jdbcType=DECIMAL},
+      subs_range = #{subsRange,jdbcType=DECIMAL},
+      risk_assess = #{riskAssess,jdbcType=CHAR},
+      risk_level = #{riskLevel,jdbcType=CHAR},
+      interest_type = #{interestType,jdbcType=VARCHAR},
+      product_state = #{productState,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="selectAll" resultMap="BaseResultMap">
+
+    select
+    <include refid="Base_Column_List"/>
+    from product
+  </select>
+
+
+  <resultMap id="ResultMap2" type="com.jinhui.scheduler.domain.core.ProductVo">
+    <id column="id" property="id" jdbcType="INTEGER"/>
+    <result column="product_name" property="productName" jdbcType="VARCHAR"/>
+    <result column="product_no" property="productNo" jdbcType="CHAR"/>
+    <result column="plat_product_no" property="platProductNo" jdbcType="VARCHAR"/>
+    <result column="product_issuer" property="productIssuer" jdbcType="VARCHAR"/>
+    <result column="exchange_no" property="exchangeNo" jdbcType="CHAR"/>
+    <result column="sub_class" property="subClass" jdbcType="VARCHAR"/>
+    <result column="product_type" property="productType" jdbcType="VARCHAR"/>
+    <result column="product_expdate" property="productExpdate" jdbcType="DECIMAL"/>
+    <result column="expdate_unit" property="expdateUnit" jdbcType="DECIMAL"/>
+    <result column="cal_income_way" property="calIncomeWay" jdbcType="CHAR"/>
+    <result column="cal_rate_way" property="calRateWay" jdbcType="CHAR"/>
+    <result column="setup_date" property="setupDate" jdbcType="DATE"/>
+    <result column="rate_date" property="rateDate" jdbcType="DATE"/>
+    <result column="term_date" property="termDate" jdbcType="DATE"/>
+    <result column="cashe_date" property="casheDate" jdbcType="DATE"/>
+    <result column="income_rate" property="incomeRate" jdbcType="DECIMAL"/>
+    <result column="percent_income_rate" property="percentIncomeRate" jdbcType="DECIMAL"/>
+    <result column="nominal_income_rate" property="nominalIncomeRate" jdbcType="DECIMAL" />
+    <result column="nominal_percent_income_rate" property="nominalPercentIncomeRate" jdbcType="DECIMAL" />
+    <result column="ipo_start_date" property="ipoStartDate" jdbcType="TIMESTAMP"/>
+    <result column="ipo_end_date" property="ipoEndDate" jdbcType="TIMESTAMP"/>
+    <result column="product_total_periods" property="productTotalPeriods" jdbcType="INTEGER"/>
+    <result column="start_periods" property="startPeriods" jdbcType="INTEGER"/>
+    <result column="end_periods" property="endPeriods" jdbcType="INTEGER"/>
+    <result column="total_limit" property="totalLimit" jdbcType="DECIMAL"/>
+    <result column="total_vol" property="totalVol" jdbcType="DECIMAL"/>
+    <result column="product_vol" property="productVol" jdbcType="DECIMAL"/>
+    <result column="subs_start_amount" property="subsStartAmount" jdbcType="DECIMAL"/>
+    <result column="subs_range" property="subsRange" jdbcType="DECIMAL"/>
+    <result column="risk_assess" property="riskAssess" jdbcType="CHAR"/>
+    <result column="risk_level" property="riskLevel" jdbcType="CHAR"/>
+    <result column="interest_type" property="interestType" jdbcType="VARCHAR"/>
+    <result column="product_state" property="productState" jdbcType="VARCHAR"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+    <result column="position_limit" property="positionLimit" jdbcType="VARCHAR"/>
+    <result column="product_subs_toplimit" property="productSubToplimit" jdbcType="DECIMAL"/>
+    <result column="chn_code" property="chnCode" jdbcType="VARCHAR"/>
+  </resultMap>
+
+  <select id="selectByQueryParam" resultMap="ResultMap2">
+    select
+    p.id, p.product_name, p.product_no, p.plat_product_no, p.product_issuer, p.exchange_no, p.sub_class,
+    p.product_type, p.product_expdate, p.expdate_unit, p.cal_income_way, p.cal_rate_way, p.setup_date,
+    p.rate_date, p.term_date, p.cashe_date, p.income_rate, p.percent_income_rate,p.nominal_income_rate,p.nominal_percent_income_rate, p.ipo_start_date,
+    p.ipo_end_date, p.product_total_periods, p.start_periods, p.end_periods, p.total_limit, p.total_vol,
+    p.product_vol, p.subs_start_amount, p.subs_range, p.risk_assess, p.risk_level, p.interest_type,
+    p.product_state, p.create_time, p.gmt_modified,
+    c.position_limit,c.product_subs_toplimit,c.chn_code
+    from product p left join chn_product c on p.product_no=c.product_no
+    where 1=1
+    <if test="productNo != null">
+      and p.product_no= #{productNo}
+    </if>
+    <if test="exchangeNo != null">
+      and p.exchange_no= #{exchangeNo}
+    </if>
+    <if test="productType != null">
+      and p.product_type= #{productType}
+    </if>
+
+  </select>
+
+
+  <select id="selectAllInfoByProductNo" resultMap="ResultMap2">
+    select
+    p.id, p.product_name, p.product_no, p.plat_product_no, p.product_issuer, p.exchange_no, p.sub_class,
+    p.product_type, p.product_expdate, p.expdate_unit, p.cal_income_way, p.cal_rate_way, p.setup_date,
+    p.rate_date, p.term_date, p.cashe_date, p.income_rate, p.percent_income_rate,p.percent_income_rate,p.nominal_income_rate,p.nominal_percent_income_rate, p.ipo_start_date,
+    p.ipo_end_date, p.product_total_periods, p.start_periods, p.end_periods, p.total_limit, p.total_vol,
+    p.product_vol, p.subs_start_amount, p.subs_range, p.risk_assess, p.risk_level, p.interest_type,
+    p.product_state, p.create_time, p.gmt_modified,
+    c.position_limit,c.product_subs_toplimit
+    from product p left join chn_product c on p.product_no=c.product_no
+    where p.product_no= #{productNo}
+
+  </select>
+
+
+  <select id="selectCurrent"  resultMap="BaseResultMap" >
+
+    select
+    <include refid="Base_Column_List"/>
+    from product
+    where product_type ='0'
+    <if test="productNo != null">
+      and product_no = #{productNo}
+    </if>
+    <if test="exchangeNo != null">
+      and exchange_no=#{exchangeNo}
+    </if>
+
+
+  </select>
+
+
+  <update id="updateIncomeByNo">
+    update product
+    set  income_rate = #{incomeRate,jdbcType=DECIMAL},
+      percent_income_rate = #{percentIncomeRate,jdbcType=DECIMAL},
+      income_difference = #{incomeDifference,jdbcType=DECIMAL},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+    where  product_no = #{productNo,jdbcType=CHAR}
+
+  </update>
+
+  <select id="selectInfoByProductNo" resultMap="BaseResultMap">
+
+    select
+    <include refid="Base_Column_List" />
+    from product
+    where  product_no = #{productNo,jdbcType=CHAR}
+
+  </select>
+
+
+</mapper>

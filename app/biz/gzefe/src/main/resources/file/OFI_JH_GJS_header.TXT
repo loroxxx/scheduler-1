@@ -1,0 +1,12 @@
+OFDCFIDX
+20
+JH
+GJS
+#{applyDate}
+004
+OFD_JH_GJS_#{applyDate}_01.TXT
+OFD_JH_GJS_#{applyDate}_03.TXT
+OFD_JH_GJS_#{applyDate}_06.TXT
+OFD_JH_GJS_#{applyDate}_12.TXT
+OFDCFEND
+

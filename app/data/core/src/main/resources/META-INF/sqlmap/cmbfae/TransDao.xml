@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.cmbfae.TransDao">
+
+
+    <resultMap type="com.jinhui.scheduler.domain.cmbfae.template.TransDetailContent" id="detailTransMap">
+        <result property="transactionOrderNo" column="app_sheet_serial_no"/>
+        <result property="productCode" column="child_product_no"/>
+        <result property="productName" column="product_name"/>
+        <result property="coProductCode" column="product_no"/>
+        <result property="coInvestUserId" column="investor_id"/>
+        <result property="customerType" column="user_flag"/>
+        <result property="certificateNo" column="id_no"/>
+        <result property="certificateType" column="id_type"/>
+        <result property="mobilePhoneNo" column="phone"/>
+        <result property="investorName" column="name"/>
+        <result property="transactionBankAccount" column="trans_bank_act"/>
+        <result property="transactionBankName" column="trans_bank_name"/>
+        <result property="transactionType" column="trans_type"/>
+        <result property="transactionAmount" column="trans_amount"/>
+        <result property="transactionVolume" column="trans_vol"/>
+        <result property="transactionTime" column="trans_time"/>
+    </resultMap>
+
+
+    <select id="queryTransStatistics" resultType="com.jinhui.scheduler.domain.cmbfae.TransStatistics">
+      SELECT
+    t.child_product_no as childProductNo,
+    p.product_name as productName,
+    t.trans_type as tranType,
+    sum(t.trans_amount) AS totalAmount,
+    count(*) as transCount
+    FROM
+    investor_trans t,product p
+    WHERE
+    t.product_no=p.product_no
+    and t.is_excess='0'
+    and p.exchange_no=#{exchangeNo}
+    and t.batch_code = #{batchCode}
+    and t.trans_type in ('022','024')
+    group by t.child_product_no,p.product_name,t.trans_type
+    </select>
+
+
+    <select id="queryTransDetail" resultMap="detailTransMap">
+       SELECT
+	t.app_sheet_serial_no,
+	p.product_no,
+	p.product_name,
+	p.plat_product_no,
+	t.child_product_no,
+	t.investor_id,
+	u.user_flag,
+	u.id_type,
+	u.id_no,
+	u.phone,
+	u.name,
+	t.trans_bank_act,
+	t.trans_type,
+	t.trans_amount,
+	t.trans_vol,
+	t.trans_time
+    FROM
+	investor_trans t,
+	product p,
+	user u
+    WHERE p.product_no = t.product_no
+    and t.investor_id = u.investor_id
+    and t.is_excess = '0'
+    and t.trans_type in ('022','024')
+    and p.exchange_no=#{exchangeNo}
+    and t.batch_code =#{batchCode}
+    ORDER BY t.id ASC LIMIT #{_skiprows}, #{_pagesize}
+    </select>
+
+
+    <select id="queryTransCount" resultType="java.lang.Integer">
+
+   select count(*)from investor_trans t,product p
+   where t.is_excess = '0'
+   and p.product_no = t.product_no
+   and p.exchange_no=#{exchangeNo}
+   and batch_code =#{batchCode}
+    </select>
+
+
+</mapper>

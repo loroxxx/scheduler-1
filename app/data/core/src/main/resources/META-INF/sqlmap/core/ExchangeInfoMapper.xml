@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.core.ExchangeInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.jinhui.scheduler.domain.core.ExchangeInfo" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="zl_instu_id" property="zlInstuId" jdbcType="VARCHAR" />
+    <result column="exchange_code" property="exchangeCode" jdbcType="CHAR" />
+    <result column="exchange_name" property="exchangeName" jdbcType="VARCHAR" />
+    <result column="id_type" property="idType" jdbcType="CHAR" />
+    <result column="id_no" property="idNo" jdbcType="CHAR" />
+    <result column="contacts" property="contacts" jdbcType="VARCHAR" />
+    <result column="artificial" property="artificial" jdbcType="VARCHAR" />
+    <result column="adress" property="adress" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="current_product_limit" property="currentProductLimit" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    id, zl_instu_id, exchange_code, exchange_name, id_type, id_no, contacts, artificial, 
+    adress, phone, current_product_limit
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    from exchange_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    delete from exchange_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jinhui.scheduler.domain.core.ExchangeInfo" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    insert into exchange_info (id, zl_instu_id, exchange_code, 
+      exchange_name, id_type, id_no, 
+      contacts, artificial, adress, 
+      phone, current_product_limit)
+    values (#{id,jdbcType=INTEGER}, #{zlInstuId,jdbcType=VARCHAR}, #{exchangeCode,jdbcType=CHAR}, 
+      #{exchangeName,jdbcType=VARCHAR}, #{idType,jdbcType=CHAR}, #{idNo,jdbcType=CHAR}, 
+      #{contacts,jdbcType=VARCHAR}, #{artificial,jdbcType=VARCHAR}, #{adress,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{currentProductLimit,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jinhui.scheduler.domain.core.ExchangeInfo" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    insert into exchange_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="zlInstuId != null" >
+        zl_instu_id,
+      </if>
+      <if test="exchangeCode != null" >
+        exchange_code,
+      </if>
+      <if test="exchangeName != null" >
+        exchange_name,
+      </if>
+      <if test="idType != null" >
+        id_type,
+      </if>
+      <if test="idNo != null" >
+        id_no,
+      </if>
+      <if test="contacts != null" >
+        contacts,
+      </if>
+      <if test="artificial != null" >
+        artificial,
+      </if>
+      <if test="adress != null" >
+        adress,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="currentProductLimit != null" >
+        current_product_limit,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="zlInstuId != null" >
+        #{zlInstuId,jdbcType=VARCHAR},
+      </if>
+      <if test="exchangeCode != null" >
+        #{exchangeCode,jdbcType=CHAR},
+      </if>
+      <if test="exchangeName != null" >
+        #{exchangeName,jdbcType=VARCHAR},
+      </if>
+      <if test="idType != null" >
+        #{idType,jdbcType=CHAR},
+      </if>
+      <if test="idNo != null" >
+        #{idNo,jdbcType=CHAR},
+      </if>
+      <if test="contacts != null" >
+        #{contacts,jdbcType=VARCHAR},
+      </if>
+      <if test="artificial != null" >
+        #{artificial,jdbcType=VARCHAR},
+      </if>
+      <if test="adress != null" >
+        #{adress,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="currentProductLimit != null" >
+        #{currentProductLimit,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jinhui.scheduler.domain.core.ExchangeInfo" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    update exchange_info
+    <set >
+      <if test="zlInstuId != null" >
+        zl_instu_id = #{zlInstuId,jdbcType=VARCHAR},
+      </if>
+      <if test="exchangeCode != null" >
+        exchange_code = #{exchangeCode,jdbcType=CHAR},
+      </if>
+      <if test="exchangeName != null" >
+        exchange_name = #{exchangeName,jdbcType=VARCHAR},
+      </if>
+      <if test="idType != null" >
+        id_type = #{idType,jdbcType=CHAR},
+      </if>
+      <if test="idNo != null" >
+        id_no = #{idNo,jdbcType=CHAR},
+      </if>
+      <if test="contacts != null" >
+        contacts = #{contacts,jdbcType=VARCHAR},
+      </if>
+      <if test="artificial != null" >
+        artificial = #{artificial,jdbcType=VARCHAR},
+      </if>
+      <if test="adress != null" >
+        adress = #{adress,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="currentProductLimit != null" >
+        current_product_limit = #{currentProductLimit,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jinhui.scheduler.domain.core.ExchangeInfo" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    update exchange_info
+    set zl_instu_id = #{zlInstuId,jdbcType=VARCHAR},
+      exchange_code = #{exchangeCode,jdbcType=CHAR},
+      exchange_name = #{exchangeName,jdbcType=VARCHAR},
+      id_type = #{idType,jdbcType=CHAR},
+      id_no = #{idNo,jdbcType=CHAR},
+      contacts = #{contacts,jdbcType=VARCHAR},
+      artificial = #{artificial,jdbcType=VARCHAR},
+      adress = #{adress,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      current_product_limit = #{currentProductLimit,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="queryExchangeInfo" resultMap="BaseResultMap">
+    select exchange_code, exchange_name,current_product_limit from exchange_info where exchange_code = #{exchangeCode}
+  </select>
+
+
+  <select id="queryExchanges" resultMap="BaseResultMap">
+    select exchange_code, exchange_name,current_product_limit from exchange_info
+  </select>
+
+
+  <update id="updateExchangeLimit">
+    update exchange_info set `current_product_limit` = #{limit}
+    where exchange_code = #{exchangeCode}
+  </update>
+
+</mapper>

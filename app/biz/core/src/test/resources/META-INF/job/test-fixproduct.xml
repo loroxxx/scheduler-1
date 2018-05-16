@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:batch="http://www.springframework.org/schema/batch"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd">
+
+
+
+
+    <!--&lt;!&ndash; fixme 测试job -->
+    <batch:job id="testUploadJob" >
+        <!--<batch:step id="getTestFilePathName" next="writeTestFile">
+            <batch:tasklet ref="cmbfaeUploadFilePathTasklet"/>
+        </batch:step>-->
+        <batch:step id="getTestFilePathName" next="writeTestFile">
+            <batch:tasklet ref="cmbfaeUploadFileDirTasklet"/>
+        </batch:step>
+        <batch:step id="writeTestFile" >
+            <batch:tasklet>
+                <batch:chunk reader="testJDBCItemReader"
+                             writer="testFileItemWriter"
+                             commit-interval="1000"/>
+            </batch:tasklet>
+        </batch:step>
+        <batch:listeners>
+            <batch:listener ref="uploadJobListener" />
+        </batch:listeners>
+    </batch:job>
+
+</beans>

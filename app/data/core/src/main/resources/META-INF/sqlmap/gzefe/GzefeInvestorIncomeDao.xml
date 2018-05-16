@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.gzefe.GzefeInvestorIncomeDao" >
+  <resultMap id="BaseResultMap" type="com.jinhui.scheduler.domain.gzefe.InvestorIncome" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+    <result column="apply_date" property="applyDate" jdbcType="DATE" />
+    <result column="confirm_date" property="confirmDate" jdbcType="DATE" />
+    <result column="income_state" property="incomeState" jdbcType="CHAR" />
+    <result column="gather_date" property="gatherDate" jdbcType="DATE" />
+    <result column="batch_code" property="batchCode" jdbcType="INTEGER" />
+    <result column="investor_id" property="investorId" jdbcType="CHAR" />
+    <result column="chn_id" property="chnId" jdbcType="CHAR" />
+    <result column="chn_code" property="chnCode" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="product_no" property="productNo" jdbcType="CHAR" />
+    <result column="child_product_no" property="childProductNo" jdbcType="CHAR" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="total_postion_amount" property="totalPostionAmount" jdbcType="DECIMAL" />
+    <result column="income_amount" property="incomeAmount" jdbcType="DECIMAL" />
+    <result column="income_rate" property="incomeRate" jdbcType="DECIMAL" />
+    <result column="percent_income" property="percentIncome" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    id, serial_number, apply_date, confirm_date, income_state, gather_date, batch_code, 
+    investor_id, chn_id, chn_code, name, product_no, child_product_no, product_name, 
+    total_postion_amount, income_amount, income_rate, percent_income, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    from investor_income
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    delete from investor_income
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jinhui.scheduler.domain.gzefe.InvestorIncome" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    insert into investor_income (id, serial_number, apply_date, 
+      confirm_date, income_state, gather_date, 
+      batch_code, investor_id, chn_id, 
+      chn_code, name, product_no, 
+      child_product_no, product_name, total_postion_amount, 
+      income_amount, income_rate, percent_income, 
+      create_time, update_time)
+    values (#{id,jdbcType=INTEGER}, #{serialNumber,jdbcType=VARCHAR}, #{applyDate,jdbcType=DATE}, 
+      #{confirmDate,jdbcType=DATE}, #{incomeState,jdbcType=CHAR}, #{gatherDate,jdbcType=DATE}, 
+      #{batchCode,jdbcType=INTEGER}, #{investorId,jdbcType=CHAR}, #{chnId,jdbcType=CHAR}, 
+      #{chnCode,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, #{productNo,jdbcType=CHAR}, 
+      #{childProductNo,jdbcType=CHAR}, #{productName,jdbcType=VARCHAR}, #{totalPostionAmount,jdbcType=DECIMAL}, 
+      #{incomeAmount,jdbcType=DECIMAL}, #{incomeRate,jdbcType=DECIMAL}, #{percentIncome,jdbcType=DECIMAL}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jinhui.scheduler.domain.gzefe.InvestorIncome" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    insert into investor_income
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="serialNumber != null" >
+        serial_number,
+      </if>
+      <if test="applyDate != null" >
+        apply_date,
+      </if>
+      <if test="confirmDate != null" >
+        confirm_date,
+      </if>
+      <if test="incomeState != null" >
+        income_state,
+      </if>
+      <if test="gatherDate != null" >
+        gather_date,
+      </if>
+      <if test="batchCode != null" >
+        batch_code,
+      </if>
+      <if test="investorId != null" >
+        investor_id,
+      </if>
+      <if test="chnId != null" >
+        chn_id,
+      </if>
+      <if test="chnCode != null" >
+        chn_code,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="productNo != null" >
+        product_no,
+      </if>
+      <if test="childProductNo != null" >
+        child_product_no,
+      </if>
+      <if test="productName != null" >
+        product_name,
+      </if>
+      <if test="totalPostionAmount != null" >
+        total_postion_amount,
+      </if>
+      <if test="incomeAmount != null" >
+        income_amount,
+      </if>
+      <if test="incomeRate != null" >
+        income_rate,
+      </if>
+      <if test="percentIncome != null" >
+        percent_income,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="serialNumber != null" >
+        #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="applyDate != null" >
+        #{applyDate,jdbcType=DATE},
+      </if>
+      <if test="confirmDate != null" >
+        #{confirmDate,jdbcType=DATE},
+      </if>
+      <if test="incomeState != null" >
+        #{incomeState,jdbcType=CHAR},
+      </if>
+      <if test="gatherDate != null" >
+        #{gatherDate,jdbcType=DATE},
+      </if>
+      <if test="batchCode != null" >
+        #{batchCode,jdbcType=INTEGER},
+      </if>
+      <if test="investorId != null" >
+        #{investorId,jdbcType=CHAR},
+      </if>
+      <if test="chnId != null" >
+        #{chnId,jdbcType=CHAR},
+      </if>
+      <if test="chnCode != null" >
+        #{chnCode,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null" >
+        #{productNo,jdbcType=CHAR},
+      </if>
+      <if test="childProductNo != null" >
+        #{childProductNo,jdbcType=CHAR},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="totalPostionAmount != null" >
+        #{totalPostionAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="incomeAmount != null" >
+        #{incomeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="incomeRate != null" >
+        #{incomeRate,jdbcType=DECIMAL},
+      </if>
+      <if test="percentIncome != null" >
+        #{percentIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jinhui.scheduler.domain.gzefe.InvestorIncome" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    update investor_income
+    <set >
+      <if test="serialNumber != null" >
+        serial_number = #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="applyDate != null" >
+        apply_date = #{applyDate,jdbcType=DATE},
+      </if>
+      <if test="confirmDate != null" >
+        confirm_date = #{confirmDate,jdbcType=DATE},
+      </if>
+      <if test="incomeState != null" >
+        income_state = #{incomeState,jdbcType=CHAR},
+      </if>
+      <if test="gatherDate != null" >
+        gather_date = #{gatherDate,jdbcType=DATE},
+      </if>
+      <if test="batchCode != null" >
+        batch_code = #{batchCode,jdbcType=INTEGER},
+      </if>
+      <if test="investorId != null" >
+        investor_id = #{investorId,jdbcType=CHAR},
+      </if>
+      <if test="chnId != null" >
+        chn_id = #{chnId,jdbcType=CHAR},
+      </if>
+      <if test="chnCode != null" >
+        chn_code = #{chnCode,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null" >
+        product_no = #{productNo,jdbcType=CHAR},
+      </if>
+      <if test="childProductNo != null" >
+        child_product_no = #{childProductNo,jdbcType=CHAR},
+      </if>
+      <if test="productName != null" >
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="totalPostionAmount != null" >
+        total_postion_amount = #{totalPostionAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="incomeAmount != null" >
+        income_amount = #{incomeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="incomeRate != null" >
+        income_rate = #{incomeRate,jdbcType=DECIMAL},
+      </if>
+      <if test="percentIncome != null" >
+        percent_income = #{percentIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jinhui.scheduler.domain.gzefe.InvestorIncome" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    update investor_income
+    set serial_number = #{serialNumber,jdbcType=VARCHAR},
+      apply_date = #{applyDate,jdbcType=DATE},
+      confirm_date = #{confirmDate,jdbcType=DATE},
+      income_state = #{incomeState,jdbcType=CHAR},
+      gather_date = #{gatherDate,jdbcType=DATE},
+      batch_code = #{batchCode,jdbcType=INTEGER},
+      investor_id = #{investorId,jdbcType=CHAR},
+      chn_id = #{chnId,jdbcType=CHAR},
+      chn_code = #{chnCode,jdbcType=CHAR},
+      name = #{name,jdbcType=VARCHAR},
+      product_no = #{productNo,jdbcType=CHAR},
+      child_product_no = #{childProductNo,jdbcType=CHAR},
+      product_name = #{productName,jdbcType=VARCHAR},
+      total_postion_amount = #{totalPostionAmount,jdbcType=DECIMAL},
+      income_amount = #{incomeAmount,jdbcType=DECIMAL},
+      income_rate = #{incomeRate,jdbcType=DECIMAL},
+      percent_income = #{percentIncome,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="findListCount" parameterType="com.jinhui.scheduler.domain.gzefe.InvestorIncome" resultType="java.lang.Integer">
+    select count(*) from investor_income i,product p
+    where i.product_no=p.product_no
+    and p.exchange_no =#{exchangeNo}
+    and apply_date = #{applyDate,jdbcType=DATE}
+    and income_type = '0'
+
+  </select>
+
+
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.imiqian.ZlBalanceAccBillMapperDAO" >
+  <resultMap id="BaseResultMap" type="com.jinhui.scheduler.domain.imiqian.domain.ZlBalanceAccBill" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="instu_id" property="instuId" jdbcType="VARCHAR" />
+    <result column="fund_date" property="fundDate" jdbcType="VARCHAR" />
+    <result column="fund_time" property="fundTime" jdbcType="VARCHAR" />
+    <result column="liq_date" property="liqDate" jdbcType="VARCHAR" />
+    <result column="fund_seq_id" property="fundSeqId" jdbcType="VARCHAR" />
+    <result column="org_fund_date" property="orgFundDate" jdbcType="VARCHAR" />
+    <result column="org_fund_seq_id" property="orgFundSeqId" jdbcType="VARCHAR" />
+    <result column="busi_type" property="busiType" jdbcType="CHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="user_name_text" property="userNameText" jdbcType="VARCHAR" />
+    <result column="cert_type" property="certType" jdbcType="CHAR" />
+    <result column="cert_id" property="certId" jdbcType="VARCHAR" />
+    <result column="trans_amt" property="transAmt" jdbcType="DECIMAL" />
+    <result column="fund_code" property="fundCode" jdbcType="VARCHAR" />
+    <result column="fund_type" property="fundType" jdbcType="CHAR" />
+    <result column="pnr_date" property="pnrDate" jdbcType="VARCHAR" />
+    <result column="pnr_time" property="pnrTime" jdbcType="VARCHAR" />
+    <result column="pnr_seq_id" property="pnrSeqId" jdbcType="VARCHAR" />
+    <result column="batch_code" property="batchCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, batch_code, instu_id, fund_date, fund_time, liq_date, fund_seq_id, org_fund_date, org_fund_seq_id,
+    busi_type, user_id, user_name_text, cert_type, cert_id, trans_amt, fund_code, fund_type, pnr_date,
+    pnr_time, pnr_seq_id
+  </sql>
+
+  <delete id="deleteBalanceAccBill">
+    delete from zl_balance_acc_bill where 1=1
+    <if test="batchCode != null">
+      AND batch_code &gt;= #{batchCode}
+    </if>
+  </delete>
+
+  <delete id="deleteBalanceAccBillHis">
+    delete from zl_balance_acc_bill_his where 1=1
+    <if test="batchCode != null">
+      AND batch_code &gt;= #{batchCode}
+    </if>
+  </delete>
+
+  <delete id="deleteBalanceAccResult">
+    delete from zl_balance_acc_bill_result where 1=1
+    <if test="batchCode != null">
+      AND batch_code &gt;= #{batchCode}
+    </if>
+  </delete>
+
+</mapper>

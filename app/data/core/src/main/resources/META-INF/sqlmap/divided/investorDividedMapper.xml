@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.divided.InvestorDividedMapper" >
+
+    <resultMap id="baseRM" type="com.jinhui.scheduler.domain.divided.InvestorDivided">
+        <result column="investor_id" property="investorId" />
+        <result column="investor_name" property="investorName" />
+        <result column="product_no" property="productNo" />
+        <result column="child_product_no" property="childProductNo" />
+        <result column="index" property="index" />
+    </resultMap>
+
+    <select id="find" parameterType="com.jinhui.scheduler.domain.divided.InvestorDivided"
+            resultMap="baseRM">
+        SELECT investor_id, investor_name, product_no, child_product_no, `index`
+        FROM schedule_investor_divided
+        WHERE investor_id=#{investorId} AND  product_no = #{productNo}
+    </select>
+
+    <insert id="save" parameterType="com.jinhui.scheduler.domain.divided.InvestorDivided">
+        INSERT INTO schedule_investor_divided
+        (
+            investor_id,
+            investor_name,
+            product_no,
+            child_product_no,
+            `index`,
+            gmt_create,
+            gmt_modified
+        )
+        VALUES
+        (
+            #{investorId},
+            #{investorName},
+            #{productNo},
+            #{childProductNo},
+            #{index},
+            now(),
+            now()
+        )
+    </insert>
+
+
+</mapper>

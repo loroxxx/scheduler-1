@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.imiqian.ProductMapper" >
+  <resultMap id="productMap" type="com.jinhui.scheduler.domain.imiqian.domain.Product" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="product_no" property="productNo" jdbcType="CHAR" />
+    <result column="plat_product_no" property="platProductNo" jdbcType="VARCHAR" />
+    <result column="product_issuer" property="productIssuer" jdbcType="VARCHAR" />
+    <result column="exchange_no" property="exchangeNo" jdbcType="CHAR" />
+    <result column="product_type" property="productType" jdbcType="VARCHAR" />
+    <result column="product_expdate" property="productExpdate" jdbcType="DECIMAL" />
+    <result column="expdate_unit" property="expdateUnit" jdbcType="DECIMAL" />
+    <result column="cal_income_way" property="calIncomeWay" jdbcType="CHAR" />
+    <result column="cal_rate_way" property="calRateWay" jdbcType="CHAR" />
+    <result column="setup_date" property="setupDate" jdbcType="DATE" />
+    <result column="rate_date" property="rateDate" jdbcType="DATE" />
+    <result column="term_date" property="termDate" jdbcType="DATE" />
+    <result column="cashe_date" property="casheDate" jdbcType="DATE" />
+    <result column="income_rate" property="incomeRate" jdbcType="DECIMAL" />
+    <result column="percent_income_rate" property="percentIncomeRate" jdbcType="DECIMAL" />
+    <result column="ipo_start_date" property="ipoStartDate" jdbcType="TIMESTAMP" />
+    <result column="ipo_end_date" property="ipoEndDate" jdbcType="TIMESTAMP" />
+    <result column="start_periods" property="startPeriods" jdbcType="DECIMAL" />
+    <result column="end_periods" property="endPeriods" jdbcType="DECIMAL" />
+    <result column="total_limit" property="totalLimit" jdbcType="DECIMAL" />
+    <result column="total_vol" property="totalVol" jdbcType="DECIMAL" />
+    <result column="product_vol" property="productVol" jdbcType="DECIMAL" />
+    <result column="subs_start_amount" property="subsStartAmount" jdbcType="DECIMAL" />
+    <result column="subs_range" property="subsRange" jdbcType="DECIMAL" />
+    <result column="risk_assess" property="riskAssess" jdbcType="CHAR" />
+    <result column="risk_level" property="riskLevel" jdbcType="CHAR" />
+    <result column="product_total_periods" property="productTotalPeriods" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, product_name, product_no, plat_product_no, product_issuer,
+    exchange_no, product_type, product_expdate, expdate_unit, cal_income_way, cal_rate_way, 
+    setup_date, rate_date, term_date, cashe_date, income_rate, percent_income_rate, ipo_start_date, 
+    ipo_end_date, start_periods, end_periods, total_limit, total_vol, product_vol, subs_start_amount, 
+    subs_range, risk_assess, risk_level,product_total_periods
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="productMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from product
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+<!-- ***********************************  以下为定期产品相关   **************************************************-->
+  <!--查询到了产品起息日待成立的定期产品(前一天为工作日) -->
+  <select id="selectToSetupProductList" resultMap="productMap">
+    select
+    <include refid="Base_Column_List" />
+    from product where date_sub(rate_date,interval 1 day) = DATE_FORMAT(now(),'%Y-%m-%d') and product_type = 1 and product_state = '01'
+  </select>
+  <!--查询到了产品起息日待成立的定期产品(前一天为非工作日) -->
+  <select id="selectToSetupProductListWithChoice" resultMap="productMap">
+    select
+    <include refid="Base_Column_List" />
+    from product where (date_sub(rate_date,interval 1 day) = DATE_FORMAT(now(),'%Y-%m-%d') or rate_date = DATE_FORMAT(now(),'%Y-%m-%d'))and product_type = 1 and product_state = '01'
+  </select>
+
+  <!-- 定期产品成立时，更新产品状态为02-存续期-->
+  <update id="updateProductStateToLast" parameterType="java.lang.String">
+    update product set product_state = '02', gmt_modified = now() where product_no = #{productNo}
+  </update>
+
+  <!-- 定期产品成立时，更新产品状态为03-产品终止-->
+  <update id="updateProductStateToOver" parameterType="java.lang.String">
+    update product set product_state = '03', gmt_modified = now() where product_no = #{productNo}
+  </update>
+
+  <!--根据产品代码查询产品信息 -->
+  <select id="selectByProductNo" resultMap="productMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from product
+    where product_no = #{productNo}
+  </select>
+
+  <select id="selectLiveProduct" resultMap="productMap">
+    select
+    <include refid="Base_Column_List" />
+    from product where product_type = '0'
+  </select>
+
+</mapper>

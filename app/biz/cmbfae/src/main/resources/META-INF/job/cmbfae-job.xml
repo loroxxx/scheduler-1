@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:batch="http://www.springframework.org/schema/batch"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd">
+
+
+      <batch:job id="cmbfaeTransFileJob">
+            <!-- 生成交易文件-->
+            <batch:step id="cmfaeTransApplyStep" >
+                  <batch:tasklet>
+                        <batch:chunk reader="cmfaeTransApplyDBReader" processor="cmfaeTransApplyDBProcessor"
+                                  writer="cmfaeTransApplyDBWriter"   commit-interval="20"/>
+                  </batch:tasklet>
+            </batch:step>
+      </batch:job>
+
+      <batch:job id="cmbfaePositionFileJob">
+            <!-- 生成持仓文件-->
+            <batch:step id="cmfaePositionStep" >
+                  <batch:tasklet>
+                        <batch:chunk reader="cmfaePositionDBReader" processor="cmfaePositionProcessor"
+                                     writer="cmfaePositionWriter"   commit-interval="20"/>
+                  </batch:tasklet>
+            </batch:step>
+      </batch:job>
+
+</beans>

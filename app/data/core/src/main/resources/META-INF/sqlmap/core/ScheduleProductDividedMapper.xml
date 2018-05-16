@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.core.ScheduleProductDividedMapper" >
+  <resultMap id="BaseResultMap" type="com.jinhui.scheduler.domain.core.ProductDivided" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <result column="product_no" property="productNo" jdbcType="CHAR" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="child_product_no" property="childProductNo" jdbcType="CHAR" />
+    <result column="count" property="count" jdbcType="INTEGER" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="CHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="com.jinhui.scheduler.domain.core.ProductDivided" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    insert into schedule_product_divided (product_no, product_name, child_product_no, 
+      count, gmt_create, gmt_modified,state
+      )
+    values (#{productNo,jdbcType=CHAR}, #{productName,jdbcType=VARCHAR}, #{childProductNo,jdbcType=CHAR}, 
+      #{count,jdbcType=INTEGER}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP},
+      #{state,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jinhui.scheduler.domain.core.ProductDivided" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    insert into schedule_product_divided
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="productNo != null" >
+        product_no,
+      </if>
+      <if test="productName != null" >
+        product_name,
+      </if>
+      <if test="childProductNo != null" >
+        child_product_no,
+      </if>
+      <if test="count != null" >
+        count,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="productNo != null" >
+        #{productNo,jdbcType=CHAR},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="childProductNo != null" >
+        #{childProductNo,jdbcType=CHAR},
+      </if>
+      <if test="count != null" >
+        #{count,jdbcType=INTEGER},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+
+
+  <select id="selectCount" resultType="java.lang.Integer">
+
+    select count(*)from schedule_product_divided where product_no =#{productNo}
+
+  </select>
+
+
+  <select id="selectCurrent" resultMap="BaseResultMap">
+
+    select * from schedule_product_divided d where d.product_no=#{productNo} and state='1' and d.count &lt;200 and d.count &gt; 0 order by d.count asc limit 1;
+
+  </select>
+
+
+  <insert id="insertList" parameterType="java.util.List">
+    insert into schedule_product_divided
+    (`product_no`, `product_name`, `child_product_no`, `count`, `gmt_create`, `gmt_modified`,`state`		)values
+    <foreach collection="list" item="item" index="index" separator=",">
+      ( #{item.productNo} ,  #{item.productName} ,  #{item.childProductNo} ,  #{item.count} ,  #{item.gmtCreate} ,  #{item.gmtModified} ,#{item.state}		)
+    </foreach>
+  </insert>
+
+
+  <select id="selectMaxRecord" resultMap="BaseResultMap">
+  select * from schedule_product_divided where product_no=#{productNo} order by child_product_no desc limit 1;
+
+  </select>
+
+  <select id="selectCountByState" resultType="java.lang.Integer">
+     select count(*) from schedule_product_divided where product_no=#{productNo} and state=#{state}
+  </select>
+
+
+</mapper>

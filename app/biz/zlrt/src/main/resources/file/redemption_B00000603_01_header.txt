@@ -1,0 +1,1 @@
+3020~zlInstuId~applyDate~count~totalAmt

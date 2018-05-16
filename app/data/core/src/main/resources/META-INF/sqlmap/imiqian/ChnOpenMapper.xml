@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.imiqian.ChnOpenMapper" >
+  <resultMap id="chnOpenMap" type="com.jinhui.scheduler.domain.imiqian.domain.ChnOpen" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+    <result column="batch_code" property="batchCode" jdbcType="INTEGER" />
+    <result column="apply_date" property="applyDate" jdbcType="DATE" />
+    <result column="confirm_date" property="confirmDate" jdbcType="DATE" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="chn_id" property="chnId" jdbcType="VARCHAR" />
+    <result column="zl_user_id" property="zlUserId" jdbcType="VARCHAR" />
+    <result column="investor_id" property="investorId" jdbcType="VARCHAR" />
+    <result column="app_sheet_serial_no" property="appSheetSerialNo" jdbcType="VARCHAR" />
+    <result column="user_flag" property="userFlag" jdbcType="CHAR" />
+    <result column="id_type" property="idType" jdbcType="CHAR" />
+    <result column="id_no" property="idNo" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="CHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="zipcode" property="zipcode" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="fax" property="fax" jdbcType="VARCHAR" />
+    <result column="open_bank" property="openBank" jdbcType="VARCHAR" />
+    <result column="bank_account" property="bankAccount" jdbcType="VARCHAR" />
+    <result column="chn_code" property="chnCode" jdbcType="VARCHAR" />
+    <result column="open_state" property="openState" jdbcType="VARCHAR" />
+    <result column="profession" property="profession" jdbcType="CHAR" />
+    <result column="education" property="education" jdbcType="CHAR" />
+    <result column="annual_income" property="annualIncome" jdbcType="DECIMAL" />
+    <result column="risk_level" property="riskLevel" jdbcType="CHAR" />
+    <result column="inst_repr_id_name" property="instReprIdName" jdbcType="VARCHAR" />
+    <result column="inst_repr_id_type" property="instReprIdType" jdbcType="CHAR" />
+    <result column="inst_repr_id_no" property="instReprIdNo" jdbcType="VARCHAR" />
+    <result column="inst_repr_expdate" property="instReprExpdate" jdbcType="DATE" />
+    <result column="inst_repr_phone" property="instReprPhone" jdbcType="VARCHAR" />
+    <result column="inst_repr_manage_range" property="instReprManageRange" jdbcType="VARCHAR" />
+    <result column="controlholder_name" property="controlholderName" jdbcType="VARCHAR" />
+    <result column="controlholder_id_type" property="controlholderIdType" jdbcType="CHAR" />
+    <result column="controlholder_id_no" property="controlholderIdNo" jdbcType="VARCHAR" />
+    <result column="controlholder_expdate" property="controlholderExpdate" jdbcType="DATE" />
+    <result column="vocation" property="vocation" jdbcType="VARCHAR" />
+    <result column="corpoProperty" property="corpoproperty" jdbcType="CHAR" />
+    <result column="staff_num" property="staffNum" jdbcType="INTEGER" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="county" property="county" jdbcType="VARCHAR" />
+    <result column="registered_capital" property="registeredCapital" jdbcType="DECIMAL" />
+    <result column="contact_name" property="contactName" jdbcType="VARCHAR" />
+    <result column="contact_id_type" property="contactIdType" jdbcType="CHAR" />
+    <result column="contact_id_no" property="contactIdNo" jdbcType="VARCHAR" />
+    <result column="contact_expdate" property="contactExpdate" jdbcType="DATE" />
+    <result column="contact_phone" property="contactPhone" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="DATE" />
+    <result column="update_time" property="updateTime" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, batch_code,serial_number, apply_date, confirm_date, name, chn_id, investor_id, app_sheet_serial_no, user_flag,
+    id_type, id_no, sex, phone, address, zipcode, email, fax, open_bank, bank_account, 
+    chn_code, open_state, profession, education, annual_income, risk_level, inst_repr_id_name,
+    inst_repr_id_type, inst_repr_id_no, inst_repr_expdate, inst_repr_phone, inst_repr_manage_range, 
+    controlholder_name, controlholder_id_type, controlholder_id_no, controlholder_expdate, 
+    vocation, corpoProperty, staff_num, province, city, county, registered_capital, contact_name, 
+    contact_id_type, contact_id_no, contact_expdate, contact_phone
+  </sql>
+  <delete id="delete">
+    delete from chn_open where 1=1
+    <if test="batchCode != null">
+      AND batch_code &gt;= #{batchCode}
+    </if>
+  </delete>
+  <select id="findChnOpen" resultMap="chnOpenMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from chn_open
+    where investor_id = #{investorId}
+  </select>
+
+  <select id="findSysChnOpen" resultMap="chnOpenMap" >
+    select
+    <include refid="Base_Column_List" />
+    from chn_open
+    where id = 1
+  </select>
+
+  <insert id="save" parameterType="com.jinhui.scheduler.domain.imiqian.domain.ChnOpen" >
+    insert into chn_open
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="batchCode != null" >
+        batch_code,
+      </if>
+      <if test="serialNumber != null" >
+        serial_number,
+      </if>
+      <if test="applyDate != null" >
+        apply_date,
+      </if>
+      <if test="confirmDate != null" >
+        confirm_date,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="chnId != null" >
+        chn_id,
+      </if>
+      <if test="zlUserId != null" >
+        zl_user_id,
+      </if>
+      <if test="investorId != null" >
+        investor_id,
+      </if>
+      <if test="appSheetSerialNo != null" >
+        app_sheet_serial_no,
+      </if>
+      <if test="userFlag != null" >
+        user_flag,
+      </if>
+      <if test="idType != null" >
+        id_type,
+      </if>
+      <if test="idNo != null" >
+        id_no,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="zipcode != null" >
+        zipcode,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="fax != null" >
+        fax,
+      </if>
+      <if test="openBank != null" >
+        open_bank,
+      </if>
+      <if test="bankAccount != null" >
+        bank_account,
+      </if>
+      <if test="chnCode != null" >
+        chn_code,
+      </if>
+      <if test="1 == 1" >
+        open_state,
+      </if>
+      <if test="profession != null" >
+        profession,
+      </if>
+      <if test="education != null" >
+        education,
+      </if>
+      <if test="annualIncome != null" >
+        annual_income,
+      </if>
+      <if test="riskLevel != null" >
+        risk_level,
+      </if>
+      <if test="instReprIdName != null" >
+        inst_repr_id_name,
+      </if>
+      <if test="instReprIdType != null" >
+        inst_repr_id_type,
+      </if>
+      <if test="instReprIdNo != null" >
+        inst_repr_id_no,
+      </if>
+      <if test="instReprExpdate != null" >
+        inst_repr_expdate,
+      </if>
+      <if test="instReprPhone != null" >
+        inst_repr_phone,
+      </if>
+      <if test="instReprManageRange != null" >
+        inst_repr_manage_range,
+      </if>
+      <if test="controlholderName != null" >
+        controlholder_name,
+      </if>
+      <if test="controlholderIdType != null" >
+        controlholder_id_type,
+      </if>
+      <if test="controlholderIdNo != null" >
+        controlholder_id_no,
+      </if>
+      <if test="controlholderExpdate != null" >
+        controlholder_expdate,
+      </if>
+      <if test="vocation != null" >
+        vocation,
+      </if>
+      <if test="corpoproperty != null" >
+        corpoProperty,
+      </if>
+      <if test="staffNum != null" >
+        staff_num,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="county != null" >
+        county,
+      </if>
+      <if test="registeredCapital != null" >
+        registered_capital,
+      </if>
+      <if test="contactName != null" >
+        contact_name,
+      </if>
+      <if test="contactIdType != null" >
+        contact_id_type,
+      </if>
+      <if test="contactIdNo != null" >
+        contact_id_no,
+      </if>
+      <if test="contactExpdate != null" >
+        contact_expdate,
+      </if>
+      <if test="contactPhone != null" >
+        contact_phone,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="batchCode != null" >
+        #{batchCode},
+      </if>
+      <if test="serialNumber != null" >
+        #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="applyDate != null" >
+        #{applyDate,jdbcType=DATE},
+      </if>
+      <if test="confirmDate != null" >
+        #{confirmDate,jdbcType=DATE},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="chnId != null" >
+        #{chnId,jdbcType=VARCHAR},
+      </if>
+      <if test="zlUserId != null" >
+        #{zlUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="investorId != null" >
+        #{investorId,jdbcType=VARCHAR},
+      </if>
+      <if test="appSheetSerialNo != null" >
+        #{appSheetSerialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="userFlag != null" >
+        #{userFlag,jdbcType=CHAR},
+      </if>
+      <if test="idType != null" >
+        #{idType,jdbcType=CHAR},
+      </if>
+      <if test="idNo != null" >
+        #{idNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=CHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="zipcode != null" >
+        #{zipcode,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="fax != null" >
+        #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="openBank != null" >
+        #{openBank,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null" >
+        #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="chnCode != null" >
+        #{chnCode,jdbcType=VARCHAR},
+      </if>
+      <if test="1 == 1" >
+        '0000',
+      </if>
+      <if test="profession != null" >
+        #{profession,jdbcType=CHAR},
+      </if>
+      <if test="education != null" >
+        #{education,jdbcType=CHAR},
+      </if>
+      <if test="annualIncome != null" >
+        #{annualIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="riskLevel != null" >
+        #{riskLevel,jdbcType=CHAR},
+      </if>
+      <if test="instReprIdName != null" >
+        #{instReprIdName,jdbcType=VARCHAR},
+      </if>
+      <if test="instReprIdType != null" >
+        #{instReprIdType,jdbcType=CHAR},
+      </if>
+      <if test="instReprIdNo != null" >
+        #{instReprIdNo,jdbcType=VARCHAR},
+      </if>
+      <if test="instReprExpdate != null" >
+        #{instReprExpdate,jdbcType=DATE},
+      </if>
+      <if test="instReprPhone != null" >
+        #{instReprPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="instReprManageRange != null" >
+        #{instReprManageRange,jdbcType=VARCHAR},
+      </if>
+      <if test="controlholderName != null" >
+        #{controlholderName,jdbcType=VARCHAR},
+      </if>
+      <if test="controlholderIdType != null" >
+        #{controlholderIdType,jdbcType=CHAR},
+      </if>
+      <if test="controlholderIdNo != null" >
+        #{controlholderIdNo,jdbcType=VARCHAR},
+      </if>
+      <if test="controlholderExpdate != null" >
+        #{controlholderExpdate,jdbcType=DATE},
+      </if>
+      <if test="vocation != null" >
+        #{vocation,jdbcType=VARCHAR},
+      </if>
+      <if test="corpoproperty != null" >
+        #{corpoproperty,jdbcType=CHAR},
+      </if>
+      <if test="staffNum != null" >
+        #{staffNum,jdbcType=INTEGER},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null" >
+        #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="registeredCapital != null" >
+        #{registeredCapital,jdbcType=DECIMAL},
+      </if>
+      <if test="contactName != null" >
+        #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactIdType != null" >
+        #{contactIdType,jdbcType=CHAR},
+      </if>
+      <if test="contactIdNo != null" >
+        #{contactIdNo,jdbcType=VARCHAR},
+      </if>
+      <if test="contactExpdate != null" >
+        #{contactExpdate,jdbcType=DATE},
+      </if>
+      <if test="contactPhone != null" >
+        #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jinhui.scheduler.domain.imiqian.domain.ChnOpen" >
+    update chn_open
+    <set >
+      <if test="batchCode != null" >
+        batch_code = #{batchCode},
+      </if>
+      <if test="serialNumber != null" >
+        serial_number = #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="applyDate != null" >
+        apply_date = #{applyDate,jdbcType=DATE},
+      </if>
+      <if test="confirmDate != null" >
+        confirm_date = #{confirmDate,jdbcType=DATE},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="chnId != null" >
+        chn_id = #{chnId,jdbcType=VARCHAR},
+      </if>
+      <if test="investorId != null" >
+        investor_id = #{investorId,jdbcType=VARCHAR},
+      </if>
+      <if test="appSheetSerialNo != null" >
+        app_sheet_serial_no = #{appSheetSerialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="userFlag != null" >
+        user_flag = #{userFlag,jdbcType=CHAR},
+      </if>
+      <if test="idType != null" >
+        id_type = #{idType,jdbcType=CHAR},
+      </if>
+      <if test="idNo != null" >
+        id_no = #{idNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=CHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="zipcode != null" >
+        zipcode = #{zipcode,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="fax != null" >
+        fax = #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="openBank != null" >
+        open_bank = #{openBank,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null" >
+        bank_account = #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="chnCode != null" >
+        chn_code = #{chnCode,jdbcType=VARCHAR},
+      </if>
+      <if test="openState != null" >
+        open_state = #{openState,jdbcType=VARCHAR},
+      </if>
+      <if test="profession != null" >
+        profession = #{profession,jdbcType=CHAR},
+      </if>
+      <if test="education != null" >
+        education = #{education,jdbcType=CHAR},
+      </if>
+      <if test="annualIncome != null" >
+        annual_income = #{annualIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="riskLevel != null" >
+        risk_level = #{riskLevel,jdbcType=CHAR},
+      </if>
+      <if test="instReprIdName != null" >
+        inst_repr_id_name = #{instReprIdName,jdbcType=VARCHAR},
+      </if>
+      <if test="instReprIdType != null" >
+        inst_repr_id_type = #{instReprIdType,jdbcType=CHAR},
+      </if>
+      <if test="instReprIdNo != null" >
+        inst_repr_id_no = #{instReprIdNo,jdbcType=VARCHAR},
+      </if>
+      <if test="instReprExpdate != null" >
+        inst_repr_expdate = #{instReprExpdate,jdbcType=DATE},
+      </if>
+      <if test="instReprPhone != null" >
+        inst_repr_phone = #{instReprPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="instReprManageRange != null" >
+        inst_repr_manage_range = #{instReprManageRange,jdbcType=VARCHAR},
+      </if>
+      <if test="controlholderName != null" >
+        controlholder_name = #{controlholderName,jdbcType=VARCHAR},
+      </if>
+      <if test="controlholderIdType != null" >
+        controlholder_id_type = #{controlholderIdType,jdbcType=CHAR},
+      </if>
+      <if test="controlholderIdNo != null" >
+        controlholder_id_no = #{controlholderIdNo,jdbcType=VARCHAR},
+      </if>
+      <if test="controlholderExpdate != null" >
+        controlholder_expdate = #{controlholderExpdate,jdbcType=DATE},
+      </if>
+      <if test="vocation != null" >
+        vocation = #{vocation,jdbcType=VARCHAR},
+      </if>
+      <if test="corpoproperty != null" >
+        corpoProperty = #{corpoproperty,jdbcType=CHAR},
+      </if>
+      <if test="staffNum != null" >
+        staff_num = #{staffNum,jdbcType=INTEGER},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null" >
+        county = #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="registeredCapital != null" >
+        registered_capital = #{registeredCapital,jdbcType=DECIMAL},
+      </if>
+      <if test="contactName != null" >
+        contact_name = #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactIdType != null" >
+        contact_id_type = #{contactIdType,jdbcType=CHAR},
+      </if>
+      <if test="contactIdNo != null" >
+        contact_id_no = #{contactIdNo,jdbcType=VARCHAR},
+      </if>
+      <if test="contactExpdate != null" >
+        contact_expdate = #{contactExpdate,jdbcType=DATE},
+      </if>
+      <if test="contactPhone != null" >
+        contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_Time = #{updateTime,jdbcType=DATE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="findListCount" parameterType="com.jinhui.scheduler.domain.imiqian.domain.ChnOpen" resultType="java.lang.Integer">
+      select count(*) from chn_open where 1=1
+    <if test="batchCode != null and batchCode != 0">
+        AND batch_code=#{batchCode}
+    </if>
+    <if test="chnCode != null">
+      AND chn_code=#{chnCode}
+    </if>
+  </select>
+
+  <select id="findList" parameterType="com.jinhui.scheduler.domain.imiqian.domain.ChnOpen" resultMap="chnOpenMap">
+    select
+    <include refid="Base_Column_List" />
+    from chn_open where 1=1
+    <if test="appSheetSerialNo != null">
+      AND app_sheet_serial_no = #{appSheetSerialNo}
+    </if>
+    <if test="idType != null">
+      AND id_type = #{idType}
+    </if>
+    <if test="idNo != null">
+      AND id_no = #{idNo}
+    </if>
+    <if test="batchCode != null and batchCode != 0">
+      AND batch_code = #{batchCode}
+    </if>
+    <if test="chnId != null">
+      AND chn_id = #{chnId}
+    </if>
+  </select>
+
+</mapper>

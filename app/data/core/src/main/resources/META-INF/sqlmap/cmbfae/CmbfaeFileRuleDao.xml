@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.cmbfae.CmbfaeFileRuleDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.jinhui.scheduler.domain.cmbfae.model.CmbfaeFileRule" id="cmbfaeFileRuleMap">
+        <result property="batchDate" column="batch_date"/>
+        <result property="flag" column="flag"/>
+		<result property="result" column="result"/>
+    </resultMap>
+
+
+  <sql id="Base_Column_List">batch_date, flag </sql>
+
+
+	<select id="queryCmbfaeFileRule" resultMap="cmbfaeFileRuleMap" parameterType="java.lang.String">
+		select batch_date, flag,result from cmbfae_file_rule where  DATE_FORMAT(batch_date,'%Y%m%d') = #{batchDate}
+	</select>
+
+
+	<insert id="save" parameterType="com.jinhui.scheduler.domain.cmbfae.model.CmbfaeFileRule" >
+		insert into cmbfae_file_rule
+		(
+			`batch_date`, 
+			`flag`
+		)
+		values
+		(
+			#{batchDate}, 
+			#{flag}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.jinhui.scheduler.domain.cmbfae.model.CmbfaeFileRule">
+		update cmbfae_file_rule 
+		<set>
+			<if test="batchDate != null">`batch_date` = #{batchDate}, </if>
+			<if test="flag != null">`flag` = #{flag}</if>
+		</set>
+		 where DATE_FORMAT(batch_date,'%Y%m%d') = #{batchDate}
+	</update>
+
+
+	<update id="updateResult" parameterType="com.jinhui.scheduler.domain.cmbfae.model.CmbfaeFileRule">
+		update cmbfae_file_rule
+		<set>
+			<if test="batchDate != null">`batch_date` = #{batchDate}, </if>
+			<if test="flag != null">`flag` = #{flag},</if>
+			<if test="result != null">`result` = #{result}</if>
+		</set>
+		where DATE_FORMAT(batch_date,'%Y%m%d') = #{batchDate}
+	</update>
+
+</mapper>

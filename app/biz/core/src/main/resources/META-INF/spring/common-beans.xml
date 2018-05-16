@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:annotation-config/>
+
+
+    <context:component-scan base-package="com.jinhui.scheduler.biz.core.common.impl"/>
+
+    <bean id="receivedFileBackupTasklet" scope="step"
+          class="com.jinhui.scheduler.biz.core.tasklet.ReceivedFileBackupTasklet">
+        <property name="backupFile" value="#{jobExecutionContext['file.path']}"/>
+    </bean>
+
+    <bean id="imiqianFtp" class="com.jinhui.scheduler.biz.core.file.support.Sftp">
+        <constructor-arg value="${imiqian.ftp.user}"/>
+        <constructor-arg value="${imiqian.ftp.password}" />
+        <constructor-arg value="${imiqian.ftp.host}" />
+        <constructor-arg value="${imiqian.ftp.port}" />
+    </bean>
+
+    <bean id="cmbfaeFtp" class="com.jinhui.scheduler.biz.core.file.support.Sftp">
+        <constructor-arg value="${cmbfae.ftp.user}"/>
+        <constructor-arg value="${cmbfae.ftp.password}" />
+        <constructor-arg value="${cmbfae.ftp.host}" />
+        <constructor-arg value="${cmbfae.ftp.port}" />
+    </bean>
+
+    <bean id="zlrtFtp" class="com.jinhui.scheduler.biz.core.file.support.Sftp">
+        <constructor-arg value="${zlrt.ftp.user}"/>
+        <constructor-arg value="${zlrt.ftp.password}" />
+        <constructor-arg value="${zlrt.ftp.host}" />
+        <constructor-arg value="${zlrt.ftp.port}" />
+        <constructor-arg value="false" />
+    </bean>
+
+    <bean id="gzefeFtp" class="com.jinhui.scheduler.biz.core.file.support.Sftp">
+        <constructor-arg value="${gzefe.ftp.user}"/>
+        <constructor-arg value="${gzefe.ftp.password}" />
+        <constructor-arg value="${gzefe.ftp.host}" />
+        <constructor-arg value="${gzefe.ftp.port}" />
+    </bean>
+
+    <bean id="xwbankFtp" class="com.jinhui.scheduler.biz.core.file.support.Sftp">
+        <constructor-arg value="${xwbank.ftp.user}"/>
+        <constructor-arg value="${xwbank.ftp.password}" />
+        <constructor-arg value="${xwbank.ftp.host}" />
+        <constructor-arg value="${xwbank.ftp.port}" />
+    </bean>
+
+    <bean id="institutionSftpMap" class="com.jinhui.scheduler.biz.core.file.support.InstitutionSftpMap">
+        <property name="sftpMap">
+            <map>
+                <entry key="imiqian" value-ref="imiqianFtp" />
+                <entry key="cmbfae" value-ref="cmbfaeFtp" />
+                <entry key="zlrt" value-ref="zlrtFtp" />
+                <entry key="gzefe" value-ref="gzefeFtp" />
+                <entry key="xwbank" value-ref="xwbankFtp" />
+            </map>
+        </property>
+    </bean>
+
+</beans>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        					http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd">
+
+
+    <task:scheduled-tasks>
+        <!--<task:scheduled ref="downloadFileScanTask" method="scan" fixed-delay="${file.scan.delay}" initial-delay="10000"/>-->
+        <task:scheduled ref="crashedJobScanTask" method="scan" fixed-delay="${job.scan.delay}" initial-delay="10000"/>
+
+    </task:scheduled-tasks>
+
+    <!--<bean id="downloadFileScanTask" class="com.jinhui.scheduler.biz.core.task.FileScanTask">
+        <property name="scanPath" value="${download.basePath}"/>
+        <property name="fileJobMapper" ref="fileJobMapper"/>
+        <property name="jobLauncher" ref="jobLauncher"/>
+    </bean>-->
+
+    <bean id="crashedJobScanTask" class="com.jinhui.scheduler.biz.core.task.CrashedJobScanTask">
+        <property name="jobExplorer" ref="jobExplorer"/>
+        <property name="jobOperator" ref="jobOperator"/>
+        <property name="jobRepository" ref="jobRepository"/>
+        <property name="jobTimeoutMinutes" value="${job.timeout.minutes}"/>
+    </bean>
+</beans>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jinhui.scheduler.data.core.mapper.zlrt.ExchangeInfoMapperZlrt" >
+  <resultMap id="BaseResultMap" type="com.jinhui.scheduler.domain.zlrt.ExchangeInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="zl_instu_id" property="zlInstuId" jdbcType="VARCHAR" />
+    <result column="exchange_code" property="exchangeCode" jdbcType="CHAR" />
+    <result column="exchange_name" property="exchangeName" jdbcType="VARCHAR" />
+    <result column="id_type" property="idType" jdbcType="CHAR" />
+    <result column="id_no" property="idNo" jdbcType="CHAR" />
+    <result column="contacts" property="contacts" jdbcType="VARCHAR" />
+    <result column="artificial" property="artificial" jdbcType="VARCHAR" />
+    <result column="adress" property="adress" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="current_product_limit" property="currentProductLimit" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, zl_instu_id, exchange_code, exchange_name, id_type, id_no, contacts, artificial, 
+    adress, phone, current_product_limit
+  </sql>
+  <select id="selectAllExchangeList" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from exchange_info
+  </select>
+
+</mapper>

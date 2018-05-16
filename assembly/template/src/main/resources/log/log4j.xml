@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+
+    <Appenders>
+
+        <!--这个输出控制台的配置，这里输出除了warn和error级别的信息到System.out -->
+        <Console name="console_out_appender" target="SYSTEM_OUT">
+            <!-- 控制台只输出level及以上级别的信息(onMatch),其他的直接拒绝(onMismatch) . -->
+            <ThresholdFilter level="DEBUG" onMatch="ACCEPT"
+                             onMismatch="DENY" />
+            <!-- 输出日志的格式 -->
+            <PatternLayout pattern="%5p [%t] %d{yyyy-MM-dd HH:mm:ss} (%F:%L) %m%n" />
+        </Console>
+        <!-- 这个输出控制台的配置，这里输出error级别的信息到System.err，在eclipse控制台上看到的是红色文字 -->
+        <Console name="console_err_appender" target="SYSTEM_ERR">
+            <ThresholdFilter level="ERROR" onMatch="ACCEPT"
+                             onMismatch="DENY" />
+            <PatternLayout pattern="%5p [%t] %d{yyyy-MM-dd HH:mm:ss} (%F:%L) %m%n" />
+        </Console>
+
+        <RollingFile name="app-file" fileName="${sys:user.home}/logs/${sys:app.sysname}/biz.log"
+                     filePattern="${sys:user.home}/logs/${sys:app.sysname}/$${date:yyyy-MM}/biz.log%d{yyyy-MM-dd}-%i.gz">
+            <PatternLayout>
+                <Pattern>[%d{MMdd HH:mm:ss SSS} %-5p] [%t] %c{3} - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <CronTriggeringPolicy schedule="0 0 0 * * ?"/>
+                <SizeBasedTriggeringPolicy size="20 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="startup-file" fileName="${sys:user.home}/logs/${sys:app.sysname}/startup.log"
+                     filePattern="${sys:user.home}/logs/${sys:app.sysname}/$${date:yyyy-MM}/startup.log%d{yyyy-MM-dd}-%i.gz">
+            <PatternLayout>
+                <Pattern>[%d{MMdd HH:mm:ss SSS} %-5p] [%t] %c{3} - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <CronTriggeringPolicy schedule="0 0 0 * * ?"/>
+                <SizeBasedTriggeringPolicy size="20 MB"/>
+            </Policies>
+        </RollingFile>
+
+    </Appenders>
+    <Loggers>
+        <!-- 配置mybatis的sql语句输出 -->
+        <logger name="dao" additivity="false">
+            <level value="debug" />
+            <appender-ref ref="app-file" />
+            <appender-ref ref="console_out_appender" />
+            <appender-ref ref="console_err_appender" />
+        </logger>
+        <logger name="com.ect.musa.web.listener" additivity="false" >
+            <appender-ref ref="startup-file"/>
+            <appender-ref ref="console_out_appender" />
+            <appender-ref ref="console_err_appender" />
+        </logger>
+        <Root level="info">
+            <AppenderRef ref="app-file"/>
+            <appender-ref ref="console_out_appender" />
+            <appender-ref ref="console_err_appender" />
+        </Root>
+    </Loggers>
+
+</Configuration>
